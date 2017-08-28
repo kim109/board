@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<script src="https://cdn.ckeditor.com/4.7.2/standard/ckeditor.js"></script>
+
 <div class="container">
     <ol class="breadcrumb">
         <li><a href="/freeboard">자유게시판</a></li>
@@ -17,7 +19,7 @@
                 </div>
                 <div class="form-group">
                     <label>내용</label>
-                    <textarea class="form-control" rows="3" name="content" required></textarea>
+                    <textarea class="form-control input-sm" rows="4" name="content" id="content" required></textarea>
                 </div>
             </div>
             <div class="panel-footer text-right">

@@ -24,7 +24,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
+        Route::pattern('freeboard', '[0-9]+');
         parent::boot();
     }
 

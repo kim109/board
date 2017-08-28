@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Article;
+use App\Comment;
 use Illuminate\Http\Request;
 
 class FreeboardController extends Controller
@@ -73,7 +74,9 @@ class FreeboardController extends Controller
         $article->hits += 1;
         $article->save();
 
-        return view('freeboard.show', ['article' => $article]);
+        $comments = Comment::where('article_id', $article->id)->get();
+
+        return view('freeboard.show', ['article' => $article, 'comments' => $comments]);
     }
 
     /**
@@ -84,7 +87,9 @@ class FreeboardController extends Controller
      */
     public function edit($id)
     {
-        //
+        $article = Article::findorFail($id);
+
+        return view('freeboard.edit', ['article' => $article]);
     }
 
     /**
@@ -96,7 +101,17 @@ class FreeboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'subject' => 'required',
+            'content' => 'required'
+        ]);
+
+        $article = Article::findorFail($id);
+        $article->subject = $request->input('subject');
+        $article->content = $request->input('content');
+        $article->save();
+
+        return redirect('/freeboard/'.$id);
     }
 
     /**

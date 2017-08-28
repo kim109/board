@@ -20,3 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('freeboard', 'FreeboardController');
+Route::post('freeboard/{article}/comment', 'CommentController@store');
+Route::patch('freeboard/{article}/comments/{comment}', 'CommentController@update')
+        ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);;
+Route::delete('freeboard/{article}/comments/{comment}', 'CommentController@destory')
+        ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);;
