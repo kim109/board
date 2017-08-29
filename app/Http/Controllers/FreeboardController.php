@@ -57,6 +57,13 @@ class FreeboardController extends Controller
         $article->user_id = Auth::id();
         $article->subject = $request->input('subject');
         $article->content = $request->input('content');
+
+        if ($request->hasFile('attach')) {
+            $filename = $request->attach->getClientOriginalName();
+            $path = $request->attach->storeAs('freeboard', $filename);
+            $article->attachs = [$path];
+        }
+
         $article->save();
 
         return redirect()->action('FreeboardController@index');
@@ -77,6 +84,14 @@ class FreeboardController extends Controller
         $comments = Comment::where('article_id', $article->id)->get();
 
         return view('freeboard.show', ['article' => $article, 'comments' => $comments]);
+    }
+
+    public function attach($id, $attach)
+    {
+        $article = Article::findorFail($id);
+        $path = $article->attachs[$attach];
+
+        return response()->download($path);
     }
 
     /**

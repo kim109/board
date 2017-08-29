@@ -20,6 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('freeboard', 'FreeboardController');
+Route::get('freeboard/{article}/attachs/{attach}', 'FreeboardController@attach');
 Route::post('freeboard/{article}/comment', 'CommentController@store');
 Route::patch('freeboard/{article}/comments/{comment}', 'CommentController@update')
         ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);

@@ -14,6 +14,14 @@
         <span>조회수 : {{ $article->hits }}</span>
     </div>
     <hr>
+    @if ($article->attachs != null)
+    <ul class="list-unstyled">
+        @foreach ($article->attachs as $attach)
+        <li><a href="{{ $article->id }}/attachs/0"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ basename($attach) }}</a></li>
+        @endforeach
+    </ul>
+    @endif
+
     <p>{!! $article->content !!}</p>
     <hr>
 

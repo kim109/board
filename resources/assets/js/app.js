@@ -7,7 +7,6 @@
 
 require('./bootstrap');
 
-
 if ($('#content').length == 1) {
     CKEDITOR.replace('content');
 }

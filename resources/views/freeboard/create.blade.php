@@ -9,7 +9,7 @@
         <li class="active">글 쓰기</li>
     </ol>
 
-    <form method="POST" action="/freeboard">
+    <form method="POST" action="/freeboard" enctype="multipart/form-data">
         <div class="panel panel-default">
             <div class="panel-body">
                 {{ csrf_field() }}
@@ -20,6 +20,10 @@
                 <div class="form-group">
                     <label>내용</label>
                     <textarea class="form-control input-sm" rows="4" name="content" id="content" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>첨부파일</label>
+                    <input type="file" name="attach">
                 </div>
             </div>
             <div class="panel-footer text-right">
