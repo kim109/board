@@ -26,9 +26,17 @@
             @forelse ($articles as $article)
                 <tr>
                     <td class="text-center">{{ $loop->iteration }}</td>
-                    <td><a href="freeboard/{{ $article->id }}">{{ $article->subject }}</a></td>
+                    <td>
+                        <a href="freeboard/{{ $article->id }}">{{ $article->subject }} [{{ $article->comments->count() }}]</a>
+                    </td>
                     <td class="text-center">{{ $article->user->name }}</td>
-                    <td class="text-center">{{ $article->created_at->format('m/d') }}</td>
+                    <td class="text-center" title="{{ $article->created_at }}">
+                        @if ($article->created_at > \Carbon\Carbon::today())
+                            {{ $article->created_at->format('H:i') }}
+                        @else
+                            {{ $article->created_at->format('m/d') }}
+                        @endif
+                    </td>
                     <td class="text-center">{{ $article->hits }}</td>
                 </tr>
             @empty

@@ -9,3 +9,15 @@ $fa-font-path: '../fonts';
 @import "variables";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "bootswatch";
+
+@import "~jquery-confirm/css/jquery-confirm";
+
+.comment {
+    padding: 0 0.5em 0.5em 0.5em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px dashed #cccccc;
+
+    .comment-title {
+        margin-bottom: 0.5em;
+    }
+}

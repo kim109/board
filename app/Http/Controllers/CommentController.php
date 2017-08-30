@@ -28,11 +28,13 @@ class CommentController extends Controller
         ]);
 
         $article = Article::findorFail($article);
+        $content = nl2br($request->input('content'));
+        $content = strip_tags($content, '<a><strong>');
 
         $comment = new Comment;
         $comment->article_id = $article->id;
         $comment->user_id = Auth::id();
-        $comment->content = $request->input('content');
+        $comment->content = $content;
         $comment->save();
 
         return redirect()->back();
@@ -57,8 +59,15 @@ class CommentController extends Controller
      * @param  int  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($comment)
+    public function destroy(Request $request, $article, $comment)
     {
-        //
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $comment = Comment::findorFail($comment);
+        $comment->delete();
+
+        return response()->json(['result' => 'success']);
     }
 }

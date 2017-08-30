@@ -7,14 +7,14 @@ use App\Article;
 use App\Comment;
 use Illuminate\Http\Request;
 
-class FreeboardController extends Controller
+class MarketController extends Controller
 {
     private $category;
 
     public function __construct()
     {
         $this->middleware('auth');
-        $this->category = 1;
+        $this->category = 2;
     }
 
     /**
@@ -25,8 +25,11 @@ class FreeboardController extends Controller
     public function index()
     {
         $articles = Article::where('category_id', $this->category)->get();
+        foreach ($articles as $article) {
+            $article->price = (int)json_decode($article->content)->price;
+        }
 
-        return view('freeboard.list', ['articles' => $articles]);
+        return view('market.list', ['articles' => $articles]);
     }
 
     /**
@@ -36,7 +39,7 @@ class FreeboardController extends Controller
      */
     public function create()
     {
-        return view('freeboard.create');
+        return view('market.create');
     }
 
     /**
@@ -49,6 +52,8 @@ class FreeboardController extends Controller
     {
         $this->validate($request, [
             'subject' => 'required',
+            'attach' => 'required',
+            'price' => 'required|integer|min:1',
             'content' => 'required'
         ]);
 
@@ -56,17 +61,18 @@ class FreeboardController extends Controller
         $article->category_id = $this->category;
         $article->user_id = Auth::id();
         $article->subject = $request->input('subject');
-        $article->content = $request->input('content');
+        $article->content = json_encode([
+            'price' => $request->input('price'),
+            'description' => $request->input('content')
+        ]);
 
-        if ($request->hasFile('attach')) {
-            $filename = $request->attach->getClientOriginalName();
-            $path = $request->attach->storeAs('freeboard', $filename);
-            $article->attachs = [$path];
-        }
+        $filename = $request->attach->getClientOriginalName();
+        $path = $request->attach->storeAs('market', $filename);
+        $article->attachs = [$path];
 
         $article->save();
 
-        return redirect()->action('FreeboardController@index');
+        return redirect()->action('MarketController@index');
     }
 
     /**
@@ -81,17 +87,13 @@ class FreeboardController extends Controller
         $article->hits += 1;
         $article->save();
 
+        $content = json_decode($article->content);
+        $article->description = $content->description;
+        $article->price = (int)$content->price;
+
         $comments = Comment::where('article_id', $article->id)->get();
 
-        return view('freeboard.show', ['article' => $article, 'comments' => $comments]);
-    }
-
-    public function attach($id, $attach)
-    {
-        $article = Article::findorFail($id);
-        $path = 'app/'.$article->attachs[$attach];
-
-        return response()->download(storage_path($path));
+        return view('market.show', ['article' => $article, 'comments' => $comments]);
     }
 
     /**
@@ -102,9 +104,7 @@ class FreeboardController extends Controller
      */
     public function edit($id)
     {
-        $article = Article::findorFail($id);
-
-        return view('freeboard.edit', ['article' => $article]);
+        //
     }
 
     /**
@@ -116,17 +116,7 @@ class FreeboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'subject' => 'required',
-            'content' => 'required'
-        ]);
-
-        $article = Article::findorFail($id);
-        $article->subject = $request->input('subject');
-        $article->content = $request->input('content');
-        $article->save();
-
-        return redirect('/freeboard/'.$id);
+        //
     }
 
     /**
@@ -140,6 +130,14 @@ class FreeboardController extends Controller
         $article = Article::findorFail($id);
         $article->delete();
 
-        return redirect()->action('FreeboardController@index');
+        return redirect()->action('MarketController@index');
+    }
+
+    public function thumbnail($id)
+    {
+        $article = Article::findorFail($id);
+        $path = 'app/'.$article->attachs[0];
+
+        return response()->file(storage_path($path));
     }
 }
