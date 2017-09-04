@@ -18,11 +18,11 @@
         <span>조회수 : {{ $article->hits }}</span>
     </div>
     <hr>
-    @if ($article->attachs != null)
+    @if ($article->attachments != null)
     <ul class="list-unstyled">
-        @foreach ($article->attachs as $attach)
+        @foreach ($article->attachments as $attachment)
         <li class="text-right">
-            <i class="fa fa-floppy-o" aria-hidden="true"></i> <a href="{{ $article->id }}/attachs/{{ $loop->index }}">{{ basename($attach) }}</a>
+            <i class="fa fa-floppy-o" aria-hidden="true"></i> <a href="/attachments/{{ $attachment->id }}/{{ md5($attachment->path) }}">{{ basename($attachment->name) }}</a>
         </li>
         @endforeach
     </ul>
@@ -32,7 +32,7 @@
     <hr>
 
     <div class="well well-sm">
-        @foreach ($comments as $comment)
+        @foreach ($article->comments as $comment)
             <div class="comment">
                 <div class='comment-title'>
                     <div class="pull-right small">

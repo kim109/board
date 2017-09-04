@@ -12,7 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $categories = \App\Category::where('open', true)->get();
+
+    return view('welcome', ['categories' => $categories]);
 });
 
 Auth::routes();
@@ -32,6 +34,7 @@ Route::prefix('freeboard')->group(function () {
 
 // 중고장터
 Route::resource('market', 'MarketController');
-Route::prefix('market')->group(function () {
-    Route::get('{article}/thumbnail', 'MarketController@thumbnail');
-});
+
+// 첨부파일
+Route::get('attachments/{id}/{md5}', 'AttachmentController@download');
+Route::get('thumbnail/{id}', 'AttachmentController@thumbnail');

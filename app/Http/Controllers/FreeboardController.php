@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Attachment;
 use App\Article;
 use App\Comment;
 use Illuminate\Http\Request;
@@ -57,14 +58,20 @@ class FreeboardController extends Controller
         $article->user_id = Auth::id();
         $article->subject = $request->input('subject');
         $article->content = $request->input('content');
+        $article->save();
 
         if ($request->hasFile('attach')) {
-            $filename = $request->attach->getClientOriginalName();
-            $path = $request->attach->storeAs('freeboard', $filename);
-            $article->attachs = [$path];
-        }
+            $attach = $request->attach;
+            $path = $request->attach->store('freeboard');
 
-        $article->save();
+            $attachment = new Attachment;
+            $attachment->article_id = $article->id;
+            $attachment->path = $path;
+            $attachment->name = $attach->getClientOriginalName();
+            $attachment->mime = $attach->getClientMimeType();
+            $attachment->size = $attach->getClientSize();
+            $attachment->save();
+        }
 
         return redirect()->action('FreeboardController@index');
     }
@@ -78,20 +85,14 @@ class FreeboardController extends Controller
     public function show($id)
     {
         $article = Article::findorFail($id);
-        $article->hits += 1;
-        $article->save();
+        if ($article->user_id != Auth::id()) {
+            $article->hits += 1;
+            $article->save();
+        }
 
         $comments = Comment::where('article_id', $article->id)->get();
 
         return view('freeboard.show', ['article' => $article, 'comments' => $comments]);
-    }
-
-    public function attach($id, $attach)
-    {
-        $article = Article::findorFail($id);
-        $path = 'app/'.$article->attachs[$attach];
-
-        return response()->download(storage_path($path));
     }
 
     /**

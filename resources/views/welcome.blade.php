@@ -3,7 +3,9 @@
 @section('content')
 <div class="container">
     <ul>
-        <li><a href="/freeboard">자유게시판</a></li>
+        @foreach ($categories as $category)
+        <li><a href="{{ $category->prefix }}">{{ $category->title }}</a></li>
+        @endforeach
     </ul>
 </div>
 @endsection
