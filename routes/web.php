@@ -24,7 +24,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 // 자유게시판
 Route::resource('freeboard', 'FreeboardController');
 Route::prefix('freeboard')->group(function () {
-    Route::get('{article}/attachs/{attach}', 'FreeboardController@attach');
     Route::post('{article}/comment', 'CommentController@store');
     Route::patch('{article}/comments/{comment}', 'CommentController@update')
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
@@ -34,6 +33,13 @@ Route::prefix('freeboard')->group(function () {
 
 // 중고장터
 Route::resource('market', 'MarketController');
+Route::prefix('market')->group(function () {
+    Route::post('{article}/comment', 'CommentController@store');
+    Route::patch('{article}/comments/{comment}', 'CommentController@update')
+                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
+    Route::delete('{article}/comments/{comment}', 'CommentController@destroy')
+                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
+});
 
 // 첨부파일
 Route::get('attachments/{id}/{md5}', 'AttachmentController@download');

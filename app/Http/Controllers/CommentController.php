@@ -29,7 +29,7 @@ class CommentController extends Controller
 
         $article = Article::findorFail($article);
         $content = nl2br($request->input('content'));
-        $content = strip_tags($content, '<a><strong>');
+        $content = strip_tags($content, '<a><strong><br><p>');
 
         $comment = new Comment;
         $comment->article_id = $article->id;

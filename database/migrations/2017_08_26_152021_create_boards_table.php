@@ -16,6 +16,7 @@ class CreateBoardsTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->comment('게시판 제목');
+            $table->string('prefix', 30);
             $table->boolean('open')->default(true)->comment('공개 여부');
             $table->softDeletes();
             $table->timestamps();

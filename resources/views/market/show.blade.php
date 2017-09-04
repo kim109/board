@@ -20,7 +20,7 @@
     <hr>
 
     <div class="text-center">
-        <img src="{{ $article->id }}/thumbnail" style="max-width: 50%;">
+        <img src="/thumbnail/{{ $article->attachments[0]->id }}" style="max-width: 50%;">
     </div>
     <hr>
 
@@ -29,7 +29,7 @@
     <hr>
 
     <div class="well well-sm">
-        @foreach ($comments as $comment)
+        @foreach ($article->comments as $comment)
             <div class="comment">
                 <div class='comment-title'>
                     <div class="pull-right small">

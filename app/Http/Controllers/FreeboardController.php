@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Attachment;
 use App\Article;
+use App\Attachment;
 use App\Comment;
 use Illuminate\Http\Request;
 

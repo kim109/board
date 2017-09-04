@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Article;
+use App\Attachment;
 use App\Comment;
 use Illuminate\Http\Request;
 
@@ -65,12 +66,20 @@ class MarketController extends Controller
             'price' => $request->input('price'),
             'description' => $request->input('content')
         ]);
-
-        $filename = $request->attach->getClientOriginalName();
-        $path = $request->attach->storeAs('market', $filename);
-        $article->attachs = [$path];
-
         $article->save();
+
+        if ($request->hasFile('attach')) {
+            $attach = $request->attach;
+            $path = $request->attach->store('market');
+
+            $attachment = new Attachment;
+            $attachment->article_id = $article->id;
+            $attachment->path = $path;
+            $attachment->name = $attach->getClientOriginalName();
+            $attachment->mime = $attach->getClientMimeType();
+            $attachment->size = $attach->getClientSize();
+            $attachment->save();
+        }
 
         return redirect()->action('MarketController@index');
     }
@@ -84,16 +93,16 @@ class MarketController extends Controller
     public function show($id)
     {
         $article = Article::findorFail($id);
-        $article->hits += 1;
-        $article->save();
+        if ($article->user_id != Auth::id()) {
+            $article->hits += 1;
+            $article->save();
+        }
 
         $content = json_decode($article->content);
         $article->description = $content->description;
         $article->price = (int)$content->price;
 
-        $comments = Comment::where('article_id', $article->id)->get();
-
-        return view('market.show', ['article' => $article, 'comments' => $comments]);
+        return view('market.show', ['article' => $article]);
     }
 
     /**
@@ -104,7 +113,12 @@ class MarketController extends Controller
      */
     public function edit($id)
     {
-        //
+        $article = Article::findorFail($id);
+        $content = json_decode($article->content);
+        $article->description = $content->description;
+        $article->price = (int)$content->price;
+        
+        return view('market.edit', ['article' => $article]);
     }
 
     /**
@@ -116,7 +130,22 @@ class MarketController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'subject' => 'required',
+            'attach' => 'required',
+            'price' => 'required|integer|min:1',
+            'content' => 'required'
+        ]);
+
+        $article = Article::findorFail($id);
+        $article->subject = $request->input('subject');
+        $article->content = json_encode([
+            'price' => $request->input('price'),
+            'description' => $request->input('content')
+        ]);
+        $article->save();
+
+        return redirect('/market/'.$id);
     }
 
     /**
@@ -131,13 +160,5 @@ class MarketController extends Controller
         $article->delete();
 
         return redirect()->action('MarketController@index');
-    }
-
-    public function thumbnail($id)
-    {
-        $article = Article::findorFail($id);
-        $path = 'app/'.$article->attachs[0];
-
-        return response()->file(storage_path($path));
     }
 }
