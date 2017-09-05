@@ -20,6 +20,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/entry', 'AuthController@entry');
 
 // 자유게시판
 Route::resource('freeboard', 'FreeboardController');
