@@ -11,16 +11,17 @@ class AuthController extends Controller
 {
     public function entry(Request $request)
     {
-        $email = 'test50@jiran.com';
-        $password = '5850d367eed947f51b618b0b7576ba0eb8ae6810b5f3d2ec2b39865f0aa93a95';
-
-        $client = new Client([
-            'base_uri' => 'http://api.chikatalk.co.kr',
-            'http_errors' => false
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|string'
         ]);
-        $response = $client->request('POST', 'app/auth/ChikaBoard', [
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        $client = new Client(['http_errors' => false]);
+        $response = $client->request('POST', env('AUTH_URL'), [
             'form_params' => [
-                'ApiKey' => 'de968e690d42e3b60e7ffbd652e9f154088b4d8815126778c0950bd6f733c883',
+                'ApiKey' => env('AUTH_KEY'),
                 'Email' => $email,
                 'Password' => $password
             ]
@@ -57,4 +58,3 @@ class AuthController extends Controller
         return redirect('/');
     }
 }
-
