@@ -11,21 +11,21 @@
             <i class="fa fa-pencil" aria-hidden="true"></i> 글 쓰기
         </a>
     </p>
-    <div class="table-responsive">
+    <div>
         <table class="table table-hover table-condensed">
             <thead>
                 <tr>
-                    <th class="text-center" style="width:4em;">번호</th>
+                    <th class="text-center hidden-xs" style="width:4em;">번호</th>
                     <th class="text-center">제 목</th>
                     <th class="text-center" style="width:8em;">작성자</th>
                     <th class="text-center" style="width:6em;">작성일시</th>
-                    <th class="text-center" style="width:5em;">조회수</th>
+                    <th class="text-center hidden-xs" style="width:5em;">조회수</th>
                 </tr>
             </thead>
             <tbody>
             @forelse ($articles as $article)
                 <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td class="text-center hidden-xs">{{ $loop->iteration }}</td>
                     <td>
                         <a href="freeboard/{{ $article->id }}">{{ $article->subject }} [{{ $article->comments->count() }}]</a>
                     </td>
@@ -37,7 +37,7 @@
                             {{ $article->created_at->format('m/d') }}
                         @endif
                     </td>
-                    <td class="text-center">{{ $article->hits }}</td>
+                    <td class="text-center hidden-xs">{{ $article->hits }}</td>
                 </tr>
             @empty
                 <tr>

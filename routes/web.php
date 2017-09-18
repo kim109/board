@@ -12,9 +12,7 @@
 */
 
 Route::get('/', function () {
-    $categories = \App\Category::where('open', true)->get();
-
-    return view('welcome', ['categories' => $categories]);
+    return view('welcome');
 });
 
 Auth::routes();
@@ -45,3 +43,4 @@ Route::prefix('market')->group(function () {
 // 첨부파일
 Route::get('attachments/{id}/{md5}', 'AttachmentController@download');
 Route::get('thumbnail/{id}', 'AttachmentController@thumbnail');
+Route::delete('attachments/{id}', 'AttachmentController@remove');

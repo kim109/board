@@ -36,4 +36,12 @@ class AttachmentController extends Controller
 
         return response()->file($path);
     }
+
+    public function remove(Request $request, $id)
+    {
+        $attachment = Attachment::find($id);
+        $attachment->delete();
+
+        return response()->json(['result' => 'success']);
+    }
 }

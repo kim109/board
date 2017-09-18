@@ -13,6 +13,7 @@ let mix = require('laravel-mix');
 
 mix.js('resources/assets/js/app.js', 'public/js')
    .js('resources/assets/js/freeboard/create.js', 'public/js/freeboard')
+   .js('resources/assets/js/freeboard/edit.js', 'public/js/freeboard')
    .js('resources/assets/js/show.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
 

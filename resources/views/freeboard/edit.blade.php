@@ -2,7 +2,7 @@
 
 @push('scripts')
 <script src="https://cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
-<script src="{{ mix('/js/freeboard/create.js') }}"></script>
+<script src="{{ mix('/js/freeboard/edit.js') }}"></script>
 @endpush
 
 @section('content')
@@ -13,7 +13,7 @@
         <li class="active">글 수정</li>
     </ol>
 
-    <form if="fm" method="POST" action="/freeboard/{{ $article->id }}">
+    <form if="fm" method="POST" action="/freeboard/{{ $article->id }}" enctype="multipart/form-data">
         <div class="panel panel-default">
             <div class="panel-body">
                 {{ csrf_field() }}
@@ -37,6 +37,21 @@
                     <textarea class="form-control input-sm" rows="4" name="content" id="content" required>
                         {!! $article->content !!}
                     </textarea>
+                </div>
+                <div class="form-group">
+                    <label>첨부파일</label>
+                    @if ($article->attachments->count() > 0)
+                    <div>
+                        @foreach ($article->attachments as $attachment)
+                        {{ basename($attachment->name) }} -
+                        <a href="/attachments/{{ $attachment->id }}" class="attachment-delete">
+                            <i class="fa fa-trash" aria-hidden="true"></i> 삭제
+                        </a>
+                        @endforeach
+                    </div>
+                    @else
+                        <input type="file" name="attach">
+                    @endif
                 </div>
             </div>
             <div class="panel-footer text-right">

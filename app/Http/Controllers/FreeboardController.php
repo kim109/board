@@ -25,7 +25,7 @@ class FreeboardController extends Controller
         // if (isset($category)) {
         //     $articles = FreeBoard::where('category', $category)->get();
         // }
-        $articles = Freeboard::all();
+        $articles = Freeboard::orderBy('id', 'desc')->get();
 
         return view('freeboard.list', ['articles' => $articles]);
     }
@@ -131,6 +131,20 @@ class FreeboardController extends Controller
             $article->subject = $request->input('subject');
             $article->content = $request->input('content');
             $article->save();
+
+            if ($request->hasFile('attach')) {
+                $attach = $request->attach;
+                $path = $request->attach->store('freeboard');
+    
+                $attachment = new Attachment;
+                $attachment->attach_id = $article->id;
+                $attachment->attach_type = 'App\\Freeboard';
+                $attachment->path = $path;
+                $attachment->name = $attach->getClientOriginalName();
+                $attachment->mime = $attach->getClientMimeType();
+                $attachment->size = $attach->getClientSize();
+                $attachment->save();
+            }
         }
 
         return redirect('/freeboard/'.$id);
