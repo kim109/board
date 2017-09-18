@@ -7,9 +7,11 @@
 
 require('./bootstrap');
 
-if ($('#content').length == 1) {
-    CKEDITOR.replace('content');
-}
+$(document).ready(function() {
+    if ($('#content').length == 1) {
+        CKEDITOR.replace('content');
+    }
+});
 
 // window.Vue = require('vue');
 

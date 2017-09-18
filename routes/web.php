@@ -25,10 +25,10 @@ Route::post('/entry', 'AuthController@entry');
 // 자유게시판
 Route::resource('freeboard', 'FreeboardController');
 Route::prefix('freeboard')->group(function () {
-    Route::post('{article}/comment', 'CommentController@store');
-    Route::patch('{article}/comments/{comment}', 'CommentController@update')
+    Route::post('{article}/comment', 'FreeboardController@storeComment');
+    Route::patch('{article}/comments/{comment}', 'FreeboardController@updateeComment')
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
-    Route::delete('{article}/comments/{comment}', 'CommentController@destroy')
+    Route::delete('{article}/comments/{comment}', 'FreeboardController@destroyeComment')
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
 });
 

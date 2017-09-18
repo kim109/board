@@ -3,19 +3,16 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Article;
+use App\Freeboard;
+use App\FreeboardComment;
 use App\Attachment;
-use App\Comment;
 use Illuminate\Http\Request;
 
 class FreeboardController extends Controller
 {
-    private $category;
-
     public function __construct()
     {
         $this->middleware('auth');
-        $this->category = 1;
     }
 
     /**
@@ -25,7 +22,10 @@ class FreeboardController extends Controller
      */
     public function index()
     {
-        $articles = Article::where('category_id', $this->category)->get();
+        // if (isset($category)) {
+        //     $articles = FreeBoard::where('category', $category)->get();
+        // }
+        $articles = Freeboard::all();
 
         return view('freeboard.list', ['articles' => $articles]);
     }
@@ -49,13 +49,14 @@ class FreeboardController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'category' => 'required|in:일상,유머,치과경영,의료윤리,의료사고',
             'subject' => 'required',
             'content' => 'required'
         ]);
 
-        $article = new Article;
-        $article->category_id = $this->category;
+        $article = new Freeboard;
         $article->user_id = Auth::id();
+        $article->category = $request->input('category');
         $article->subject = $request->input('subject');
         $article->content = $request->input('content');
         $article->save();
@@ -65,7 +66,8 @@ class FreeboardController extends Controller
             $path = $request->attach->store('freeboard');
 
             $attachment = new Attachment;
-            $attachment->article_id = $article->id;
+            $attachment->attach_id = $article->id;
+            $attachment->attach_type = 'App\\Freeboard';
             $attachment->path = $path;
             $attachment->name = $attach->getClientOriginalName();
             $attachment->mime = $attach->getClientMimeType();
@@ -84,13 +86,13 @@ class FreeboardController extends Controller
      */
     public function show($id)
     {
-        $article = Article::findorFail($id);
+        $article = Freeboard::findorFail($id);
         if ($article->user_id != Auth::id()) {
             $article->hits += 1;
             $article->save();
         }
 
-        $comments = Comment::where('article_id', $article->id)->get();
+        $comments = FreeboardComment::where('freeboard_id', $article->id)->get();
 
         return view('freeboard.show', ['article' => $article, 'comments' => $comments]);
     }
@@ -103,7 +105,7 @@ class FreeboardController extends Controller
      */
     public function edit($id)
     {
-        $article = Article::findorFail($id);
+        $article = Freeboard::findorFail($id);
 
         return view('freeboard.edit', ['article' => $article]);
     }
@@ -118,14 +120,18 @@ class FreeboardController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'category' => 'required|in:일상,유머,치과경영,의료윤리,의료사고',
             'subject' => 'required',
             'content' => 'required'
         ]);
 
-        $article = Article::findorFail($id);
-        $article->subject = $request->input('subject');
-        $article->content = $request->input('content');
-        $article->save();
+        $article = Freeboard::findorFail($id);
+        if ($article->user_id == Auth::id()) {
+            $article->category = $request->input('category');
+            $article->subject = $request->input('subject');
+            $article->content = $request->input('content');
+            $article->save();
+        }
 
         return redirect('/freeboard/'.$id);
     }
@@ -138,9 +144,46 @@ class FreeboardController extends Controller
      */
     public function destroy($id)
     {
-        $article = Article::findorFail($id);
-        $article->delete();
+        $article = Freeboard::findorFail($id);
+        if ($article->user_id == Auth::id()) {
+            $article->delete();
+        }
 
         return redirect()->action('FreeboardController@index');
+    }
+
+    // 댓글 작성
+    public function storeComment(Request $request, $article)
+    {
+        $this->validate($request, [
+            'content' => 'required'
+        ]);
+
+        $article = Freeboard::findorFail($article);
+        $content = nl2br($request->input('content'));
+        $content = strip_tags($content, '<a><strong><br><p>');
+
+        $comment = new FreeboardComment;
+        $comment->user_id = Auth::id();
+        $comment->freeboard_id = $article->id;
+        $comment->content = $content;
+        $comment->save();
+
+        return redirect()->back();
+    }
+
+    // 댓글 삭제
+    public function destroyeComment(Request $request, $article, $comment)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $comment = FreeboardComment::findorFail($comment);
+        if ($comment->user_id == Auth::id()) {
+            $comment->delete();
+        }
+
+        return response()->json(['result' => 'success']);
     }
 }

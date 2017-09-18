@@ -1,3 +1,5 @@
+require('./bootstrap');
+
 $(document).ready(function() {
     $('.comment-delete').click(function (e) {
         e.preventDefault();

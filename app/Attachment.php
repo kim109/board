@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attachment extends Model
 {
-    public function article()
+    public function attach()
     {
-        return $this->belongsTo('App\Article');
+        return $this->morphTo();
     }
 }

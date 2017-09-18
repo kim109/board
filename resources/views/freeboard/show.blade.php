@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('scripts')
-    <script src="{{ mix('/js/show.js') }}"></script>
+<script src="{{ mix('/js/show.js') }}"></script>
 @endpush
 
 @section('content')
@@ -11,13 +11,19 @@
         <li class="active">{{ $article->subject }}</li>
     </ol>
 
-    <h4>{{ $article->subject }}</h4>
-    <div class="small text-right">
-        <span class="text-primary"><i class="fa fa-user" aria-hidden="true"></i> {{ $article->user->name }}</span> /
-        <span><i class="fa fa-calendar" aria-hidden="true"></i> {{ $article->created_at }}</span> /
-        <span>조회수 : {{ $article->hits }}</span>
+    <div class="row">
+        <h4 class="col-sm-6">
+            <span class="text-success">[{{ $article->category }}]</span>
+            {{ $article->subject }}
+        </h4>
+        <div class="small text-right col-sm-6">
+            <span class="text-primary"><i class="fa fa-user" aria-hidden="true"></i> {{ $article->user->name }}</span> /
+            <span><i class="fa fa-calendar" aria-hidden="true"></i> {{ $article->created_at }}</span> /
+            <span>조회수 : {{ $article->hits }}</span>
+        </div>
     </div>
     <hr>
+
     @if ($article->attachments != null)
     <ul class="list-unstyled">
         @foreach ($article->attachments as $attachment)
@@ -33,21 +39,21 @@
 
     <div class="well well-sm">
         @foreach ($article->comments as $comment)
-            <div class="comment">
-                <div class='comment-title'>
-                    <div class="pull-right small">
-                        {{ $comment->created_at }}
-                        @if ($comment->user_id == Auth::id())
-                            /
-                            <a href="/freeboard/{{ $article->id }}/comments/{{ $comment->id }}" class="comment-delete">
-                                <i class="fa fa-trash" aria-hidden="true"></i> 삭제
-                            </a>
-                        @endif
-                    </div>
-                    <strong>{{ $comment->user->name }}</strong>
+        <div class="comment">
+            <div class='comment-title'>
+                <div class="pull-right small">
+                    {{ $comment->created_at }}
+                    @if ($comment->user_id == Auth::id())
+                        /
+                        <a href="/freeboard/{{ $article->id }}/comments/{{ $comment->id }}" class="comment-delete">
+                            <i class="fa fa-trash" aria-hidden="true"></i> 삭제
+                        </a>
+                    @endif
                 </div>
-                <div class="comment-body">{!! $comment->content !!}</div>
+                <strong>{{ $comment->user->name }}</strong>
             </div>
+            <div class="comment-body">{!! $comment->content !!}</div>
+        </div>
         @endforeach
 
         <form method="POST" action="/freeboard/{{ $article->id }}/comment">
@@ -56,11 +62,12 @@
                 <div class="col-sm-11">
                     <textarea class="form-control input-sm" rows="2" name="content" required></textarea>
                 </div>
-                <div class="col-sm-1 text-right" style="margin-top:1em;"><input class="btn btn-primary btn-sm" type="submit" value="등록"></div>
+                <div class="col-sm-1">
+                    <input class="btn btn-primary comment-submit" type="submit" value="등록">
+                </div>
             </div>
         </form>
     </div>
-
     <hr>
 
     <div class="text-center">
