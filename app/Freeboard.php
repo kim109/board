@@ -24,7 +24,7 @@ class Freeboard extends Model
 
     public function comments()
     {
-        return $this->hasMany('App\FreeBoardComment');
+        return $this->hasMany('App\FreeboardComment');
     }
 
     public function attachments()
