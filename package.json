@@ -19,6 +19,7 @@
     "jquery-confirm": "^3.3.2",
     "laravel-mix": "^1.0",
     "lodash": "^4.17.4",
+    "trumbowyg": "^2.8.0",
     "vue": "^2.1.10"
   }
 }

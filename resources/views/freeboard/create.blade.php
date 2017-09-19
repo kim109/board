@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @push('scripts')
-<script src="https://cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
 <script src="{{ mix('/js/freeboard/create.js') }}"></script>
 @endpush
 
@@ -31,7 +30,6 @@
                     <input type="text" class="form-control input-sm" name="subject" placeholder="제목을 입력해주세요" required>
                 </div>
                 <div class="form-group">
-                    <label>내 용</label>
                     <textarea class="form-control input-sm" rows="4" name="content" id="content" required></textarea>
                 </div>
                 <div class="form-group">

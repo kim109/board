@@ -19,7 +19,7 @@ class CreateFreeboard extends Migration
             $table->unsignedInteger('user_id');
             $table->enum('category', ['일상', '유머', '치과경영', '의료윤리', '의료사고']);
             $table->string('subject')->comment('제목');
-            $table->text('content')->comment('내용');
+            $table->longText('content')->comment('내용');
             $table->unsignedInteger('hits')->default(0)->comment('조회수');
             $table->boolean('pin')->default(false)->comment('상단 고정 여부');
             $table->boolean('open')->default(true)->comment('공개 여부');
