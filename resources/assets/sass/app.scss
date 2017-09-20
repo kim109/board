@@ -1,18 +1,18 @@
-// Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
-$fa-font-path: '../fonts';
-// Font Awesome
-@import '~font-awesome/scss/font-awesome';
-
 // Sandstone Theme
 @import "variables";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "bootswatch";
 
+// Font Awesome
+@import '~font-awesome/scss/font-awesome';
+
 @import "~jquery-confirm/css/jquery-confirm";
 
 @import "~trumbowyg/dist/ui/sass/trumbowyg";
+
+body {
+    margin-top: 2em;
+}
 
 .comment {
     padding: 0 0.5em 0.5em 0.5em;

@@ -66,6 +66,7 @@ class FreeboardController extends Controller
             $path = $request->attach->store('freeboard');
 
             $attachment = new Attachment;
+            $attachment->user_id = Auth::id();
             $attachment->attach_id = $article->id;
             $attachment->attach_type = 'App\\Freeboard';
             $attachment->path = $path;
@@ -135,8 +136,9 @@ class FreeboardController extends Controller
             if ($request->hasFile('attach')) {
                 $attach = $request->attach;
                 $path = $request->attach->store('freeboard');
-    
+
                 $attachment = new Attachment;
+                $attachment->user_id = Auth::id();
                 $attachment->attach_id = $article->id;
                 $attachment->attach_type = 'App\\Freeboard';
                 $attachment->path = $path;

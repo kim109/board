@@ -14,8 +14,8 @@ try {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    require('bootstrap-sass');
-    require('jquery-confirm');
+    // require('bootstrap-sass');
+    // require('jquery-confirm');
 } catch (e) {}
 
 /**
@@ -25,7 +25,6 @@ try {
  */
 
 // window.axios = require('axios');
-
 // window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**

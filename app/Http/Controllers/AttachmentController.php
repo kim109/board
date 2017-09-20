@@ -30,7 +30,7 @@ class AttachmentController extends Controller
         $attachment = Attachment::findorFail($id);
         $path = storage_path('app/'.$attachment->path);
 
-        if (!str_is('image/*', $attachment->mime) ) {
+        if (!str_is('image/*', $attachment->mime)) {
             return '404';
         }
 
@@ -39,8 +39,13 @@ class AttachmentController extends Controller
 
     public function remove(Request $request, $id)
     {
-        $attachment = Attachment::find($id);
+        $attachment = Attachment::findorFail($id);
+        if ($attachment->user_id != \Auth::id()) {
+            return response()->json(['error' => 'permission denied'], 403);
+        }
+        $path = storage_path('app/'.$attachment->path);
         $attachment->delete();
+        unlink($path);
 
         return response()->json(['result' => 'success']);
     }
