@@ -1,28 +1,26 @@
 require('./bootstrap');
+require('jquery-confirm');
 
-$(document).ready(function() {
-    $('.comment-delete').click(function (e) {
-        e.preventDefault();
+import Vue from 'vue';
 
-        let url = $(this).attr('href');
-        $.confirm({
-            title: '댓글 삭제',
-            content: '해당 댓글를 삭제 하시겠습니까?',
-            buttons: {
-                '삭제': {
-                    btnClass: 'btn-danger',
-                    action: function() {
-                        $.ajax({
-                            method: "DELETE",
-                            url: url
-                        })
-                        .done(function(data, textStatus) {
-                            location.reload(true);
-                        });
-                    }
-                },
-                '취소': function() {}
+document.addEventListener("DOMContentLoaded", function(event) {
+    let comments = new Vue({
+        el: '#comments',
+        components: {
+            'comment': require('./components/Comment.vue')
+        },
+        data: {
+            comments: null
+        },
+        created: function() {
+            this.loadComments();
+        },
+        methods: {
+            loadComments: function () {
+                $.get(window.location.pathname+"/comments", (data) => {
+                    this.comments = data;
+                }, 'json');
             }
-        });
+        }
     });
 });

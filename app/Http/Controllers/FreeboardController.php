@@ -168,6 +168,29 @@ class FreeboardController extends Controller
         return redirect()->action('FreeboardController@index');
     }
 
+    // 댓글 확인
+    public function getComment(Request $request, $article)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $data = null;
+        $comments = FreeboardComment::where('freeboard_id', $article)
+                        ->where('parent_id', null)
+                        ->get();
+        foreach ($comments as $comment) {
+            $data[] = [
+                'id' => $comment->id,
+                'owner' => $comment->user_id == Auth::id(),
+                'author' => $comment->user->name,
+                'content'=> trim(str_replace(PHP_EOL, '', $comment->content )),
+                'created_at' => $comment->created_at->toIso8601String()
+            ];
+        }
+        return response()->json($data);
+    }
+
     // 댓글 작성
     public function storeComment(Request $request, $article)
     {
@@ -176,8 +199,9 @@ class FreeboardController extends Controller
         ]);
 
         $article = Freeboard::findorFail($article);
-        $content = nl2br($request->input('content'));
-        $content = strip_tags($content, '<a><strong><br><p>');
+        $content = $request->input('content');
+        $content = strip_tags($content, '<a><strong><p>');
+        $content = nl2br($content);
 
         $comment = new FreeboardComment;
         $comment->user_id = Auth::id();
@@ -186,6 +210,35 @@ class FreeboardController extends Controller
         $comment->save();
 
         return redirect()->back();
+    }
+
+    // 댓글 수정
+    public function updateComment(Request $request, $article, $comment)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $this->validate($request, [
+            'content' => 'required'
+        ]);
+
+        $content = $request->input('content');
+        $content = strip_tags($content, '<a><strong><p>');
+        $content = nl2br($content);
+
+        $comment = FreeboardComment::findorFail($comment);
+        if ($comment->user_id != Auth::id()) {
+            return response()->json(['error' => 'permission denied'], 403);
+        }
+
+        if ($comment->freeboard_id != $article) {
+            return response()->json(['error' => 'miss match article id'], 403);
+        }
+        $comment->content = $content;
+        $comment->save();
+
+        return response()->json(['result' => 'success']);
     }
 
     // 댓글 삭제

@@ -37,31 +37,8 @@
     <p>{!! $article->content !!}</p>
     <hr>
 
-    <div class="well well-sm">
-        @foreach ($article->comments as $comment)
-        <div class="comment">
-            <div class='comment-title'>
-                <div class="pull-right small">
-                    <a href="/freeboard/{{ $article->id }}/comments/{{ $comment->id }}/comment" class="comment-reply">
-                        <i class="fa fa-comment" aria-hidden="true"></i> 댓글
-                    </a>
-                    @if ($comment->user_id == Auth::id())
-                    <span class="text-muted">&#x2223</span>
-                    <a href="/freeboard/{{ $article->id }}/comments/{{ $comment->id }}" class="comment-edit">
-                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정
-                    </a>
-                    <span class="text-muted">&#x2223</span>
-                    <a href="/freeboard/{{ $article->id }}/comments/{{ $comment->id }}" class="comment-delete">
-                        <i class="fa fa-trash" aria-hidden="true"></i> 삭제
-                    </a>
-                    @endif
-                </div>
-                <strong>{{ $comment->user->name }}</strong>
-                <small class="text-muted">{{ $comment->created_at }}</small>
-            </div>
-            <div class="comment-body">{!! $comment->content !!}</div>
-        </div>
-        @endforeach
+    <div class="well well-sm" id="comments">
+        <comment v-for="comment in comments" :key="comment.id" :comment="comment" @reload="loadComments"></comment>
 
         <form method="POST" action="/freeboard/{{ $article->id }}/comment">
             {{ csrf_field() }}

@@ -23,8 +23,9 @@ Route::post('/entry', 'AuthController@entry');
 // 자유게시판
 Route::resource('freeboard', 'FreeboardController');
 Route::prefix('freeboard')->group(function () {
+    Route::get('{article}/comments', 'FreeboardController@getComment');
     Route::post('{article}/comment', 'FreeboardController@storeComment');
-    Route::patch('{article}/comments/{comment}', 'FreeboardController@updateeComment')
+    Route::patch('{article}/comments/{comment}', 'FreeboardController@updateComment')
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
     Route::delete('{article}/comments/{comment}', 'FreeboardController@destroyeComment')
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
