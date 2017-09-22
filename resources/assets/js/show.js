@@ -1,7 +1,17 @@
-require('./bootstrap');
-require('jquery-confirm');
+// require('./bootstrap');
 
 import Vue from 'vue';
+import axios from 'axios';
+
+// CSRF 토큰 설정
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+let token = document.head.querySelector('meta[name="csrf-token"]');
+if (token) {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+} else {
+    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
+Vue.prototype.$http = axios;
 
 document.addEventListener("DOMContentLoaded", function(event) {
     let comments = new Vue({
@@ -17,9 +27,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         },
         methods: {
             loadComments: function () {
-                $.get(window.location.pathname+"/comments", (data) => {
-                    this.comments = data;
-                }, 'json');
+                let url = window.location.pathname+'/comments';
+                this.$http.get(url)
+                    .then((response) => {
+                        this.comments = response.data;
+                    });
             }
         }
     });

@@ -24,7 +24,7 @@ Route::post('/entry', 'AuthController@entry');
 Route::resource('freeboard', 'FreeboardController');
 Route::prefix('freeboard')->group(function () {
     Route::get('{article}/comments', 'FreeboardController@getComment');
-    Route::post('{article}/comment', 'FreeboardController@storeComment');
+    Route::post('{article}/comments', 'FreeboardController@storeComment');
     Route::patch('{article}/comments/{comment}', 'FreeboardController@updateComment')
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
     Route::delete('{article}/comments/{comment}', 'FreeboardController@destroyeComment')

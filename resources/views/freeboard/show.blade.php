@@ -40,7 +40,7 @@
     <div class="well well-sm" id="comments">
         <comment v-for="comment in comments" :key="comment.id" :comment="comment" @reload="loadComments"></comment>
 
-        <form method="POST" action="/freeboard/{{ $article->id }}/comment">
+        <form method="POST" action="/freeboard/{{ $article->id }}/comments">
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-sm-11">
