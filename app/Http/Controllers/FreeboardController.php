@@ -175,20 +175,12 @@ class FreeboardController extends Controller
             return response()->json(['errors' => 'invalid connection'], 406);
         }
 
-        $data = null;
         $comments = FreeboardComment::where('freeboard_id', $article)
                         ->where('parent_id', null)
+                        ->with(['user:id,name', 'childs.user:id,name'])
                         ->get();
-        foreach ($comments as $comment) {
-            $data[] = [
-                'id' => $comment->id,
-                'owner' => $comment->user_id == Auth::id(),
-                'author' => $comment->user->name,
-                'content'=> trim(str_replace(PHP_EOL, '', $comment->content )),
-                'created_at' => $comment->created_at->toIso8601String()
-            ];
-        }
-        return response()->json($data);
+
+        return response()->json(['user'=> Auth::id(), 'comments' => $comments]);
     }
 
     // 댓글 작성
@@ -252,6 +244,31 @@ class FreeboardController extends Controller
         if ($comment->user_id == Auth::id()) {
             $comment->delete();
         }
+
+        return response()->json(['result' => 'success']);
+    }
+
+    public function replyComment(Request $request, $article, $comment)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $parent = FreeboardComment::findorFail($comment);
+        if ($parent->freeboard_id != $article) {
+            return response()->json(['error' => 'miss match article id'], 403);
+        }
+
+        $content = $request->input('content');
+        $content = strip_tags($content, '<a><strong><p>');
+        $content = nl2br($content);
+
+        $reply = new FreeboardComment;
+        $reply->user_id = Auth::id();
+        $reply->freeboard_id = $article;
+        $reply->parent_id = $comment;
+        $reply->content = $content;
+        $reply->save();
 
         return response()->json(['result' => 'success']);
     }

@@ -9,6 +9,8 @@ class FreeboardComment extends Model
 {
     use SoftDeletes;
 
+    protected $hidden = ['deleted_at'];
+
     public function user()
     {
         return $this->belongsTo('App\User');
@@ -17,5 +19,10 @@ class FreeboardComment extends Model
     public function article()
     {
         return $this->belongsTo('App\FreeBoard');
+    }
+
+    public function childs()
+    {
+        return $this->hasMany('App\FreeboardComment', 'parent_id', 'id');
     }
 }

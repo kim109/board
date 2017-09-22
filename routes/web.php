@@ -29,6 +29,9 @@ Route::prefix('freeboard')->group(function () {
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
     Route::delete('{article}/comments/{comment}', 'FreeboardController@destroyeComment')
                 ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
+
+    Route::post('{article}/comments/{comment}/reply', 'FreeboardController@replyComment')
+                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
 });
 
 // 중고장터

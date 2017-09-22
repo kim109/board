@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             'comment': require('./components/Comment.vue')
         },
         data: {
+            user: null,
             comments: null
         },
         created: function() {
@@ -30,7 +31,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 let url = window.location.pathname+'/comments';
                 this.$http.get(url)
                     .then((response) => {
-                        this.comments = response.data;
+                        this.user = response.data.user;
+                        this.comments = response.data.comments;
                     });
             }
         }
