@@ -20,21 +20,28 @@ class FreeboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $articles = Freeboard::where('open', true);
+
         // if (isset($category)) {
         //     $articles = FreeBoard::where('category', $category)->get();
         // }
+
+        if ($request->has('q')) {
+            $keword = '%'.$request->input('q').'%';
+            $articles->where('content', 'like', $keword);
+        }
+
         $notices = Freeboard::where('open', true)
                     ->where('pin', true)
                     ->orderBy('id', 'desc')
                     ->get();
 
-        $articles = Freeboard::where('open', true)
-                    ->orderBy('id', 'desc')
-                    ->paginate(10);
+        $list = $articles->orderBy('id', 'desc')
+                        ->paginate(3);
 
-        return view('freeboard.list', ['notices' => $notices, 'articles' => $articles]);
+        return view('freeboard.list', ['notices' => $notices, 'articles' => $list]);
     }
 
     /**

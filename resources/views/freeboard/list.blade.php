@@ -6,11 +6,25 @@
         <li class="active">자유게시판</li>
     </ol>
 
-    <p class="text-right">
-        <a class="btn btn-primary btn-sm" href="freeboard/create" role="button">
-            <i class="fa fa-pencil" aria-hidden="true"></i> 글 쓰기
-        </a>
-    </p>
+    <div class="row" style="margin:3em 0 1em;">
+        <div class="col-sm-6 col-xs-8">
+            <form metod="get">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" name="q" placeholder="검색어를 입력해주세요..." value="{{ Request::get('q') }}">
+                    <span class="input-group-btn">
+                        <input type="submit" class="btn btn-default" value="검색">
+                    </span>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-6 col-xs-4 text-right">
+            <a class="btn btn-primary btn-sm" href="freeboard/create" role="button">
+                <i class="fa fa-pencil" aria-hidden="true"></i> 글 쓰기
+            </a>
+        </div>
+    </div>
+    
     <div>
         <table class="table table-hover table-condensed">
             <thead>
@@ -65,7 +79,7 @@
         </table>
 
         <div class="text-center">
-            {{ $articles->links() }}
+            {{ $articles->appends(Request::only('q'))->links() }}
         </div>
     </div>
 </div>
