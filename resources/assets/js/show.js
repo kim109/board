@@ -1,7 +1,8 @@
 // require('./bootstrap');
 
-import Vue from 'vue';
-import axios from 'axios';
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
 
 // CSRF 토큰 설정
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -11,7 +12,10 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
-Vue.prototype.$http = axios;
+Vue.prototype.$http = axios
+
+moment.locale('ko')
+Vue.prototype.moment = moment
 
 document.addEventListener("DOMContentLoaded", function(event) {
     let comments = new Vue({
@@ -27,14 +31,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.loadComments();
         },
         methods: {
-            loadComments: function () {
+            loadComments: function() {
                 let url = window.location.pathname+'/comments';
                 this.$http.get(url)
                     .then((response) => {
                         this.user = response.data.user;
                         this.comments = response.data.comments;
                     });
+            },
+            comment: function() {
+                let url = window.location.pathname+'/comments';
+                let content = document.getElementById('comment-content').value.trim();
+                this.$http.post(url, { 'content': content })
+                    .then((response) => {
+                        document.getElementById('comment-content').value = '';
+                        this.loadComments();
+                    });
             }
         }
     });
+
+    if (document.getElementById('delete')) {
+        document.getElementById('delete').onclick = function(e) {
+            e.preventDefault();
+
+            if (confirm('작성하신 글을 삭제하시겠습니까?')) {
+                axios.delete(this.getAttribute('href'))
+                    .then((response) => {
+                         location.href = '/freeboard';
+                    });
+            }
+        }
+    }
+
 });

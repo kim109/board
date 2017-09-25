@@ -2,42 +2,43 @@
     <div class="comment">
         <div class='comment-title'>
             <div class="pull-right small" v-if="status == 'none'">
-                <span  @click="status = 'reply'"><i class="fa fa-comment" aria-hidden="true"></i> 댓글</span>
+                <a href="reply" @click.prevent="status = 'reply'"><i class="fa fa-comment" aria-hidden="true"></i> 댓글</a>
                 <template v-if="comment.user_id == user">
                     <span class="text-muted">&#x2223</span>
-                    <span @click="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정</span>
+                    <a href="#" @click.prevent="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정</a>
                     <span class="text-muted">&#x2223</span>
-                    <span @click="remove(comment.id)"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</span>
+                    <a href="#" @click.prevent="remove(comment.id)"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</a>
                 </template>
             </div>
             <strong>{{ comment.user.name }}</strong>
-            <small class="text-muted">{{ this.date }}</small>
+            <small class="text-muted" :title="comment.created_at">{{ dateAt(comment.created_at) }}</small>
         </div>
         <div class="comment-body" v-if="status != 'edit'" v-html="comment.content"></div>
 
-        <div class="row" v-if="status == 'edit'">
-            <div class="col-sm-10 col-md-11">
-                <textarea class="form-control input-sm" rows="3" v-model="content" @keyup.esc="cancel"></textarea>
-            </div>
-            <div class="col-sm-2 col-md-1">
-                <input class="btn btn-primary comment-submit" type="submit" value="수정" @click="update">
+        <div v-if="status == 'edit'">
+            <textarea class="form-control input-sm" rows="3" v-model="content" @keyup.esc="cancel"></textarea>
+            <div class="text-right">
+                <button class="btn btn-sm btn-primary" @click="update">수정</button>
             </div>
         </div>
 
         <ul class="reply">
-            <li v-for="childen in comment.childs">
+            <li v-for="childen in comment.childs" :key="childen.id">
                 <div class='comment-title'>
                     <div class="pull-right small" v-if="childen.user_id == user">
-                        <span @click="remove(childen.id)"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</span>
+                        <a href="#" @click="remove(childen.id)"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</a>
                     </div>
                     <strong>{{ childen.user.name }}</strong>
-                    <small class="text-muted">{{ new Date(childen.created_at).toISOString() }}</small>
+                    <small class="text-muted" :title="childen.created_at">{{ dateAt(childen.created_at) }}</small>
                 </div>
                 <div v-html="childen.content"></div>
             </li>
             <li v-if="status == 'reply'">
                 <textarea id="reply-content" class="form-control input-sm" rows="3" @keyup.esc="cancel"></textarea>
-                <input class="btn btn-primary comment-submit" type="submit" value="등록" @click="reply">
+                <div class="text-right">
+                    <button class="btn btn-sm btn-primary" @click="reply">등록</button>
+                    <button class="btn btn-sm btn-default" @click="cancel">취소</button>
+                </div>
             </li>
         </ul>
     </div>
@@ -61,14 +62,17 @@
                 content: null
             }
         },
-        computed: {
-            date: function() {
-                let date = new Date(this.comment.created_at);
-                // return date.toLocaleDateString() + ' ' + date.toLocaleTimeString('ko-KR');
-                return date.toISOString();
-            }
-        },
         methods: {
+            dateAt: function(date) {
+                let now = this.moment();
+                let d = this.moment(date);
+
+                if (now.diff(d, 'days', true) < 1) {
+                    return d.format('LT');
+                } else {
+                    return d.format('LL');
+                }
+            },
             edit: function() {
                 this.status = 'edit';
                 this.content = this.comment.content.replace(/<br ?\/?>/g,"\n");
@@ -96,20 +100,35 @@
             },
             reply: function() {
                 let url = window.location.pathname+'/comments/'+this.comment.id+'/reply';
-                let content = document.getElementById('reply-content').value;
-                this.$http.post(url, { 'content': content })
-                    .then((response) => {
-                            this.status = 'none';
-                            this.$emit('reload');
-                    });
+                let content = document.getElementById('reply-content').value.trim();
+                console.log(content);
+                if (content.length > 0) {
+                    this.$http.post(url, { 'content': content })
+                        .then((response) => {
+                                this.status = 'none';
+                                this.$emit('reload');
+                        });
+                } else {
+                    alert('내용을 입력해주세요.');
+                }
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    small.text-muted {
-        margin-left: 1em;
+    .comment {
+        padding: 0 0.5em 0.5em 0.5em;
+        margin-bottom: 0.5em;
+        border-bottom: 1px dashed #cccccc;
+
+        .comment-title {
+            margin-bottom: 0.5em;
+
+            small.text-muted {
+                margin-left: 1em;
+            }
+        }
     }
 
     ul.reply {

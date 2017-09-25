@@ -10,28 +10,10 @@
 
 @import "~trumbowyg/dist/ui/sass/trumbowyg";
 
-body {
-    margin-top: 2em;
-}
+body { margin-top: 2em; }
 
-.comment {
-    padding: 0 0.5em 0.5em 0.5em;
-    margin-bottom: 0.5em;
-    border-bottom: 1px dashed #cccccc;
-
-    .comment-title {
+#comments {
+    textarea {
         margin-bottom: 0.5em;
-    }
-}
-
-.comment-submit {
-    width: 100%;
-    height: 100%;
-    display: block;
-
-    @media (max-width: 767px) {
-        margin-top: 5px;
-        height: 3em;
-        padding: 5px 16px;
     }
 }

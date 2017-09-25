@@ -158,14 +158,21 @@ class FreeboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
         $article = Freeboard::findorFail($id);
         if ($article->user_id == Auth::id()) {
             $article->delete();
         }
 
-        return redirect()->action('FreeboardController@index');
+        $comments = FreeboardComment::where('freeboard_id', $id);
+        $comments->delete();
+
+        return response()->json(['result' => 'success']);
     }
 
     // 댓글 확인

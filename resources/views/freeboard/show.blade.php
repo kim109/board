@@ -19,7 +19,7 @@
         <div class="small text-right col-sm-6">
             <span class="text-primary"><i class="fa fa-user" aria-hidden="true"></i> {{ $article->user->name }}</span> /
             <span><i class="fa fa-calendar" aria-hidden="true"></i> {{ $article->created_at }}</span> /
-            <span>조회수 : {{ $article->hits }}</span>
+            <span>조회수 : {{ number_format($article->hits) }}</span>
         </div>
     </div>
     <hr>
@@ -40,17 +40,10 @@
     <div class="well well-sm" id="comments">
         <comment v-for="comment in comments" :key="comment.id" :comment="comment" :user="user" @reload="loadComments"></comment>
 
-        <form method="POST" action="/freeboard/{{ $article->id }}/comments">
-            {{ csrf_field() }}
-            <div class="row">
-                <div class="col-sm-11">
-                    <textarea class="form-control input-sm" rows="2" name="content" required></textarea>
-                </div>
-                <div class="col-sm-1">
-                    <input class="btn btn-primary comment-submit" type="submit" value="등록">
-                </div>
-            </div>
-        </form>
+        <textarea class="form-control input-sm" rows="3" id="comment-content" required></textarea>
+        <div class="text-right">
+            <button class="btn btn-sm btn-primary" @click="comment">등록</button>
+        </div>
     </div>
     <hr>
 
@@ -62,13 +55,9 @@
         <a class="btn btn-default btn-sm" href="/freeboard/{{ $article->id }}/edit" role="button">
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정
         </a>
-        <button class="btn btn-danger btn-sm" role="button" onclick="document.getElementById('delete').submit();">
+        <a id="delete" class="btn btn-default btn-sm" href="/freeboard/{{ $article->id }}" role="button">
             <i class="fa fa-trash" aria-hidden="true"></i> 삭제
-        </button>
-        <form method="POST" action="/freeboard/{{ $article->id }}" id="delete">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-        </form>
+        </a>
         @endif
     </div>
 </div>
