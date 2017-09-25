@@ -19,6 +19,7 @@
             <textarea class="form-control input-sm" rows="3" v-model="content" @keyup.esc="cancel"></textarea>
             <div class="text-right">
                 <button class="btn btn-sm btn-primary" @click="update">수정</button>
+                <button class="btn btn-sm btn-default" @click="cancel">취소</button>
             </div>
         </div>
 

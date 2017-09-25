@@ -25,9 +25,16 @@ class FreeboardController extends Controller
         // if (isset($category)) {
         //     $articles = FreeBoard::where('category', $category)->get();
         // }
-        $articles = Freeboard::orderBy('id', 'desc')->get();
+        $notices = Freeboard::where('open', true)
+                    ->where('pin', true)
+                    ->orderBy('id', 'desc')
+                    ->get();
 
-        return view('freeboard.list', ['articles' => $articles]);
+        $articles = Freeboard::where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->paginate(10);
+
+        return view('freeboard.list', ['notices' => $notices, 'articles' => $articles]);
     }
 
     /**

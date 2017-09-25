@@ -23,9 +23,26 @@
                 </tr>
             </thead>
             <tbody>
+            @foreach ($notices as $notice)
+                <tr class="success">
+                    <td class="text-center hidden-xs"></td>
+                    <td>
+                        <a href="freeboard/{{ $notice->id }}">{{ $notice->subject }} [{{ $notice->comments->count() }}]</a>
+                    </td>
+                    <td class="text-center">{{ $notice->user->name }}</td>
+                    <td class="text-center" title="{{ $notice->created_at }}">
+                        @if ($notice->created_at > \Carbon\Carbon::today())
+                            {{ $notice->created_at->format('H:i') }}
+                        @else
+                            {{ $notice->created_at->format('m/d') }}
+                        @endif
+                    </td>
+                    <td class="text-center hidden-xs">{{ $notice->hits }}</td>
+                </tr>
+            @endforeach
             @forelse ($articles as $article)
                 <tr>
-                    <td class="text-center hidden-xs">{{ $loop->iteration }}</td>
+                    <td class="text-center hidden-xs">{{ $articles->perPage() * ($articles->currentPage()-1) + $loop->iteration }}</td>
                     <td>
                         <a href="freeboard/{{ $article->id }}">{{ $article->subject }} [{{ $article->comments->count() }}]</a>
                     </td>
@@ -46,6 +63,10 @@
             @endforelse
             </tbody>
         </table>
+
+        <div class="text-center">
+            {{ $articles->links() }}
+        </div>
     </div>
 </div>
 @endsection

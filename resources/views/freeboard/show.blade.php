@@ -55,7 +55,7 @@
         <a class="btn btn-default btn-sm" href="/freeboard/{{ $article->id }}/edit" role="button">
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정
         </a>
-        <a id="delete" class="btn btn-default btn-sm" href="/freeboard/{{ $article->id }}" role="button">
+        <a id="delete" class="btn btn-danger btn-sm" href="/freeboard/{{ $article->id }}" role="button">
             <i class="fa fa-trash" aria-hidden="true"></i> 삭제
         </a>
         @endif
