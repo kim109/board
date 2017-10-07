@@ -43,7 +43,7 @@ class FreeboardController extends Controller
         }
 
         $list = $articles->orderBy('id', 'desc')
-                        ->paginate(3);
+                        ->paginate(10);
 
         if ($request->has('page')) {
             $request->session()->put('page', $request->input('page'));
