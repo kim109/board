@@ -22,6 +22,11 @@ class FreeboardController extends Controller
      */
     public function index(Request $request)
     {
+        $notices = Freeboard::where('open', true)
+                    ->where('pin', true)
+                    ->orderBy('id', 'desc')
+                    ->get();
+
         $articles = Freeboard::where('open', true);
 
         // if (isset($category)) {
@@ -31,15 +36,20 @@ class FreeboardController extends Controller
         if ($request->has('q')) {
             $keword = '%'.$request->input('q').'%';
             $articles->where('content', 'like', $keword);
-        }
 
-        $notices = Freeboard::where('open', true)
-                    ->where('pin', true)
-                    ->orderBy('id', 'desc')
-                    ->get();
+            $request->session()->put('q', $request->input('q'));
+        } else {
+            $request->session()->forget('q');
+        }
 
         $list = $articles->orderBy('id', 'desc')
                         ->paginate(3);
+
+        if ($request->has('page')) {
+            $request->session()->put('page', $request->input('page'));
+        } else {
+            $request->session()->forget('page');
+        }
 
         return view('freeboard.list', ['notices' => $notices, 'articles' => $list]);
     }
@@ -99,7 +109,7 @@ class FreeboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $article = Freeboard::findorFail($id);
         if ($article->user_id != Auth::id()) {
@@ -107,9 +117,22 @@ class FreeboardController extends Controller
             $article->save();
         }
 
+        $list_url = '/freeboard';
+        $param = null;
+        if ($request->session()->has('page')) {
+            $param['page'] = $request->session()->get('page');
+        }
+        if ($request->session()->has('q')) {
+            $param['q'] = $request->session()->get('q');
+        }
+
+        if ($param != null) {
+            $list_url .= '?'.http_build_query($param);
+        }
+
         $comments = FreeboardComment::where('freeboard_id', $article->id)->get();
 
-        return view('freeboard.show', ['article' => $article, 'comments' => $comments]);
+        return view('freeboard.show', ['article' => $article, 'comments' => $comments, 'list' => $list_url]);
     }
 
     /**

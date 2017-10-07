@@ -48,7 +48,7 @@
     <hr>
 
     <div class="text-center">
-        <a class="btn btn-default btn-sm" href="/freeboard" role="button">
+        <a class="btn btn-default btn-sm" href="{{ $list }}" role="button">
             <i class="fa fa-list" aria-hidden="true"></i> 목록
         </a>
         @if ($article->user_id == Auth::id())
