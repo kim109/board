@@ -85,19 +85,13 @@ class FreeboardController extends Controller
         $article->content = $request->input('content');
         $article->save();
 
-        if ($request->hasFile('attach')) {
-            $attach = $request->attach;
-            $path = $request->attach->store('freeboard');
-
-            $attachment = new Attachment;
-            $attachment->user_id = Auth::id();
-            $attachment->attach_id = $article->id;
-            $attachment->attach_type = 'App\\Freeboard';
-            $attachment->path = $path;
-            $attachment->name = $attach->getClientOriginalName();
-            $attachment->mime = $attach->getClientMimeType();
-            $attachment->size = $attach->getClientSize();
-            $attachment->save();
+        if ($request->has('attachments')) {
+            $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
+            $attachments->each(function ($attachment) use ($article) {
+                $attachment->attach_id = $article->id;
+                $attachment->attach_type = 'App\\Freeboard';
+                $attachment->save();
+            });
         }
 
         return redirect()->action('FreeboardController@index');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Attachment;
 use Illuminate\Http\Request;
 
@@ -19,18 +20,22 @@ class AttachmentController extends Controller
         }
 
         $file = $request->file('file');
-        $path = $request->file->store('freeboard');
+        $path = $request->file->store('attachments');
 
-        $name = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-        // $file->move(attachment_path(), $name);
-
-        // $attachment = \App\Attachment::create(['name' => $name]);
+        $attachment = new Attachment;
+        $attachment->user_id = \Auth::id();
+        $attachment->attach_id = null;
+        $attachment->attach_type = null;
+        $attachment->path = $path;
+        $attachment->name = $file->getClientOriginalName();
+        $attachment->mime = $file->getClientMimeType();
+        $attachment->size = $file->getClientSize();
+        $attachment->save();
 
         return response()->json([
-            // 'id'   => $attachment->id,
-            'name' => $name,
-            'type' => $file->getClientMimeType(),
-            'url'  => sprintf("/attachments/%s", $name),
+            'id'   => $attachment->id,
+            'name' => $file->getClientOriginalName(),
+            'type' => $file->getClientMimeType()
         ]);
     }
 

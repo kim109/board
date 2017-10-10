@@ -10,7 +10,8 @@
 
 @import "~trumbowyg/dist/ui/sass/trumbowyg";
 
-@import "~dropzone/dist/basic";
+// @import "~dropzone/dist/basic";
+@import "~dropzone/dist/dropzone";
 
 body { margin-top: 2em; }
 
@@ -22,7 +23,7 @@ body { margin-top: 2em; }
     }
 }
 
-// #attachment {
-//     height: 2em;
-//     border: 1px solid #cccccc;
-// }
+#attachment {
+    padding: 5px;
+    border: 1px solid #DFD7CA;
+}
