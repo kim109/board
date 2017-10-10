@@ -12,6 +12,28 @@ class AttachmentController extends Controller
         $this->middleware('auth');
     }
 
+    public function store(Request $request)
+    {
+        if (!$request->hasFile('file')) {
+            return response()->json('File not passed', 422);
+        }
+
+        $file = $request->file('file');
+        $path = $request->file->store('freeboard');
+
+        $name = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+        // $file->move(attachment_path(), $name);
+
+        // $attachment = \App\Attachment::create(['name' => $name]);
+
+        return response()->json([
+            // 'id'   => $attachment->id,
+            'name' => $name,
+            'type' => $file->getClientMimeType(),
+            'url'  => sprintf("/attachments/%s", $name),
+        ]);
+    }
+
     public function download(Request $request, $id, $md5)
     {
         $attachment = Attachment::findorFail($id);

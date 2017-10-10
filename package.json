@@ -13,6 +13,7 @@
     "axios": "^0.16.2",
     "bootstrap-sass": "^3.3.7",
     "cross-env": "^5.0.1",
+    "dropzone": "^5.2.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.1.1",
     "jquery-confirm": "^3.3.2",

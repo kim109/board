@@ -33,8 +33,9 @@
                     <textarea class="form-control input-sm" rows="4" name="content" id="content" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label>첨부파일</label>
-                    <input type="file" name="attach">
+                    <a id="attachment" class="btn btn-primary btn-sm">첨부파일</a>
+                    <div class="dz-preview dz-file-preview"></div>
+                    {{--  <input type="file" name="attach">  --}}
                 </div>
             </div>
             <div class="panel-footer text-right">
