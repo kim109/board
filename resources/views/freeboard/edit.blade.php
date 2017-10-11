@@ -5,7 +5,7 @@
     let article_id = {{ $article->id }};
     let attachments = [
         @foreach ($article->attachments as $attachment)
-        { name : "{{ basename($attachment->name) }}", size : {{ $attachment->size }}, mime : "{{ basename($attachment->mime) }}", _id: {{ $attachment->id }} },
+        { name : "{{ basename($attachment->name) }}", size : {{ $attachment->size }}, type : "{{ $attachment->mime }}", _id: {{ $attachment->id }} },
         @endforeach
     ];
 </script>
@@ -46,16 +46,6 @@
                 </div>
                 <div class="form-group">
                     <label>첨부파일</label>
-                    @if ($article->attachments->count() > 0)
-                    <div>
-                        @foreach ($article->attachments as $attachment)
-                        {{ basename($attachment->name) }} -
-                        <a href="/attachments/{{ $attachment->id }}" class="attachment-delete">
-                            <i class="fa fa-trash" aria-hidden="true"></i> 삭제
-                        </a>
-                        @endforeach
-                    </div>
-                    @endif
                     <div id="attachment" class="dropzone">
                         <div class="dz-default dz-message">
                             여기에 파일을 끌어 놓거나, 클릭하세요.

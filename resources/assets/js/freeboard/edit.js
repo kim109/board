@@ -4,19 +4,6 @@ window.Dropzone = require('dropzone');
 Dropzone.autoDiscover = false;
 
 $(document).ready(function() {
-    $('.attachment-delete').click(function(e) {
-        e.preventDefault();
-
-        let url = $(this).attr('href');
-        $.ajax({
-            method: "DELETE",
-            url: url
-        })
-        .done(function(data, textStatus) {
-            location.reload(true);
-        });
-    });
-
     let myDropzone = new Dropzone("#attachment", {
         url: "/attachments",
         headers: {
@@ -33,14 +20,20 @@ $(document).ready(function() {
         init: function() {
             var self = this;
             attachments.forEach(function (attachment) {
-                if (/image\/*/i.test(attachment.mime)) {
-                    self.emit("thumbnail", attachment, "/image/url");
-                } else {
-                    self.emit("addedfile", attachment);
+                self.emit("addedfile", attachment);
+
+                if (/^image/i.test(attachment.type)) {
+                    self.emit("thumbnail", attachment, "/thumbnail/"+attachment._id+"?w=120&h=120");
                 }
+
                 self.emit("complete", attachment);
+                self.files.push(attachment);
             });
         }
+    });
+
+    myDropzone.on('success', function (file, data) {
+        file._id = data.id;
     });
 
     myDropzone.on('maxfilesexceeded', function (file) {
@@ -48,8 +41,8 @@ $(document).ready(function() {
         this.removeFile(file);
     });
 
-    myDropzone.on('removedfile', function (file, data) {
-        $('input[type=hidden][value='+file._id+']').remove();
+    myDropzone.on('removedfile', function (file) {
+        console.log(myDropzone);
         $.ajax({
             method: "DELETE",
             url: '/attachments/'+file._id
