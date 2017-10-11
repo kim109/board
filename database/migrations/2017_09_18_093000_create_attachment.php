@@ -18,7 +18,7 @@ class CreateAttachment extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->morphs('attach');
+            $table->nullableMorphs('attach');
             $table->string('name')->commnet('파일이름');
             $table->string('path')->commnet('경로');
             $table->string('mime', 100)->collation('ascii_bin');

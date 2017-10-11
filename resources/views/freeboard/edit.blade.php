@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @push('scripts')
+<script>
+    let article_id = {{ $article->id }};
+    let attachments = [
+        @foreach ($article->attachments as $attachment)
+        { name : "{{ basename($attachment->name) }}", size : {{ $attachment->size }}, mime : "{{ basename($attachment->mime) }}", _id: {{ $attachment->id }} },
+        @endforeach
+    ];
+</script>
 <script src="{{ mix('/js/freeboard/edit.js') }}"></script>
 @endpush
 
@@ -47,9 +55,13 @@
                         </a>
                         @endforeach
                     </div>
-                    @else
-                        <input type="file" name="attach">
                     @endif
+                    <div id="attachment" class="dropzone">
+                        <div class="dz-default dz-message">
+                            여기에 파일을 끌어 놓거나, 클릭하세요.
+                            <div class="small text-success">( 최대 크기 : 2MB )</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel-footer text-right">
