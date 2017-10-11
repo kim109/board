@@ -10,6 +10,9 @@
 
 @import "~trumbowyg/dist/ui/sass/trumbowyg";
 
+// @import "~dropzone/dist/basic";
+@import "~dropzone/dist/dropzone";
+
 body { margin-top: 2em; }
 
 .icon-new { margin-left: 0.5em; }
@@ -18,4 +21,9 @@ body { margin-top: 2em; }
     textarea {
         margin-bottom: 0.5em;
     }
+}
+
+#attachment {
+    padding: 5px;
+    border: 1px solid #DFD7CA;
 }

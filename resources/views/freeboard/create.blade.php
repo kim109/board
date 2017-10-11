@@ -34,7 +34,12 @@
                 </div>
                 <div class="form-group">
                     <label>첨부파일</label>
-                    <input type="file" name="attach">
+                    <div id="attachment" class="dropzone">
+                        <div class="dz-default dz-message">
+                            여기에 파일을 끌어 놓거나, 클릭하세요.
+                            <div class="small text-success">( 최대 크기 : 2MB )</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel-footer text-right">
