@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Freeboard;
-use App\FreeboardComment;
+use App\Comment;
 use App\Attachment;
 use Illuminate\Http\Request;
 
@@ -89,7 +89,7 @@ class FreeboardController extends Controller
             $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
             $attachments->each(function ($attachment) use ($article) {
                 $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'App\\Freeboard';
+                $attachment->attach_type = 'freeboard';
                 $attachment->save();
             });
         }
@@ -124,9 +124,9 @@ class FreeboardController extends Controller
             $list_url .= '?'.http_build_query($param);
         }
 
-        $comments = FreeboardComment::where('freeboard_id', $article->id)->get();
+        $comments = $article->comments;
 
-        return view('freeboard.show', ['article' => $article, 'comments' => $comments, 'list' => $list_url]);
+        return view('freeboard.show', ['article' => $article, 'list' => $list_url]);
     }
 
     /**
@@ -171,7 +171,7 @@ class FreeboardController extends Controller
                 $attachment = new Attachment;
                 $attachment->user_id = Auth::id();
                 $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'App\\Freeboard';
+                $attachment->attach_type = 'freeboard';
                 $attachment->path = $path;
                 $attachment->name = $attach->getClientOriginalName();
                 $attachment->mime = $attach->getClientMimeType();
@@ -200,113 +200,9 @@ class FreeboardController extends Controller
             $article->delete();
         }
 
-        $comments = FreeboardComment::where('freeboard_id', $id);
-        $comments->delete();
-
-        return response()->json(['result' => 'success']);
-    }
-
-    // 댓글 확인
-    public function getComment(Request $request, $article)
-    {
-        if (!$request->ajax()) {
-            return response()->json(['errors' => 'invalid connection'], 406);
-        }
-
-        $comments = FreeboardComment::where('freeboard_id', $article)
-                        ->where('parent_id', null)
-                        ->with(['user:id,name', 'childs.user:id,name'])
-                        ->get();
-
-        return response()->json(['user'=> Auth::id(), 'comments' => $comments]);
-    }
-
-    // 댓글 작성
-    public function storeComment(Request $request, $article)
-    {
-        $this->validate($request, [
-            'content' => 'required'
-        ]);
-
-        $article = Freeboard::findorFail($article);
-        $content = $request->input('content');
-        $content = strip_tags($content, '<a><strong><p>');
-        $content = nl2br($content);
-
-        $comment = new FreeboardComment;
-        $comment->user_id = Auth::id();
-        $comment->freeboard_id = $article->id;
-        $comment->content = $content;
-        $comment->save();
-
-        return redirect()->back();
-    }
-
-    // 댓글 수정
-    public function updateComment(Request $request, $article, $comment)
-    {
-        if (!$request->ajax()) {
-            return response()->json(['errors' => 'invalid connection'], 406);
-        }
-
-        $this->validate($request, [
-            'content' => 'required'
-        ]);
-
-        $content = $request->input('content');
-        $content = strip_tags($content, '<a><strong><p>');
-        $content = nl2br($content);
-
-        $comment = FreeboardComment::findorFail($comment);
-        if ($comment->user_id != Auth::id()) {
-            return response()->json(['error' => 'permission denied'], 403);
-        }
-
-        if ($comment->freeboard_id != $article) {
-            return response()->json(['error' => 'miss match article id'], 403);
-        }
-        $comment->content = $content;
-        $comment->save();
-
-        return response()->json(['result' => 'success']);
-    }
-
-    // 댓글 삭제
-    public function destroyeComment(Request $request, $article, $comment)
-    {
-        if (!$request->ajax()) {
-            return response()->json(['errors' => 'invalid connection'], 406);
-        }
-
-        $comment = FreeboardComment::findorFail($comment);
-        if ($comment->user_id == Auth::id()) {
-            $comment->delete();
-        }
-
-        return response()->json(['result' => 'success']);
-    }
-
-    public function replyComment(Request $request, $article, $comment)
-    {
-        if (!$request->ajax()) {
-            return response()->json(['errors' => 'invalid connection'], 406);
-        }
-
-        $parent = FreeboardComment::findorFail($comment);
-        if ($parent->freeboard_id != $article) {
-            return response()->json(['error' => 'miss match article id'], 403);
-        }
-
-        $content = $request->input('content');
-        $content = strip_tags($content, '<a><strong><p>');
-        $content = nl2br($content);
-
-        $reply = new FreeboardComment;
-        $reply->user_id = Auth::id();
-        $reply->freeboard_id = $article;
-        $reply->parent_id = $comment;
-        $reply->content = $content;
-        $reply->save();
+        $article->comments()->delete();
+        $article->attachments()->delete();
+        $article->delete();
 
         return response()->json(['result' => 'success']);
     }

@@ -22,27 +22,18 @@ Route::post('/entry', 'AuthController@entry');
 
 // 자유게시판
 Route::resource('freeboard', 'FreeboardController');
-Route::prefix('freeboard')->group(function () {
-    Route::get('{article}/comments', 'FreeboardController@getComment');
-    Route::post('{article}/comments', 'FreeboardController@storeComment');
-    Route::patch('{article}/comments/{comment}', 'FreeboardController@updateComment')
-                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
-    Route::delete('{article}/comments/{comment}', 'FreeboardController@destroyeComment')
-                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
-
-    Route::post('{article}/comments/{comment}/reply', 'FreeboardController@replyComment')
-                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
-});
-
 // 중고장터
 Route::resource('market', 'MarketController');
-Route::prefix('market')->group(function () {
-    Route::post('{article}/comment', 'CommentController@store');
-    Route::patch('{article}/comments/{comment}', 'CommentController@update')
-                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
-    Route::delete('{article}/comments/{comment}', 'CommentController@destroy')
-                ->where(['article' => '[0-9]+', 'comment' => '[0-9]+']);
+
+// 댓글
+Route::prefix('{type}/{id}/comments')->group(function () {
+    Route::get('/', 'CommentController@get');
+    Route::post('/', 'CommentController@store');
+    Route::patch('/{comment}', 'CommentController@update');
+    Route::delete('/{comment}', 'CommentController@destroy');
+    Route::post('/{comment}/reply', 'CommentController@reply');
 });
+
 
 // 첨부파일
 Route::post('attachments', 'AttachmentController@store');

@@ -42,7 +42,7 @@ class CleanAttachments extends Command
         $attachments->each(function ($attachment) {
             $path = storage_path('app/'.$attachment->path);
             unlink($path);
-            $attachment->delete();
+            $attachment->forceDelete();
         });
     }
 }

@@ -12,7 +12,6 @@ class Freeboard extends Model
     protected $table = 'freeboard';
 
     protected $casts = [
-        'attachs' => 'array',
         'pin' => 'boolean',
         'open' => 'boolean'
     ];
@@ -24,7 +23,7 @@ class Freeboard extends Model
 
     public function comments()
     {
-        return $this->hasMany('App\FreeboardComment');
+        return $this->morphMany('App\Comment', 'commentable');
     }
 
     public function attachments()

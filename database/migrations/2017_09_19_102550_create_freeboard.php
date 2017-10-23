@@ -32,25 +32,6 @@ class CreateFreeboard extends Migration
 
             $table->index('category');
         });
-
-        // 자유게시판 댓글
-        Schema::create('freeboard_comments', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('freeboard_id');
-            $table->unsignedInteger('parent_id')->nullable();
-            $table->text('content')->comment('내용');
-            $table->softDeletes();
-            $table->timestamps();
-
-            $table->foreign('freeboard_id')
-                  ->references('id')->on('freeboard')
-                  ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->foreign('user_id')
-                  ->references('id')->on('users')
-                  ->onDelete('cascade')->onUpdate('cascade');
-        });
     }
 
     /**
@@ -60,11 +41,6 @@ class CreateFreeboard extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-
-        Schema::dropIfExists('freeboard_comments');
         Schema::dropIfExists('freeboard');
-
-        Schema::enableForeignKeyConstraints();
     }
 }

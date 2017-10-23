@@ -14,8 +14,13 @@ class Comment extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function article()
+    public function commentable()
     {
-        return $this->belongsTo('App\Article');
+        return $this->morphTo();
+    }
+
+    public function children()
+    {
+        return $this->morphMany('App\Comment', 'commentable');
     }
 }

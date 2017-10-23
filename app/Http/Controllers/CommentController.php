@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Article;
 use App\Comment;
 use Illuminate\Http\Request;
 
@@ -14,59 +13,108 @@ class CommentController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int $article
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request, $article)
+    public function get(Request $request, $type, $id)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $comments = Comment::where([
+                        ['commentable_type', $type],
+                        ['commentable_id', $id]
+                    ])
+                    ->with(['user:id,name', 'children.user:id,name'])
+                    ->get();
+
+        return response()->json(['user'=> Auth::id(), 'comments' => $comments]);
+    }
+
+    public function store(Request $request, $type, $id)
     {
         $this->validate($request, [
             'content' => 'required'
         ]);
 
-        $article = Article::findorFail($article);
-        $content = nl2br($request->input('content'));
-        $content = strip_tags($content, '<a><strong><br><p>');
+        $content = $request->input('content');
+        $content = strip_tags($content, '<a><strong><p>');
+        $content = nl2br($content);
 
         $comment = new Comment;
-        $comment->article_id = $article->id;
         $comment->user_id = Auth::id();
+        $comment->commentable_type = $type;
+        $comment->commentable_id = $id;
         $comment->content = $content;
         $comment->save();
 
         return redirect()->back();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int $article
-     * @param  int $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $article, $comment)
+    public function update(Request $request, $type, $id, $comment)
     {
-        //
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $this->validate($request, [
+            'content' => 'required'
+        ]);
+
+        $comment = Comment::findorFail($comment);
+        if ($comment->user_id != Auth::id()) {
+            return response()->json(['error' => 'permission denied'], 403);
+        }
+
+        if ($comment->commentable_type != $type || $comment->commentable_id != $id) {
+            return response()->json(['error' => 'miss match article id'], 403);
+        }
+
+        $content = $request->input('content');
+        $content = strip_tags($content, '<a><strong><p>');
+        $content = nl2br($content);
+        $comment->content = $content;
+        $comment->save();
+
+        return response()->json(['result' => 'success']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, $article, $comment)
+    public function destroy(Request $request, $type, $id, $comment)
     {
         if (!$request->ajax()) {
             return response()->json(['errors' => 'invalid connection'], 406);
         }
 
         $comment = Comment::findorFail($comment);
+        if ($comment->user_id != Auth::id()) {
+            return response()->json(['error' => 'permission denied'], 403);
+        }
+
+        $comment->children()->delete();
         $comment->delete();
+
+        return response()->json(['result' => 'success']);
+    }
+
+    public function reply(Request $request, $type, $id, $comment)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $parent = Comment::findorFail($comment);
+        if ($parent->commentable_type != $type || $parent->commentable_id != $id) {
+            return response()->json(['error' => 'miss match article id'], 403);
+        }
+
+        $content = $request->input('content');
+        $content = strip_tags($content, '<a><strong><p>');
+        $content = nl2br($content);
+
+        $reply = new Comment;
+        $reply->user_id = Auth::id();
+        $reply->commentable_type = 'comments';
+        $reply->commentable_id = $comment;
+        $reply->content = $content;
+        $reply->save();
 
         return response()->json(['result' => 'success']);
     }

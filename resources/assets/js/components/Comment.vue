@@ -24,7 +24,7 @@
         </div>
 
         <ul class="reply">
-            <li v-for="childen in comment.childs" :key="childen.id">
+            <li v-for="childen in comment.children" :key="childen.id">
                 <div class='comment-title'>
                     <div class="pull-right small" v-if="childen.user_id == user">
                         <a href="#" @click="remove(childen.id)"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</a>
