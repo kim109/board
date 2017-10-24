@@ -3,41 +3,27 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Article;
-use App\Attachment;
+use App\Market;
 use App\Comment;
+use App\Attachment;
 use Illuminate\Http\Request;
 
 class MarketController extends Controller
 {
-    private $category;
-
     public function __construct()
     {
         $this->middleware('auth');
-        $this->category = 2;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $articles = Article::where('category_id', $this->category)->get();
-        foreach ($articles as $article) {
-            $article->price = (int)json_decode($article->content)->price;
-        }
+        $articles = Market::where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->paginate(10);
 
         return view('market.list', ['articles' => $articles]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('market.create');
@@ -53,32 +39,25 @@ class MarketController extends Controller
     {
         $this->validate($request, [
             'subject' => 'required',
-            'attach' => 'required',
             'price' => 'required|integer|min:1',
             'content' => 'required'
         ]);
 
-        $article = new Article;
-        $article->category_id = $this->category;
-        $article->user_id = Auth::id();
-        $article->subject = $request->input('subject');
-        $article->content = json_encode([
-            'price' => $request->input('price'),
-            'description' => $request->input('content')
-        ]);
-        $article->save();
+        $market = new Market;
+        $market->status = '판매중';
+        $market->user_id = Auth::id();
+        $market->subject = $request->input('subject');
+        $market->price = $request->input('price');
+        $market->content = $request->input('content');
+        $market->save();
 
-        if ($request->hasFile('attach')) {
-            $attach = $request->attach;
-            $path = $request->attach->store('market');
-
-            $attachment = new Attachment;
-            $attachment->article_id = $article->id;
-            $attachment->path = $path;
-            $attachment->name = $attach->getClientOriginalName();
-            $attachment->mime = $attach->getClientMimeType();
-            $attachment->size = $attach->getClientSize();
-            $attachment->save();
+        if ($request->has('attachments')) {
+            $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
+            $attachments->each(function ($attachment) use ($article) {
+                $attachment->attach_id = $article->id;
+                $attachment->attach_type = 'market';
+                $attachment->save();
+            });
         }
 
         return redirect()->action('MarketController@index');
@@ -92,15 +71,11 @@ class MarketController extends Controller
      */
     public function show($id)
     {
-        $article = Article::findorFail($id);
+        $article = Market::findorFail($id);
         if ($article->user_id != Auth::id()) {
             $article->hits += 1;
             $article->save();
         }
-
-        $content = json_decode($article->content);
-        $article->description = $content->description;
-        $article->price = (int)$content->price;
 
         return view('market.show', ['article' => $article]);
     }
@@ -117,7 +92,7 @@ class MarketController extends Controller
         $content = json_decode($article->content);
         $article->description = $content->description;
         $article->price = (int)$content->price;
-        
+
         return view('market.edit', ['article' => $article]);
     }
 

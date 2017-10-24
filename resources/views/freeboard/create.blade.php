@@ -11,6 +11,15 @@
         <li class="active">글 쓰기</li>
     </ol>
 
+    @if (count($errors) > 0)
+    <!-- Form Error List -->
+    <div class="alert alert-danger">
+    @foreach ($errors->all() as $error)
+        <p>{!! nl2br(e($error)) !!}</p>
+    @endforeach
+    </div>
+    @endif
+
     <form id="fm" method="POST" action="/freeboard" enctype="multipart/form-data">
         <div class="panel panel-default">
             <div class="panel-body">

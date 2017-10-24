@@ -20,44 +20,22 @@
     <hr>
 
     <div class="text-center">
-        <img src="/thumbnail/{{ $article->attachments[0]->id }}" style="max-width: 50%;">
+        {{--  <img src="/thumbnail/{{ $article->attachments[0]->id }}" style="max-width: 50%;">  --}}
     </div>
     <hr>
 
     <strong>판매가격 &#8361;{{ number_format($article->price) }}</strong>
-    <p>{!! $article->description !!}</p>
+    <p>{!! $article->content !!}</p>
     <hr>
 
-    <div class="well well-sm">
-        @foreach ($article->comments as $comment)
-            <div class="comment">
-                <div class='comment-title'>
-                    <div class="pull-right small">
-                        {{ $comment->created_at }}
-                        @if ($comment->user_id == Auth::id())
-                            /
-                            <a href="/market/{{ $article->id }}/comments/{{ $comment->id }}" class="comment-delete">
-                                <i class="fa fa-trash" aria-hidden="true"></i> 삭제
-                            </a>
-                        @endif
-                    </div>
-                    <strong>{{ $comment->user->name }}</strong>
-                </div>
-                <div class="comment-body">{!! $comment->content !!}</div>
-            </div>
-        @endforeach
+    <div class="well well-sm" id="comments">
+        <comment v-for="comment in comments" :key="comment.id" :comment="comment" :user="user" @reload="loadComments"></comment>
 
-        <form method="POST" action="/market/{{ $article->id }}/comment">
-            {{ csrf_field() }}
-            <div class="row">
-                <div class="col-sm-11">
-                    <textarea class="form-control input-sm" rows="2" name="content" required></textarea>
-                </div>
-                <div class="col-sm-1 text-right" style="margin-top:1em;"><input class="btn btn-primary btn-sm" type="submit" value="등록"></div>
-            </div>
-        </form>
+        <textarea class="form-control input-sm" rows="3" id="comment-content" required></textarea>
+        <div class="text-right">
+            <button class="btn btn-sm btn-primary" @click="comment">등록</button>
+        </div>
     </div>
-
     <hr>
 
     <div class="text-center">
