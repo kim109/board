@@ -11,7 +11,7 @@
         <li class="active">등록하기</li>
     </ol>
 
-    <form method="POST" action="/market" enctype="multipart/form-data">
+    <form id="fm" method="POST" action="/market" enctype="multipart/form-data">
         <div class="panel panel-default">
             <div class="panel-body">
                 {{ csrf_field() }}
@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label>상품 가격</label>
-                    <input type="number" class="form-control input-sm" name="price" min="1" required>
+                    <input type="number" class="form-control input-sm" name="price" min="1" placeholder=" 상품 가격을 입력해주세요" required>
                 </div>
                 <div class="form-group">
                     <label>상세 설명</label>

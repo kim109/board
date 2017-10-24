@@ -21,6 +21,7 @@ class CreateMarket extends Migration
             $table->string('subject')->comment('제목');
             $table->unsignedInteger('price')->comment('가격');
             $table->longText('content')->comment('상세설명');
+            $table->unsignedInteger('thumbnail_id')->comment('대표 이미지');
             $table->unsignedInteger('hits')->default(0)->comment('조회수');
             $table->boolean('pin')->default(false)->comment('상단 고정 여부');
             $table->boolean('open')->default(true)->comment('공개 여부');
@@ -30,6 +31,10 @@ class CreateMarket extends Migration
             $table->foreign('user_id')
                   ->references('id')->on('users')
                   ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->foreign('thumbnail')
+                  ->references('id')->on('attachments')
+                  ->onUpdate('cascade');
         });
     }
 

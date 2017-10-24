@@ -26,6 +26,11 @@ class Market extends Model
         return $this->morphMany('App\Comment', 'commentable');
     }
 
+    public function thumbnail()
+    {
+        return $this->hasOne('App\Attachment', 'id', 'thumbnail_id');
+    }
+
     public function attachments()
     {
         return $this->morphMany('App\Attachment', 'attach');

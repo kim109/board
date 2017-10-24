@@ -53,8 +53,8 @@ class MarketController extends Controller
 
         if ($request->has('attachments')) {
             $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
-            $attachments->each(function ($attachment) use ($article) {
-                $attachment->attach_id = $article->id;
+            $attachments->each(function ($attachment) use ($market) {
+                $attachment->attach_id = $market->id;
                 $attachment->attach_type = 'market';
                 $attachment->save();
             });
