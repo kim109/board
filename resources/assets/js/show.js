@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             if (confirm('작성하신 글을 삭제하시겠습니까?')) {
                 axios.delete(this.getAttribute('href'))
                     .then((response) => {
-                         location.href = '/freeboard';
+                         location.href = response.data.list;
                     });
             }
         }

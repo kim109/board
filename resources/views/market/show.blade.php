@@ -20,7 +20,9 @@
     <hr>
 
     <div class="text-center">
-        {{--  <img src="/thumbnail/{{ $article->attachments[0]->id }}" style="max-width: 50%;">  --}}
+        @foreach ($article->attachments as $attachment)
+            <img class="img-thumbnail" src="/thumbnail/{{ $attachment->id }}" style="width: 300px; margin:0 1em;">
+        @endforeach
     </div>
     <hr>
 
@@ -46,13 +48,9 @@
         <a class="btn btn-default btn-sm" href="/market/{{ $article->id }}/edit" role="button">
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정
         </a>
-        <button class="btn btn-danger btn-sm" role="button" onclick="document.getElementById('delete').submit();">
+        <a id="delete" class="btn btn-danger btn-sm" href="/market/{{ $article->id }}" role="button">
             <i class="fa fa-trash" aria-hidden="true"></i> 삭제
-        </button>
-        <form method="POST" action="/market/{{ $article->id }}" id="delete">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-        </form>
+        </a>
         @endif
     </div>
 </div>

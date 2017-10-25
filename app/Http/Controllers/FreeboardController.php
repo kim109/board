@@ -204,6 +204,6 @@ class FreeboardController extends Controller
         $article->attachments()->delete();
         $article->delete();
 
-        return response()->json(['result' => 'success']);
+        return response()->json(['list' => '/market']);
     }
 }

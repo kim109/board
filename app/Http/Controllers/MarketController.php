@@ -40,7 +40,8 @@ class MarketController extends Controller
         $this->validate($request, [
             'subject' => 'required',
             'price' => 'required|integer|min:1',
-            'content' => 'required'
+            'content' => 'required',
+            'attachments' => 'required'
         ]);
 
         $market = new Market;
@@ -49,6 +50,7 @@ class MarketController extends Controller
         $market->subject = $request->input('subject');
         $market->price = $request->input('price');
         $market->content = $request->input('content');
+        $market->thumbnail_id = $request->input('attachments')[0];
         $market->save();
 
         if ($request->has('attachments')) {
@@ -129,11 +131,20 @@ class MarketController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $article = Article::findorFail($id);
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $article = Market::findorFail($id);
+        if ($article->user_id == Auth::id()) {
+            $article->delete();
+        }
+
+        $article->comments()->delete();
         $article->delete();
 
-        return redirect()->action('MarketController@index');
+        return response()->json(['list' => '/market']);
     }
 }

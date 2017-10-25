@@ -18,7 +18,7 @@
                 <div class="media">
                 <div class="media-left">
                     <div style="width: 140px;">
-                        {{--  <img class="media-object img-rounded" src="/thumbnail/{{ $article->attachments[0]->id }}" style="height:80px;">  --}}
+                        <img class="media-object img-rounded" src="/thumbnail/{{ $article->thumbnail_id }}" style="height:80px;">
                     </div>
                 </div>
                 <div class="media-body">
