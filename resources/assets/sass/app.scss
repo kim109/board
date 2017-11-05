@@ -15,7 +15,14 @@
 
 body { margin-top: 2em; }
 
-.icon-new { margin-left: 0.5em; }
+span.icon-new {
+    content:"";
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJAgMAAACd/+6DAAAACVBMVEX/////X5D8/PwtSiEdAAAAAXRSTlMAQObYZgAAACFJREFUeNpjEA1lYAgNdWCIjHRgiALiyJlAnAnhg8SB8gCLUAe0QNoMtgAAAABJRU5ErkJggg==') no-repeat;
+    display:inline-block;
+    width: 9px;
+    height: 9px;
+    margin-left: 0.5em;
+}
 
 #comments {
     textarea {

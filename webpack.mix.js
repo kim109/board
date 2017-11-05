@@ -19,6 +19,8 @@ mix.js('resources/assets/js/app.js', 'public/js')
 
 mix.js('resources/assets/js/market/create.js', 'public/js/market');
 
+mix.js('resources/assets/js/notice/create.js', 'public/js/notice');
+
 if (mix.inProduction()) {
     mix.version();
 }
