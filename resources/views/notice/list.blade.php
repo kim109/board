@@ -9,7 +9,7 @@
 @endpush
 
 @section('content')
-  @component('layouts.list', ['articles' => $articles])
+  @component('layouts.list', ['articles' => $articles, 'writable' => $writable])
     @slot('board')
       공지사항
     @endslot

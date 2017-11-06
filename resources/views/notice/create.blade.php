@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-  @component('layouts.create', ['link' => '/notice'])
+  @component('layouts.create')
     @slot('board')
       공지사항
     @endslot

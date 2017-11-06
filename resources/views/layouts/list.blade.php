@@ -3,7 +3,7 @@
 
   <div class="row" style="margin:3em 0 1em;">
     <div class="col-sm-6 col-xs-8" style="padding-left:0;">
-      <form metod="get" action="{{ Request::path() }}">
+      <form metod="get" action="/{{ Request::path() }}">
         <div class="input-group input-group-sm">
           <input type="text" class="form-control" name="q" placeholder="검색어를 입력해주세요" value="{{ Request::get('q') }}">
           <span class="input-group-btn">
@@ -13,11 +13,13 @@
       </form>
     </div>
 
+    @if ($writable)
     <div class="col-sm-6 col-xs-4 text-right" style="padding-right:0;">
-      <a class="btn btn-primary btn-sm" href="{{ Request::path() }}/create" role="button">
+      <a class="btn btn-primary btn-sm" href="/{{ Request::path() }}/create" role="button">
         <i class="fa fa-pencil" aria-hidden="true"></i> 글 쓰기
       </a>
     </div>
+    @endif
   </div>
 
   <div>

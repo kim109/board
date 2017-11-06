@@ -14,7 +14,7 @@ class NoticeController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('admin')->except(['index','show']);
     }
 
     /**
@@ -44,7 +44,11 @@ class NoticeController extends Controller
             $request->session()->forget('page');
         }
 
-        return view('notice.list', ['articles' => $list]);
+        $admin = explode(',', env('ADMIN'));
+        $admin = array_map('trim', $admin);
+        $writable = in_array(Auth::user()->user_id, $admin);
+
+        return view('notice.list', ['articles' => $list, 'writable' => $writable]);
     }
 
     /**
@@ -80,7 +84,7 @@ class NoticeController extends Controller
             $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
             $attachments->each(function ($attachment) use ($article) {
                 $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'notices';
+                $attachment->attach_type = 'notice';
                 $attachment->save();
             });
         }
@@ -126,7 +130,13 @@ class NoticeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $article = Notice::findorFail($id);
+
+        if ($article->user_id != Auth::id()) {
+            return redirect()->route('notice.show', ['id' => $article->id]);
+        }
+
+        return view('notice.edit', ['article' => $article]);
     }
 
     /**
@@ -138,7 +148,34 @@ class NoticeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'subject' => 'required',
+            'content' => 'required'
+        ]);
+
+        $article = Notice::findorFail($id);
+        if ($article->user_id == Auth::id()) {
+            $article->subject = $request->input('subject');
+            $article->content = $request->input('content');
+            $article->save();
+
+            if ($request->hasFile('attach')) {
+                $attach = $request->attach;
+                $path = $request->attach->store('freeboard');
+
+                $attachment = new Attachment;
+                $attachment->user_id = Auth::id();
+                $attachment->attach_id = $article->id;
+                $attachment->attach_type = 'notice';
+                $attachment->path = $path;
+                $attachment->name = $attach->getClientOriginalName();
+                $attachment->mime = $attach->getClientMimeType();
+                $attachment->size = $attach->getClientSize();
+                $attachment->save();
+            }
+        }
+
+        return redirect()->route('notice.show', ['id' => $article->id]);
     }
 
     /**

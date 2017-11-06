@@ -21,8 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/entry', 'AuthController@entry');
 
 // 공지사항
-Route::resource('notice', 'NoticeController');
-
+Route::resource('notice', 'NoticeController')->middleware('auth');
 // 자유게시판
 Route::resource('freeboard', 'FreeboardController');
 // 중고장터

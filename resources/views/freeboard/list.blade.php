@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  @component('layouts.list', ['articles' => $articles])
+  @component('layouts.list', ['articles' => $articles, 'writable' => true])
     @slot('board')
       자유게시판
     @endslot
