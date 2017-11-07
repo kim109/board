@@ -27,11 +27,13 @@ class Initalize extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->nullableMorphs('commentable');
+            $table->unsignedInteger('commentable_id');
+            $table->string('commentable_type')->collation('ascii_general_ci');
             $table->text('content')->comment('내용');
             $table->softDeletes();
             $table->timestamps();
 
+            $table->index(['commentable_id', 'commentable_type']);
             $table->foreign('user_id')
                     ->references('id')->on('users')
                     ->onDelete('cascade')->onUpdate('cascade');
@@ -41,13 +43,15 @@ class Initalize extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->nullableMorphs('attach');
+            $table->unsignedInteger('attach_id')->nullable();
+            $table->string('attach_type')->nullable()->collation('ascii_general_ci');
             $table->string('name')->commnet('파일이름');
             $table->string('path')->commnet('경로');
             $table->string('mime', 100)->collation('ascii_general_ci');
             $table->unsignedInteger('size')->commnet('파일크기');
             $table->timestamps();
 
+            $table->index(['attach_id', 'attach_type']);
             $table->foreign('user_id')
                   ->references('id')->on('users')
                   ->onDelete('cascade')->onUpdate('cascade');

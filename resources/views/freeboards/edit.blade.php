@@ -14,7 +14,7 @@
 @section('content')
   @component('layouts.edit')
     @slot('board')
-      공지사항
+      자유게시판
     @endslot
     @slot('subject')
       {{ $article->subject }}

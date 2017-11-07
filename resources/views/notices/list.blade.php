@@ -54,7 +54,7 @@
           </tr>
         @empty
         <tr>
-          <td colspan="5">등록된 공지사항이 없습니다.</td>
+          <td colspan="6">등록된 공지사항이 없습니다.</td>
         </tr>
         @endforelse
       </tbody>

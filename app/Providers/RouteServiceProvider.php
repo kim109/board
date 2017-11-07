@@ -23,7 +23,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::pattern('type', '(notice|freeboard|market)');
+        Route::pattern('type', '(notices|freeboard|market)');
         Route::pattern('id', '[0-9]+');
         Route::pattern('comment', '[0-9]+');
         parent::boot();

@@ -1,5 +1,5 @@
-require('../bootstrap');
-require('../wysiwyg');
+require('./bootstrap');
+require('./wysiwyg');
 window.Dropzone = require('dropzone');
 Dropzone.autoDiscover = false;
 

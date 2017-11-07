@@ -41,4 +41,10 @@ class LoginController extends Controller
     {
         return 'user_id';
     }
+
+    protected function redirectTo(Request $request)
+    {
+        return route('notices.index');
+    }
+    
 }

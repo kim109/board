@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
-@push('stylesheets')
-</style>
-@endpush
-
 @push('scripts')
-<script src="{{ mix('/js/notice/create.js') }}"></script>
+<script src="{{ mix('/js/create.js') }}"></script>
 @endpush
 
 @section('content')
@@ -16,14 +12,14 @@
 
     <div class="form-horizontal">
       <div class="form-group">
-        <div class="col-xs-4 col-sm-2 col-lg-1">
+        <div class="col-xs-4 col-sm-2">
           <select class="form-control input-sm" name="category" required>
             @foreach ($categories as $category)
               <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
           </select>
         </div>
-        <div class="col-xs-8 col-sm-10 col-lg-11">
+        <div class="col-xs-8 col-sm-10">
           <input type="text" class="form-control input-sm" id="subject" name="subject" placeholder="제목을 입력해주세요" required>
         </div>
       </div>

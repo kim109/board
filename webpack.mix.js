@@ -11,15 +11,12 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .js('resources/assets/js/freeboard/create.js', 'public/js/freeboard')
-   .js('resources/assets/js/freeboard/edit.js', 'public/js/freeboard')
-   .js('resources/assets/js/show.js', 'public/js')
+mix.js('resources/assets/js/show.js', 'public/js')
+   .js('resources/assets/js/create.js', 'public/js')
+   .js('resources/assets/js/edit.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
 
 mix.js('resources/assets/js/market/create.js', 'public/js/market');
-
-mix.js('resources/assets/js/notice/create.js', 'public/js/notice');
 
 if (mix.inProduction()) {
     mix.version();

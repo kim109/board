@@ -10,11 +10,6 @@ use Illuminate\Http\Request;
 
 class FreeboardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -51,7 +46,7 @@ class FreeboardController extends Controller
             $request->session()->forget('page');
         }
 
-        return view('freeboard.list', ['notices' => $notices, 'articles' => $list]);
+        return view('freeboards.list', ['notices' => $notices, 'articles' => $list]);
     }
 
     /**
@@ -61,7 +56,8 @@ class FreeboardController extends Controller
      */
     public function create()
     {
-        return view('freeboard.create');
+        $categories = \App\Category::where('table', 'freeboards')->get();
+        return view('freeboards.create', ['categories' => $categories]);
     }
 
     /**
@@ -73,14 +69,14 @@ class FreeboardController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'category' => 'required|in:일상,유머,치과경영,의료윤리,의료사고',
+            'category' => 'required|integer',
             'subject' => 'required',
             'content' => 'required'
         ]);
 
         $article = new Freeboard;
         $article->user_id = Auth::id();
-        $article->category = $request->input('category');
+        $article->category_id = $request->input('category');
         $article->subject = $request->input('subject');
         $article->content = $request->input('content');
         $article->save();
@@ -89,12 +85,12 @@ class FreeboardController extends Controller
             $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
             $attachments->each(function ($attachment) use ($article) {
                 $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'freeboard';
+                $attachment->attach_type = 'freeboards';
                 $attachment->save();
             });
         }
 
-        return redirect()->action('FreeboardController@index');
+        return redirect()->route('freeboards.index');
     }
 
     /**
@@ -111,7 +107,7 @@ class FreeboardController extends Controller
             $article->save();
         }
 
-        $list_url = '/freeboard';
+        $list_url = '/freeboards';
         $param = null;
         if ($request->session()->has('page')) {
             $param['page'] = $request->session()->get('page');
@@ -126,7 +122,7 @@ class FreeboardController extends Controller
 
         $comments = $article->comments;
 
-        return view('freeboard.show', ['article' => $article, 'list' => $list_url]);
+        return view('freeboards.show', ['article' => $article, 'list' => $list_url]);
     }
 
     /**
@@ -138,8 +134,8 @@ class FreeboardController extends Controller
     public function edit($id)
     {
         $article = Freeboard::findorFail($id);
-
-        return view('freeboard.edit', ['article' => $article]);
+        $categories = \App\Category::where('table', 'freeboards')->get();
+        return view('freeboards.edit', ['article' => $article, 'categories' => $categories]);
     }
 
     /**
@@ -152,14 +148,14 @@ class FreeboardController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'category' => 'required|in:일상,유머,치과경영,의료윤리,의료사고',
+            'category' => 'required|integer',
             'subject' => 'required',
             'content' => 'required'
         ]);
 
         $article = Freeboard::findorFail($id);
         if ($article->user_id == Auth::id()) {
-            $article->category = $request->input('category');
+            $article->category_id = $request->input('category');
             $article->subject = $request->input('subject');
             $article->content = $request->input('content');
             $article->save();
@@ -171,7 +167,7 @@ class FreeboardController extends Controller
                 $attachment = new Attachment;
                 $attachment->user_id = Auth::id();
                 $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'freeboard';
+                $attachment->attach_type = 'freeboards';
                 $attachment->path = $path;
                 $attachment->name = $attach->getClientOriginalName();
                 $attachment->mime = $attach->getClientMimeType();
@@ -180,7 +176,7 @@ class FreeboardController extends Controller
             }
         }
 
-        return redirect('/freeboard/'.$id);
+        return redirect()->route('freeboards.show', ['id' => $article->id]);
     }
 
     /**

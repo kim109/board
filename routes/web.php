@@ -18,12 +18,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// 메신저에서 로그인
 Route::post('/entry', 'AuthController@entry');
 
 // 공지사항
 Route::resource('notices', 'NoticeController')->middleware('auth');
 // 자유게시판
-Route::resource('freeboard', 'FreeboardController');
+Route::resource('freeboards', 'FreeboardController')->middleware('auth');
 // 중고장터
 Route::resource('market', 'MarketController');
 
@@ -35,7 +37,6 @@ Route::prefix('{type}/{id}/comments')->group(function () {
     Route::delete('/{comment}', 'CommentController@destroy');
     Route::post('/{comment}/reply', 'CommentController@reply');
 });
-
 
 // 첨부파일
 Route::post('attachments', 'AttachmentController@store');
