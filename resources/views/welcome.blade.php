@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <ul>
-        <li><a href="/notice">공지사항</a></li>
+        <li><a href="/notices">공지사항</a></li>
         <li><a href="/freeboard">자유게시판</a></li>
         <li><a href="/market">중고장터</a></li>
     </ul>

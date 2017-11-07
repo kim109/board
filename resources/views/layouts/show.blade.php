@@ -9,7 +9,13 @@
       {{ $title }}
     </h4>
     <div class="small text-right col-sm-6">
-      <span class="text-primary"><i class="fa fa-user" aria-hidden="true"></i> {{ $article->user->name }}</span> /
+      <span class="text-primary"><i class="fa fa-user" aria-hidden="true"></i>
+        @if (Request::is('notices/*'))
+          치카톡
+        @else
+          {{ $article->user->name }}
+        @endif
+      </span> /
       <span><i class="fa fa-calendar" aria-hidden="true"></i> {{ $article->created_at }}</span> /
       <span>조회수 : {{ number_format($article->hits) }}</span>
     </div>

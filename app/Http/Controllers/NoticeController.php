@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 class NoticeController extends Controller
 {
-    public $admin = ['kim109'];
-
     public function __construct()
     {
         $this->middleware('admin')->except(['index','show']);
@@ -48,7 +46,7 @@ class NoticeController extends Controller
         $admin = array_map('trim', $admin);
         $writable = in_array(Auth::user()->user_id, $admin);
 
-        return view('notice.list', ['articles' => $list, 'writable' => $writable]);
+        return view('notices.list', ['articles' => $list, 'writable' => $writable]);
     }
 
     /**
@@ -58,7 +56,8 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        return view('notice.create');
+        $categories = \App\Category::where('table', 'notices')->get();
+        return view('notices.create', ['categories' => $categories]);
     }
 
     /**
@@ -70,12 +69,14 @@ class NoticeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'category' => 'required|integer',
             'subject' => 'required',
             'content' => 'required'
         ]);
 
         $article = new Notice;
         $article->user_id = Auth::id();
+        $article->category_id = $request->input('category');
         $article->subject = $request->input('subject');
         $article->content = $request->input('content');
         $article->save();
@@ -84,12 +85,12 @@ class NoticeController extends Controller
             $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
             $attachments->each(function ($attachment) use ($article) {
                 $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'notice';
+                $attachment->attach_type = 'notices';
                 $attachment->save();
             });
         }
 
-        return redirect()->route('notice.index');
+        return redirect()->route('notices.index');
     }
 
     /**
@@ -106,7 +107,7 @@ class NoticeController extends Controller
             $article->save();
         }
 
-        $list_url = '/notice';
+        $list_url = '/notices';
         $param = null;
         if ($request->session()->has('page')) {
             $param['page'] = $request->session()->get('page');
@@ -119,7 +120,7 @@ class NoticeController extends Controller
             $list_url .= '?'.http_build_query($param);
         }
 
-        return view('notice.show', ['article' => $article, 'list' => $list_url]);
+        return view('notices.show', ['article' => $article, 'list' => $list_url]);
     }
 
     /**
@@ -131,12 +132,8 @@ class NoticeController extends Controller
     public function edit($id)
     {
         $article = Notice::findorFail($id);
-
-        if ($article->user_id != Auth::id()) {
-            return redirect()->route('notice.show', ['id' => $article->id]);
-        }
-
-        return view('notice.edit', ['article' => $article]);
+        $categories = \App\Category::where('table', 'notices')->get();
+        return view('notices.edit', ['article' => $article, 'categories' => $categories]);
     }
 
     /**
@@ -149,33 +146,33 @@ class NoticeController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'category' => 'required|integer',
             'subject' => 'required',
             'content' => 'required'
         ]);
 
         $article = Notice::findorFail($id);
-        if ($article->user_id == Auth::id()) {
-            $article->subject = $request->input('subject');
-            $article->content = $request->input('content');
-            $article->save();
+        $article->category_id = $request->input('category');
+        $article->subject = $request->input('subject');
+        $article->content = $request->input('content');
+        $article->save();
 
-            if ($request->hasFile('attach')) {
-                $attach = $request->attach;
-                $path = $request->attach->store('freeboard');
+        if ($request->hasFile('attach')) {
+            $attach = $request->attach;
+            $path = $request->attach->store('attachments');
 
-                $attachment = new Attachment;
-                $attachment->user_id = Auth::id();
-                $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'notice';
-                $attachment->path = $path;
-                $attachment->name = $attach->getClientOriginalName();
-                $attachment->mime = $attach->getClientMimeType();
-                $attachment->size = $attach->getClientSize();
-                $attachment->save();
-            }
+            $attachment = new Attachment;
+            $attachment->user_id = Auth::id();
+            $attachment->attach_id = $article->id;
+            $attachment->attach_type = 'notices';
+            $attachment->path = $path;
+            $attachment->name = $attach->getClientOriginalName();
+            $attachment->mime = $attach->getClientMimeType();
+            $attachment->size = $attach->getClientSize();
+            $attachment->save();
         }
 
-        return redirect()->route('notice.show', ['id' => $article->id]);
+        return redirect()->route('notices.show', ['id' => $article->id]);
     }
 
     /**
@@ -191,14 +188,10 @@ class NoticeController extends Controller
         }
 
         $article = Notice::findorFail($id);
-        if ($article->user_id == Auth::id()) {
-            $article->delete();
-        }
-
         $article->comments()->delete();
         $article->attachments()->delete();
         $article->delete();
 
-        return response()->json(['list' => '/notice']);
+        return response()->json(['list' => '/notices']);
     }
 }

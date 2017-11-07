@@ -32,9 +32,9 @@ class CreateMarket extends Migration
                   ->references('id')->on('users')
                   ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->foreign('thumbnail_id')
-                  ->references('id')->on('attachments')
-                  ->onUpdate('cascade');
+            // $table->foreign('thumbnail_id')
+            //       ->references('id')->on('attachments')
+            //       ->onUpdate('cascade');
         });
     }
 
