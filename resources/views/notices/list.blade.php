@@ -37,6 +37,9 @@
             <td class="text-left">
               <a href="{{ Request::path() }}/{{ $article->id }}">
                 {{ $article->subject }} [{{ $article->comments->count() }}]
+                @if ($article->attachments->count() > 0)
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                @endif
                 @if ($article->created_at > \Carbon\Carbon::today())
                 <span class="icon-new"></span>
                 @endif

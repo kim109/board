@@ -120,9 +120,10 @@ class FreeboardController extends Controller
             $list_url .= '?'.http_build_query($param);
         }
 
-        $comments = $article->comments;
+        // 수정,삭제 버튼 노출 여부
+        $writable = $article->user_id == Auth::id();
 
-        return view('freeboards.show', ['article' => $article, 'list' => $list_url]);
+        return view('freeboards.show', ['article' => $article, 'list' => $list_url, 'writable' => $writable]);
     }
 
     /**

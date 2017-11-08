@@ -29,7 +29,7 @@
         <i class="fa fa-list" aria-hidden="true"></i> 목록
       </a>
 
-      @if ($article->user_id == Auth::id())
+      @if ($writable)
       <a class="btn btn-default btn-sm" href="/{{ Request::path() }}/edit" role="button">
         <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정
       </a>

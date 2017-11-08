@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-  @component('layouts.show', ['article' => $article, 'list' => $list])
+  @component('layouts.show', ['article' => $article, 'list' => $list, 'writable' => $writable])
     @slot('board')
       자유게시판
     @endslot

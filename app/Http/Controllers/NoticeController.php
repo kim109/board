@@ -120,7 +120,11 @@ class NoticeController extends Controller
             $list_url .= '?'.http_build_query($param);
         }
 
-        return view('notices.show', ['article' => $article, 'list' => $list_url]);
+        $admin = explode(',', env('ADMIN'));
+        $admin = array_map('trim', $admin);
+        $writable = in_array(Auth::user()->user_id, $admin);
+
+        return view('notices.show', ['article' => $article, 'list' => $list_url, 'writable' => $writable]);
     }
 
     /**

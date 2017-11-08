@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/notices';
 
     /**
      * Create a new controller instance.
@@ -41,10 +41,4 @@ class LoginController extends Controller
     {
         return 'user_id';
     }
-
-    protected function redirectTo(Request $request)
-    {
-        return route('notices.index');
-    }
-    
 }

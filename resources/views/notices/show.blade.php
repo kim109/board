@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-  @component('layouts.show', ['article' => $article, 'list' => $list])
+  @component('layouts.show', ['article' => $article, 'list' => $list, 'writable' => $writable])
     @slot('board')
       공지사항
     @endslot
@@ -16,11 +16,11 @@
 
     @if ($article->attachments != null)
     <ul class="list-unstyled">
-        @foreach ($article->attachments as $attachment)
-        <li class="text-right">
+      @foreach ($article->attachments as $attachment)
+      <li class="text-right">
         <i class="fa fa-floppy-o" aria-hidden="true"></i> <a href="/attachments/{{ $attachment->id }}/{{ md5($attachment->path) }}">{{ basename($attachment->name) }}</a>
-        </li>
-        @endforeach
+      </li>
+      @endforeach
     </ul>
     @endif
 

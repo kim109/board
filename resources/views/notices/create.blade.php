@@ -30,10 +30,10 @@
     <div class="form-group">
       <label>첨부파일</label>
       <div id="attachment" class="dropzone">
-        <div class="dz-default dz-message">
-          여기에 파일을 끌어 놓거나, 클릭하세요.
-          <div class="small text-success">( 최대 크기 : 2MB )</div>
-        </div>
+        <div class="dz-default dz-message"></div>
+      </div>
+      <div>
+        여기에 파일을 끌어 놓거나, 클릭하세요. <span class="small text-success">( 최대 크기 : 2MB )</span>
       </div>
     </div>
   @endcomponent
