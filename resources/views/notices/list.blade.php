@@ -20,7 +20,7 @@
             <th class="hidden-xs" style="width:4em;">번호</th>
             <th style="width:6em;">구 분</th>
             <th>제 목</th>
-            <th style="width:6em;">작성자</th>
+            <th class="hidden-xs" style="width:6em;">작성자</th>
             <th style="width:6em;">작성일시</th>
             <th class="hidden-xs" style="width:5em;">조회수</th>
           </tr>
@@ -45,7 +45,7 @@
                 @endif
               </a>
             </td>
-            <td>치카톡</td>
+            <td class="hidden-xs">치카톡</td>
             <td title="{{ $article->created_at }}">
                 @if ($article->created_at > \Carbon\Carbon::today())
                     {{ $article->created_at->format('H:i') }}

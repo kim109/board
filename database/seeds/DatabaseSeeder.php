@@ -13,13 +13,20 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         DB::table('categories')->insert([[
-            'title' => '자유게시판',
-            'prefix' => '/freeboard',
-            'open' => true
+            'table' => 'notices',
+            'name' => '공지'
         ], [
-            'title' => '중고장터',
-            'prefix' => '/market',
-            'open' => true
+            'table' => 'notices',
+            'name' => '이벤트'
+        ], [
+            'table' => 'supports',
+            'name' => '버그리포트'
+        ], [
+            'table' => 'supports',
+            'name' => '원격 요청'
+        ], [
+            'table' => 'supports',
+            'name' => '바란다'
         ]]);
     }
 }

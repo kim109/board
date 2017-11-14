@@ -26,6 +26,8 @@ Route::post('/entry', 'AuthController@entry');
 Route::resource('notices', 'NoticeController')->middleware('auth');
 // 자유게시판
 Route::resource('freeboards', 'FreeboardController')->middleware('auth');
+// 사용문의 Q&A
+Route::resource('supports', 'QnAController')->middleware('auth');
 // 중고장터
 Route::resource('market', 'MarketController');
 
