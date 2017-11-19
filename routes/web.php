@@ -27,7 +27,13 @@ Route::resource('notices', 'NoticeController')->middleware('auth');
 // 자유게시판
 Route::resource('freeboards', 'FreeboardController')->middleware('auth');
 // 사용문의 Q&A
-Route::resource('supports', 'QnAController')->middleware('auth');
+Route::resource('supports', 'SupportController')->middleware('auth');
+Route::get('supports/{id}/answer', function ($id) {
+    $article = \App\Support::findorFail($id);
+    return view('supports.answer', ['article' => $article]);
+})->middleware(['auth', 'admin']);
+Route::post('supports/{id}/answer', 'SupportController@answer')->middleware(['auth', 'admin']);
+
 // 중고장터
 Route::resource('market', 'MarketController');
 
