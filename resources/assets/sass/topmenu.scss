@@ -1,0 +1,26 @@
+$nav-bg : #1390ed;
+
+.topnav {
+    background: $nav-bg;
+    border-bottom: 1px solid #077dd7;
+}
+.subnav {
+    background: white;
+    border-bottom: 1px solid #c9c9c9;
+
+    a.nav-item {
+        color: black;
+        font-weight: bold;
+        margin-right: 2em;
+
+        &:hover{
+            color: darken($nav-bg, 15);
+        }
+        &.active {
+            color: $nav-bg;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
