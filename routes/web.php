@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/summary-articles', 'HomeController@summary');
 
 // 메신저에서 로그인
 Route::post('/entry', 'AuthController@entry');
