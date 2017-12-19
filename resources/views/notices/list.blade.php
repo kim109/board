@@ -1,15 +1,26 @@
 @extends('layouts.app')
 
-@push('stylesheets')
-<style type="text/css">
-    thead th, tbody td {
-        text-align: center;
-    }
-</style>
+@push('scripts')
+  <script src="{{ mix('js/list.js') }}"></script>
 @endpush
 
 @section('content')
-  @component('layouts.list', ['articles' => $articles, 'writable' => $writable])
+  <div id="content" class="container mt-5">
+    <summary-articles></summary-articles>
+
+    <div class="row no-gutters mt-3">
+      <div class="col">
+        <articles-list url="/notices/list" writable="{{ $writable }}"></articles-list>
+      </div>
+      <div class="ml-3 d-none d-sm-block" style="width:300px">
+        <div><img src="images/banner/banner1.png"></div>
+        <div class="mt-3"><img src="images/banner/banner2.png"></div>
+        <div class="mt-3"><img src="images/banner/banner3.png"></div>
+      </div>
+    </div>
+  </div>
+
+  {{--  @component('layouts.list', ['articles' => $articles, 'writable' => $writable])
     @slot('board')
       공지사항
     @endslot
@@ -62,5 +73,5 @@
         @endforelse
       </tbody>
     </table>
-  @endcomponent
+  @endcomponent  --}}
 @endsection

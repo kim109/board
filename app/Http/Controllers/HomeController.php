@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notice;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -28,7 +29,14 @@ class HomeController extends Controller
 
     public function summary()
     {
-        $data = [];
+        $data = [
+            [
+                'subject' => 'teegeg',
+                'content' => '내용 내용',
+                'hits' => 124
+            ]
+        ];
+
         return response()->json($data);
     }
 }

@@ -1,5 +1,5 @@
-<div class="container">
-  <ol class="breadcrumb"><li class="active">{{ $board }}</li></ol>
+<div id="content" class="container mt-5">
+  <summary-articles></summary-articles>
 
   <div class="row" style="margin:3em 0 1em;">
     <div class="col-sm-6 col-xs-8" style="padding-left:0;">

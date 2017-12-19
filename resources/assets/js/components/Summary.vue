@@ -24,12 +24,14 @@
 export default {
   data: function () {
     return {
-      list: null
+      articles: null
     }
   },
   mounted: function() {
     this.$http.get('/home/summary-articles')
-    .then()
+    .then((response) => {
+      this.articles = response.data
+    })
   }
 }
 </script>

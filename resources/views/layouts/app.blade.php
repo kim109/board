@@ -60,14 +60,9 @@
         </div>
     </nav>
 
-    <div id="summary" class="container mt-5 mb-3">
-        <summary-articles></summary-articles>
-    </div>
-
     @yield('content')
 </div>
 
-<!-- Scripts -->
-<script src="{{ mix('js/app.js') }}"></script>
+@stack('scripts')
 </body>
 </html>
