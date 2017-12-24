@@ -12,7 +12,7 @@ class NoticeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin')->except(['index','show']);
+        $this->middleware('admin')->except(['index', 'list', 'show']);
     }
 
     /**
@@ -22,31 +22,50 @@ class NoticeController extends Controller
      */
     public function index(Request $request)
     {
-        $articles = Notice::where('open', true);
+        // $articles = Notice::where('open', true);
 
-        if ($request->has('q')) {
-            $keword = '%'.$request->input('q').'%';
-            $articles->where('content', 'like', $keword);
+        // if ($request->has('q')) {
+        //     $keword = '%'.$request->input('q').'%';
+        //     $articles->where('content', 'like', $keword);
 
-            $request->session()->put('q', $request->input('q'));
-        } else {
-            $request->session()->forget('q');
+        //     $request->session()->put('q', $request->input('q'));
+        // } else {
+        //     $request->session()->forget('q');
+        // }
+
+        // $list = $articles->orderBy('id', 'desc')
+        //                 ->paginate(10);
+
+        // if ($request->has('page')) {
+        //     $request->session()->put('page', $request->input('page'));
+        // } else {
+        //     $request->session()->forget('page');
+        // }
+
+        $writable = false;
+        if (Auth::check()) {
+            $admin = explode(',', env('ADMIN'));
+            $admin = array_map('trim', $admin);
+            $writable = in_array(Auth::user()->user_id, $admin);
         }
 
-        $list = $articles->orderBy('id', 'desc')
-                        ->paginate(10);
+        return view('notices.list', ['writable' => $writable]);
+    }
 
-        if ($request->has('page')) {
-            $request->session()->put('page', $request->input('page'));
-        } else {
-            $request->session()->forget('page');
+    public function list(Request $request)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
         }
+ 
+        $articles = Notice::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    // ->paginate(200);
+                    ->get();
 
-        $admin = explode(',', env('ADMIN'));
-        $admin = array_map('trim', $admin);
-        $writable = in_array(Auth::user()->user_id, $admin);
-
-        return view('notices.list', ['articles' => $list, 'writable' => $writable]);
+        return response()->json($articles);
     }
 
     /**
@@ -107,22 +126,14 @@ class NoticeController extends Controller
             $article->save();
         }
 
-        $list_url = '/notices';
-        $param = null;
-        if ($request->session()->has('page')) {
-            $param['page'] = $request->session()->get('page');
-        }
-        if ($request->session()->has('q')) {
-            $param['q'] = $request->session()->get('q');
-        }
+        $list_url = route('notices.index');
 
-        if ($param != null) {
-            $list_url .= '?'.http_build_query($param);
+        $writable = false;
+        if (Auth::check()) {
+            $admin = explode(',', env('ADMIN'));
+            $admin = array_map('trim', $admin);
+            $writable = in_array(Auth::user()->user_id, $admin);
         }
-
-        $admin = explode(',', env('ADMIN'));
-        $admin = array_map('trim', $admin);
-        $writable = in_array(Auth::user()->user_id, $admin);
 
         return view('notices.show', ['article' => $article, 'list' => $list_url, 'writable' => $writable]);
     }
@@ -196,6 +207,6 @@ class NoticeController extends Controller
         $article->attachments()->delete();
         $article->delete();
 
-        return response()->json(['list' => '/notices']);
+        return response()->json(['list' => route('notices.index')]);
     }
 }

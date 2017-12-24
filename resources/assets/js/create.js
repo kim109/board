@@ -1,5 +1,7 @@
 require('./bootstrap');
+window.$ = window.jQuery = require('jquery/dist/jquery')
 require('./wysiwyg');
+
 window.Dropzone = require('dropzone');
 Dropzone.autoDiscover = false;
 
@@ -14,7 +16,7 @@ $(document).ready(function() {
         addRemoveLinks: true,
         dictRemoveFile: '삭제'
     });
-
+console.log(myDropzone)
     myDropzone.on('success', function (file, data) {
         file._id = data.id;
         file._name = data.name;

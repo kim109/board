@@ -10,12 +10,10 @@
 
     <div class="row no-gutters mt-3">
       <div class="col">
-        <articles-list url="/notices/list" writable="{{ $writable }}"></articles-list>
+        <articles-list writable="{{ $writable }}"></articles-list>
       </div>
       <div class="ml-3 d-none d-sm-block" style="width:300px">
-        <div><img src="images/banner/banner1.png"></div>
-        <div class="mt-3"><img src="images/banner/banner2.png"></div>
-        <div class="mt-3"><img src="images/banner/banner3.png"></div>
+        @include('layouts.right_banner')
       </div>
     </div>
   </div>

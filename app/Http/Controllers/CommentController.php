@@ -10,7 +10,7 @@ class CommentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['get']);
     }
 
     public function get(Request $request, $type, $id)
@@ -23,7 +23,7 @@ class CommentController extends Controller
                         ['commentable_type', $type],
                         ['commentable_id', $id]
                     ])
-                    ->with(['user:id,name', 'children.user:id,name'])
+                    ->with(['user:id,user_id,name', 'children.user:id,user_id,name'])
                     ->get();
 
         return response()->json(['user'=> Auth::id(), 'comments' => $comments]);

@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/chikaplus.css') }}" rel="stylesheet">
+    @stack('styles')
 </head>
 <body>
 <div id="app">
@@ -51,10 +52,18 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link active" href="{{ url('/') }}">치카플러스 홈</a>
+                    <a class="nav-item nav-link @if (Request::is('/')) active @endif" href="{{ url('/') }}">치카플러스 홈</a>
                     <a class="nav-item nav-link" href="#">보험청구 이모저모</a>
                     <a class="nav-item nav-link" href="#">세미나소식</a>
-                    <a class="nav-item nav-link" href="/notices">공지사항</a>
+                    <a class="nav-item nav-link @if (Request::is('notices*')) active @endif" href="/notices">공지사항</a>
+                  @if (Auth::guest())
+                    <a class="nav-item nav-link d-block d-sm-none" href="{{ route('login') }}">로그인</a>
+                  @else
+                    <a class="nav-item nav-link d-block d-sm-none" href="{{ route('logout') }}"
+                      onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                        로그아웃
+                    </a>
+                  @endif
                 </div>
             </div>
         </div>

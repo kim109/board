@@ -9,6 +9,12 @@ class Notice extends Model
 {
     use SoftDeletes;
 
+    protected $dates = [
+        'craeted_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     protected $casts = [
         'pin' => 'boolean',
         'open' => 'boolean'

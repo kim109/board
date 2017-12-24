@@ -1,6 +1,6 @@
 <template>
   <div class="summary-card clearfix">
-    <div class="float-right"><img src="images/summary-right.jpg" width="348" height="310"></div>
+    <div class="float-right"><img src="/images/summary-right.jpg" width="348" height="310"></div>
     <div class="py-4 px-5 articles-list">
       <div class="media">
         <img class="mr-3" src="" alt="Generic placeholder image">

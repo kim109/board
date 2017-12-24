@@ -24,7 +24,19 @@ Route::get('/home/summary-articles', 'HomeController@summary');
 Route::post('/entry', 'AuthController@entry');
 
 // 공지사항
-Route::resource('notices', 'NoticeController')->middleware('auth');
+// Route::resource('notices', 'NoticeController')->middleware('auth');
+Route::prefix('notices')->group(function () {
+    Route::get('/', 'NoticeController@index')->name('notices.index');
+    Route::get('list', 'NoticeController@list');
+
+    Route::get('/{id}', 'NoticeController@show');
+
+    Route::get('create', 'NoticeController@create')->name('notices.create');
+    Route::post('/', 'NoticeController@store');
+    
+    Route::delete('/{id}', 'NoticeController@destroy');
+});
+
 // 자유게시판
 Route::resource('freeboards', 'FreeboardController')->middleware('auth');
 // 사용문의 Q&A
