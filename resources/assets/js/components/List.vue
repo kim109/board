@@ -45,7 +45,9 @@
            페이징
         </div>
         <div class="col-2 text-right" v-if="writable == 1">
-          <a :href="base+'/create'" class="btn btn-sm btn-primary">글쓰기</a>
+          <a :href="base+'/create'" class="btn btn-sm btn-primary">
+            <i class="far fa-edit"></i> 글쓰기
+          </a>
         </div>
       </div>
     </div>

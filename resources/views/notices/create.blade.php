@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('styles')
-  <link href="{{ mix('css/trumbowyg.min.css') }}" rel="stylesheet">
+  <link href="{{ mix('css/wysiwyg.css') }}" rel="stylesheet">
 @endpush
 
 @push('scripts')
@@ -14,7 +14,7 @@
   
     <div class="row no-gutters mt-3">
       <div class="col">
-        <form class="content-box p-3" action="/{{ dirname(Request::path()) }}" method="post" enctype="multipart/form-data">
+        <form id="fm" class="content-box p-3" action="/{{ dirname(Request::path()) }}" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
           <div class="row">
             <div class="col-4 col-sm-2">

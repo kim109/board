@@ -1,7 +1,9 @@
-require('./bootstrap');
-require('./wysiwyg');
-window.Dropzone = require('dropzone');
-Dropzone.autoDiscover = false;
+require('./bootstrap')
+window.$ = window.jQuery = require('jquery/dist/jquery')
+require('./wysiwyg')
+
+window.Dropzone = require('dropzone')
+Dropzone.autoDiscover = false
 
 $(document).ready(function() {
     let param = null;

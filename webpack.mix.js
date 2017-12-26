@@ -12,12 +12,12 @@ let mix = require('laravel-mix');
  */
 
 mix.sass('resources/assets/sass/chikaplus.scss', 'public/css')
+   .sass('resources/assets/sass/wysiwyg.scss', 'public/css')
    .js('resources/assets/js/home.js', 'public/js')
    .js('resources/assets/js/list.js', 'public/js')
    .js('resources/assets/js/show.js', 'public/js')
-   .js('resources/assets/js/create.js', 'public/js');
-
-mix.copy('node_modules/trumbowyg/dist/ui/trumbowyg.min.css', 'public/css');
+   .js('resources/assets/js/create.js', 'public/js')
+   .js('resources/assets/js/edit.js', 'public/js');
 
 if (mix.inProduction()) {
     mix.version();

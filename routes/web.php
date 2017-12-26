@@ -29,12 +29,15 @@ Route::prefix('notices')->group(function () {
     Route::get('/', 'NoticeController@index')->name('notices.index');
     Route::get('list', 'NoticeController@list');
 
-    Route::get('/{id}', 'NoticeController@show');
+    Route::get('{id}', 'NoticeController@show')->name('notices.show');
 
     Route::get('create', 'NoticeController@create')->name('notices.create');
     Route::post('/', 'NoticeController@store');
-    
-    Route::delete('/{id}', 'NoticeController@destroy');
+
+    Route::get('{id}/edit', 'NoticeController@edit')->name('notices.edit');
+    Route::patch('{id}', 'NoticeController@update');
+
+    Route::delete('{id}', 'NoticeController@destroy');
 });
 
 // 자유게시판

@@ -32,13 +32,26 @@
           </div>
         </div>
         <div class="p-3">
+          @if (count($article->attachments) > 0)
+          <ul class="list-unstyled">
+              @foreach ($article->attachments as $attachment)
+              <li class="text-right">
+                <a href="/attachments/{{ $attachment->id }}/{{ md5($attachment->path) }}">
+                  <i class="far @if (preg_match('/^image\//', $attachment->mime) === 1) fa-file-image @else fa-file @endif" aria-hidden="true"></i>
+                  {{ basename($attachment->name) }}
+                </a>
+              </li>
+              @endforeach
+          </ul>
+          @endif
+
           <p>{!! $article->content !!}</p>
           <hr>
           
           @if (Auth::check()) 
           <div>
             <h6 class="font-weight-bold">플러스 댓글 남기기</h6>
-            <textarea class="form-control input-sm" rows="3" id="comment-content" required></textarea>
+            <textarea class="form-control input-sm mb-1" rows="3" id="comment-content" required></textarea>
             <div class="text-right">
               <button class="btn btn-sm btn-primary" @click="comment">등록</button>
             </div>
@@ -50,15 +63,15 @@
 
           <div class="text-center">
             <a class="btn btn-sm btn-primary" href="{{ $list }}" role="button">
-              <i class="fa fa-list" aria-hidden="true"></i> 목록
+              <i class="far fa-list-alt" aria-hidden="true"></i> 목록
             </a>
       
             @if ($writable)
             <a class="btn btn-sm btn-secondary" href="/{{ Request::path() }}/edit" role="button">
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정
+              <i class="far fa-edit" aria-hidden="true"></i> 수정
             </a>
             <a class="btn btn-sm btn-danger" href="/{{ Request::path() }}" role="button" @click.prevent="destory">
-              <i class="fa fa-trash" aria-hidden="true"></i> 삭제
+              <i class="far fa-trash-alt" aria-hidden="true"></i> 삭제
             </a>
             @endif
           </div>
