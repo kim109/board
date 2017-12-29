@@ -32,7 +32,7 @@
             <textarea class="form-control form-control-sm" rows="10" id="article" name="content" required></textarea>
           </div>
           <div class="form-group">
-            <label>첨부파일</label>
+            <label><i class="fas fa-paperclip"></i> 첨부파일</label>
             <div id="attachment" class="dropzone">
               <div class="dz-default dz-message"></div>
             </div>

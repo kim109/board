@@ -41,21 +41,18 @@ $(document).ready(function() {
     });
 
     // 첨부파일 성공
-    myDropzone.on('success', function (file, data) {
-        file._id = data.id;
-    });
+    myDropzone.on('success', (file, data) => {
+        file._id = data.id
+    })
 
     // 첨부파일 삭제
-    myDropzone.on('removedfile', function (file) {
-        $.ajax({
-            method: "DELETE",
-            url: '/attachments/'+file._id
-        });
-    });
+    myDropzone.on('removedfile', (file) => {
+        axios.delete('/attachments/'+file._id)
+    })
 
     // 초과 등록시
-    myDropzone.on('maxfilesexceeded', function (file) {
-        alert ("최대 3개의 파일을 첨부할수 있습니다.");
-        this.removeFile(file);
-    });
+    myDropzone.on('maxfilesexceeded', (file) => {
+        alert ("최대 3개의 파일을 첨부할수 있습니다.")
+        this.removeFile(file)
+    })
 });

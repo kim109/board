@@ -63,15 +63,15 @@
 
           <div class="text-center">
             <a class="btn btn-sm btn-primary" href="{{ $list }}" role="button">
-              <i class="far fa-list-alt" aria-hidden="true"></i> 목록
+              <i class="fas fa-list" aria-hidden="true"></i> 목록
             </a>
       
             @if ($writable)
             <a class="btn btn-sm btn-secondary" href="/{{ Request::path() }}/edit" role="button">
-              <i class="far fa-edit" aria-hidden="true"></i> 수정
+              <i class="fas fa-edit" aria-hidden="true"></i> 수정
             </a>
             <a class="btn btn-sm btn-danger" href="/{{ Request::path() }}" role="button" @click.prevent="destory">
-              <i class="far fa-trash-alt" aria-hidden="true"></i> 삭제
+              <i class="fas fa-trash" aria-hidden="true"></i> 삭제
             </a>
             @endif
           </div>

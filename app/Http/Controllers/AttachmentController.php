@@ -10,7 +10,7 @@ class AttachmentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->only(['store', 'remove']);
     }
 
     public function download(Request $request, $id, $md5)

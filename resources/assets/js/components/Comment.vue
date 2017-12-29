@@ -6,12 +6,12 @@
         <small class="text-muted ml-3" :title="comment.created_at">{{ dateAt(comment.created_at) }}</small>
       </div>
       <div class="col-sm-6 text-right small" v-if="status == 'none'">
-        <a href="reply" @click.prevent="status = 'reply'"><i class="fa fa-comment" aria-hidden="true"></i> 댓글</a>
+        <a href="reply" @click.prevent="status = 'reply'"><i class="fas fa-reply" aria-hidden="true"></i> 댓글</a>
         <template v-if="comment.user_id == user">
             <span class="text-muted">&#x2223;</span>
-            <a href="#" @click.prevent="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> 수정</a>
+            <a href="#" @click.prevent="edit"><i class="fas fa-edit" aria-hidden="true"></i> 수정</a>
             <span class="text-muted">&#x2223;</span>
-            <a href="#" @click.prevent="remove(comment.id)"><i class="fa fa-trash" aria-hidden="true"></i> 삭제</a>
+            <a href="#" @click.prevent="remove(comment.id)"><i class="fas fa-trash" aria-hidden="true"></i> 삭제</a>
         </template>
       </div>
     </div>

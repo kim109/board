@@ -4,9 +4,11 @@
       <div class="col-12 col-md-6 offset-md-6">
         <div class="input-group">
           <input type="Search" class="form-control" placeholder="검색" aria-label="Search for...">
-          <span class="input-group-btn">
-            <button class="btn btn-secondary" type="button">Go!</button>
-          </span>
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -46,7 +48,7 @@
         </div>
         <div class="col-2 text-right" v-if="writable == 1">
           <a :href="base+'/create'" class="btn btn-sm btn-primary">
-            <i class="far fa-edit"></i> 글쓰기
+            <i class="fas fa-pencil-alt"></i> 글쓰기
           </a>
         </div>
       </div>
