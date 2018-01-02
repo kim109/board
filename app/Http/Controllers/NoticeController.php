@@ -57,12 +57,16 @@ class NoticeController extends Controller
         if (!$request->ajax()) {
             return response()->json(['errors' => 'invalid connection'], 406);
         }
+        $keyword = $request->input('keyword');
  
         $articles = Notice::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
+                    ->when($keyword, function ($query) use ($keyword) {
+                        return $query->where('subject', 'like', '%'.$keyword.'%')
+                                ->orWhere('content', 'like', '%'.$keyword.'%');
+                    })
                     ->orderBy('id', 'desc')
-                    // ->paginate(200);
                     ->get();
 
         return response()->json($articles);

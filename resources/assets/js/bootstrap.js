@@ -1,6 +1,6 @@
-
+require('es6-promise').polyfill()
 window._ = require('lodash')
-window.Popper = require('popper.js/dist/umd/popper')
+// window.Popper = require('popper.js/dist/umd/popper')
 window.Vue = require('vue')
 
 /**
@@ -10,8 +10,8 @@ window.Vue = require('vue')
  */
 
 try {
-  window.$ = window.jQuery = require('jquery/dist/jquery.slim')
-  require('bootstrap');
+  window.$ = window.jQuery = require('jquery/dist/jquery')
+  require('bootstrap')
 } catch (e) {}
 
 /**
