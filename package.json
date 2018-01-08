@@ -21,7 +21,7 @@
         "lodash": "^4.17.4",
         "moment": "2.18.*",
         "popper.js": "^1.13.0",
-        "trumbowyg": "^2.8.0",
+        "trumbowyg": "^2.9.3",
         "vue": "^2.5.13"
     }
 }

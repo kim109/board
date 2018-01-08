@@ -19,7 +19,7 @@
     <nav class="navbar navbar-expand-md navbar-dark topnav">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="/images/BI.jpg" width="168" height="46" alt="치카톡">
+                <img src="/images/bi.jpg" width="168" height="46" alt="치카톡">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,6 @@
                     @endif
                 </ul>
             </div>
-
         </div>
     </nav>
     <nav class="navbar navbar-expand-md subnav">
@@ -70,6 +69,40 @@
     </nav>
 
     @yield('content')
+
+    <div class="footer pt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-5">
+                    <div class="mb-3">
+                        <img class="align-bottom" src="/images/denit_ci.png" width="104" height="56" alt="DENIT">
+                        <img class="align-bottom" src="/images/jplelab_ci.png" width="152" height="32" alt="JPLELAB">
+                    </div>
+                    <p class="small mb-3">
+                        서울시 강남구 테헤란로82길 15(대치동), 70호 <span class="ml-4">T. 6204-0511</span><br>
+                        (주) 대닛 대표 : 주지훈 <span class="ml-4">사업자등록번호 : 598-81-00812</span>
+                    </p>
+                    <p class="small">
+                        서울시 강남구 역삼로 542(대치동) 신사에앤지빌딩1층 <span class="ml-  4">T. 02-6204-0512</span><br>
+                        (주) 제이플랩 대표 : 김기연 <span class="ml-4">사업자등록번호 : 343-87-00664</span>
+                    </p>
+                </div>
+                <div class="col-3 pt-4">
+                    <h4>QUICK LINK</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#">개인정보처리방침</a></li>
+                        <li><a href="#">이용약관</a></li>
+                        <li><a href="#">고객지원</a></li>
+                        <li><a href="#">서비스 전체보기</a></li>
+                        <li><a href="#">원격지원 신청</a></li>
+                    </ul>
+                </div>
+                <div class="col-3 pt-4">
+                    <h4>CONTACT US</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @stack('scripts')

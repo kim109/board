@@ -31,7 +31,7 @@
         <tbody>
           <template v-if="lists.length">
             <tr v-for="(row) in lists" :key="row.id">
-              <td>
+              <td class="text-truncate">
                 <a :href="base+'/'+row.id">
                   <span class="text-primary">[{{ row.category.name }}]</span>
                   {{ row.subject }} ({{ row.comments_count.toLocaleString() }})

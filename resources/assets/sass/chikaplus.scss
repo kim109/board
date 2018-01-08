@@ -13,8 +13,11 @@
 @import "fontawesome/fa-regular";
 
 @import "topmenu";
+@import "footer";
 
 #content {
+  min-height: 70vh;
+
   .content-box {
     border: 1px solid #cdcdcd;
     background-color: white;

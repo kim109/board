@@ -35,7 +35,7 @@ const app = new Vue({
             });
     },
     destory: function(event) {
-      if (confirm('작성하신 글을 삭제하시겠습니까?')) {
+      if (confirm('게시글을 삭제하시겠습니까?')) {
         this.$http.delete(event.currentTarget.getAttribute('href'))
         .then((response) => {
           location.href = response.data.list
