@@ -21,5 +21,9 @@
   .content-box {
     border: 1px solid #cdcdcd;
     background-color: white;
+
+    img {
+      max-width: 100%;
+    }
   }
 }

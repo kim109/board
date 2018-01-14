@@ -134,7 +134,9 @@ class NoticeController extends Controller
 
         $writable = false;
         if (Auth::check()) {
-            $writable = $article->user_id == Auth::id();
+            $admin = explode(',', env('ADMIN'));
+            $admin = array_map('trim', $admin);
+            $writable = in_array(Auth::user()->user_id, $admin) || $article->user_id == Auth::id();
         }
 
         return view('notices.show', ['article' => $article, 'list' => $list_url, 'writable' => $writable]);
@@ -170,7 +172,9 @@ class NoticeController extends Controller
 
         $article = Notice::findorFail($id);
 
-        if ($article->user_id != Auth::id()) {
+        $admin = explode(',', env('ADMIN'));
+        $admin = array_map('trim', $admin);
+        if (!in_array(Auth::user()->user_id, $admin) && $article->user_id != Auth::id()) {
             return back()->withErrors(['errors' => '수정 권한이 없습니다.']);
         }
 
@@ -210,7 +214,10 @@ class NoticeController extends Controller
         }
 
         $article = Notice::findorFail($id);
-        if ($article->user_id != Auth::id()) {
+
+        $admin = explode(',', env('ADMIN'));
+        $admin = array_map('trim', $admin);
+        if (!in_array(Auth::user()->user_id, $admin) && $article->user_id != Auth::id()) {
             return response()->json(['errors' => '삭제 권한이 없습니다.'], 403);
         }
 

@@ -68,24 +68,41 @@ class AttachmentController extends Controller
 
         $attachment = new Attachment;
         $attachment->user_id = \Auth::id();
-        if ($request->has('article_id') && $request->has('type')) {
+        $attachment->attach_id = null;
+        $attachment->attach_type = null;
+
+        if ($request->has('article_id')) {
             $attachment->attach_id = $request->input('article_id');
-            $attachment->attach_type = $request->input('type');
-        } else {
-            $attachment->attach_id = null;
-            $attachment->attach_type = null;
         }
+        if ($request->has('type')) {
+            if ($request->input('type') == 'artwork' && !str_is('image/*', $file->getClientMimeType())) {
+                return response()->json([
+                  'success' => false,
+                  'message' => '이미지 파일만 업로드 가능합니다.'
+                ]);
+            }
+            $attachment->attach_type = $request->input('type');
+        }
+
         $attachment->path = $path;
         $attachment->name = $file->getClientOriginalName();
         $attachment->mime = $file->getClientMimeType();
         $attachment->size = $file->getClientSize();
         $attachment->save();
 
-        return response()->json([
+        $result = [
             'id'   => $attachment->id,
             'name' => $file->getClientOriginalName(),
             'type' => $file->getClientMimeType()
-        ]);
+        ];
+
+        // 본문에 들어간 이미지 이면..
+        if ($request->input('type') == 'artwork') {
+            $result['success'] = true;
+            $result['link'] = '/thumbnail/'.$attachment->id;
+        }
+
+        return response()->json($result);
     }
     
     public function remove(Request $request, $id)
