@@ -1,2 +1,11 @@
 @import "~trumbowyg/dist/ui/sass/trumbowyg";
 @import "~dropzone/dist/dropzone";
+
+.dropzone {
+  padding: 10px;
+  min-height: 165px;
+
+  .dz-preview {
+      margin:0 10px;
+  }
+}

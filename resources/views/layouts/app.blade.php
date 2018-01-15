@@ -53,7 +53,7 @@
                 <div class="navbar-nav">
                     <a class="nav-item nav-link @if (Request::is('/')) active @endif" href="{{ url('/') }}">치카플러스 홈</a>
                     <a class="nav-item nav-link" href="#">보험청구 이모저모</a>
-                    <a class="nav-item nav-link" href="#">세미나소식</a>
+                    <a class="nav-item nav-link @if (Request::is('seminars*')) active @endif" href="/seminars">세미나소식</a>
                     <a class="nav-item nav-link @if (Request::is('notices*')) active @endif" href="/notices">공지사항</a>
                   @if (Auth::guest())
                     <a class="nav-item nav-link d-block d-sm-none" href="{{ route('login') }}">로그인</a>

@@ -19,6 +19,8 @@ mix.sass('resources/assets/sass/chikaplus.scss', 'public/css')
    .js('resources/assets/js/create.js', 'public/js')
    .js('resources/assets/js/edit.js', 'public/js');
 
+mix.js('resources/assets/js/seminars/create.js', 'public/js/seminars');
+
 if (mix.inProduction()) {
     mix.version();
 }

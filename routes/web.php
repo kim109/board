@@ -23,8 +23,23 @@ Route::get('/home/summary-articles', 'HomeController@summary');
 // 메신저에서 로그인
 Route::post('/entry', 'AuthController@entry');
 
+// 세미나 소식
+Route::prefix('seminars')->group(function () {
+    Route::get('/', 'SeminarController@index')->name('seminars.index');
+    Route::get('list', 'SeminarController@list');
+
+    Route::get('{id}', 'SeminarController@show')->name('seminars.show');
+
+    Route::get('create', 'SeminarController@create')->name('seminars.create');
+    Route::post('/', 'SeminarController@store');
+
+    Route::get('{id}/edit', 'NoticeController@edit')->name('seminars.edit');
+    Route::patch('{id}', 'NoticeController@update');
+
+    Route::delete('{id}', 'NoticeController@destroy');
+});
+
 // 공지사항
-// Route::resource('notices', 'NoticeController')->middleware('auth');
 Route::prefix('notices')->group(function () {
     Route::get('/', 'NoticeController@index')->name('notices.index');
     Route::get('list', 'NoticeController@list');
