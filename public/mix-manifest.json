@@ -1,10 +1,12 @@
 {
     "/js/show.js": "/js/show.js?id=0b9bd0d2ca11cc7ff2c8",
-    "/js/list.js": "/js/list.js?id=ad177d2e5642775624c2",
-    "/js/home.js": "/js/home.js?id=db34e9323b79b3490333",
+    "/js/seminars/list.js": "/js/seminars/list.js?id=cede5c583f7bcdd5c491",
+    "/js/list.js": "/js/list.js?id=702c0571ca43c8d934fa",
+    "/js/home.js": "/js/home.js?id=bd77c1d1e9ea4a9fc1a1",
     "/css/chikaplus.css": "/css/chikaplus.css?id=dc42a94dfbceebccb532",
     "/css/wysiwyg.css": "/css/wysiwyg.css?id=5bd286f377ff5a45e92c",
-    "/js/seminars/create.js": "/js/seminars/create.js?id=9d31908763ef4c77a1f6",
+    "/js/seminars/edit.js": "/js/seminars/edit.js?id=e66eb1c57e93b36b63fb",
+    "/js/seminars/create.js": "/js/seminars/create.js?id=0ac8196861239448812b",
     "/js/edit.js": "/js/edit.js?id=b415b7a2678cbc084311",
     "/js/create.js": "/js/create.js?id=c6062af6eac92e4fb7e3"
 }

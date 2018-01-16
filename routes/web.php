@@ -33,10 +33,10 @@ Route::prefix('seminars')->group(function () {
     Route::get('create', 'SeminarController@create')->name('seminars.create');
     Route::post('/', 'SeminarController@store');
 
-    Route::get('{id}/edit', 'NoticeController@edit')->name('seminars.edit');
-    Route::patch('{id}', 'NoticeController@update');
+    Route::get('{id}/edit', 'SeminarController@edit')->name('seminars.edit');
+    Route::patch('{id}', 'SeminarController@update');
 
-    Route::delete('{id}', 'NoticeController@destroy');
+    Route::delete('{id}', 'SeminarController@destroy');
 });
 
 // 공지사항
