@@ -14,14 +14,25 @@
     </div>
     <div class="content-box mt-3">
       <div class="row p-3">
-        <div class="media col-sm-6" v-for="(row) in lists" :key="row.id">
-          <img class="mr-3" :src="'/thumbnail/'+row.thumbnail_id+'?w=120&h=120'" :alt="row.subject">
+        <div class="media col-md-6 mb-3" v-for="(row) in lists" :key="row.id">
+          <a :href="base+'/'+row.id"><img class="mr-3" :src="'/thumbnail/'+row.thumbnail_id+'?w=120&h=120'" :alt="row.subject"></a>
           <div class="media-body">
-            <h6 class="mt-0">
+            <div class="my-3 font-weight-bold">
               <a :href="base+'/'+row.id">{{ row.subject }} ({{ row.comments_count.toLocaleString() }})</a>
-            </h6>
-            <div class="small">
-              조회수: {{ row.hits.toLocaleString() }} / 작성자: {{ row.user.name }}
+            </div>
+            <div class="row small">
+              <div class="col-12">
+                <label class="text-primary">작성일</label>
+                {{ row.created_at }}
+              </div>
+              <div class="col">
+                <label class="text-primary">조회수</label>
+                {{ row.hits.toLocaleString() }}
+              </div>
+              <div class="col text-right mr-3">
+                <label class="text-primary">작성자</label>
+                {{ row.user.name }}
+              </div>
             </div>
           </div>
         </div>

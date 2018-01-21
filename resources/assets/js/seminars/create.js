@@ -69,6 +69,10 @@ $(document).ready(() => {
   })
 
   $('#fm').submit((event) => {
+    if ($("input[name=thumbnail_id]").val().length == 0) {
+      alert('썸네일 이미지를 등록해주세요.')
+      return false;
+    }
     return confirm('작성된 내용을 저장하시겠습니까?')
   })
 })

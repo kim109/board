@@ -51,7 +51,7 @@
             <input class="btn btn-primary btn-sm" type="submit" value="등록">
             <a class="btn btn-secondary btn-sm" href="/{{ dirname(Request::path()) }}" role="button">취소</a>
           </div>
-          <input type="hidden" name="thumbnail_id">
+          <input type="hidden" name="thumbnail_id" required>
         </form>
       </div>
       <div class="ml-3 d-none d-sm-block" style="width:300px">

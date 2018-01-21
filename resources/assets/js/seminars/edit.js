@@ -87,6 +87,10 @@ $(document).ready(function() {
   })
 
   $('#fm').submit((event) => {
+    if ($("input[name=thumbnail_id]").val().length == 0) {
+      alert('썸네일 이미지를 등록해주세요.')
+      return false;
+    }
     return confirm('변경한 내용으로 저장하시겠습니까?')
   })
 });
