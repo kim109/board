@@ -1,12 +1,12 @@
 {
-    "/js/show.js": "/js/show.js",
-    "/js/seminars/list.js": "/js/seminars/list.js",
-    "/js/list.js": "/js/list.js",
-    "/js/home.js": "/js/home.js",
-    "/css/chikaplus.css": "/css/chikaplus.css",
-    "/css/wysiwyg.css": "/css/wysiwyg.css",
-    "/js/seminars/edit.js": "/js/seminars/edit.js",
-    "/js/seminars/create.js": "/js/seminars/create.js",
-    "/js/edit.js": "/js/edit.js",
-    "/js/create.js": "/js/create.js"
+    "/js/show.js": "/js/show.js?id=4fcf147cb6754a60c4f8",
+    "/js/seminars/list.js": "/js/seminars/list.js?id=bf80a5ee36aa6e4c1ff4",
+    "/js/list.js": "/js/list.js?id=4921439fc8cd3eb18417",
+    "/js/home.js": "/js/home.js?id=a3bfd455eb89ae077174",
+    "/css/chikaplus.css": "/css/chikaplus.css?id=fc4016835b7a8b55cd70",
+    "/css/wysiwyg.css": "/css/wysiwyg.css?id=5bd286f377ff5a45e92c",
+    "/js/seminars/edit.js": "/js/seminars/edit.js?id=8bfc4ddfe61bcc6f57fb",
+    "/js/seminars/create.js": "/js/seminars/create.js?id=0095aa22c420ca9bf542",
+    "/js/edit.js": "/js/edit.js?id=d13ab4644c0ab9f8894b",
+    "/js/create.js": "/js/create.js?id=c6075076353922bea821"
 }
