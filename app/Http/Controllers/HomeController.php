@@ -29,13 +29,28 @@ class HomeController extends Controller
 
     public function summary()
     {
-        $data = [
-            [
-                'subject' => 'teegeg',
-                'content' => '내용 내용',
-                'hits' => 124
-            ]
-        ];
+        $seminars = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->limit(5)
+                    ->get();
+        $seminars = $seminars->each(function ($item, $key) {
+            $item->board = 'seminars';
+        });
+
+        $notices = \App\Notice::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->limit(5)
+                    ->get();
+        $notices = $notices->each(function ($item, $key) {
+            $item->board = 'notices';
+        });
+
+        $data = $seminars->merge($notices);
+        $data = $data->sortByDesc('created_at')->slice(0, 5);
 
         return response()->json($data);
     }
