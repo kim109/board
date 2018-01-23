@@ -11,6 +11,25 @@
                         {!! csrf_field() !!}
 
                         <div class="form-group row">
+                            <label class="col-lg-4 col-form-label text-lg-right">UserID</label>
+
+                            <div class="col-lg-6">
+                                <input
+                                        type="text"
+                                        class="form-control{{ $errors->has('user_id') ? ' is-invalid' : '' }}"
+                                        name="user_id"
+                                        value="{{ old('user_id') }}"
+                                        required
+                                >
+                                @if ($errors->has('user_id'))
+                                    <div class="invalid-feedback">
+                                        <strong>{{ $errors->first('user_id') }}</strong>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label class="col-lg-4 col-form-label text-lg-right">Name</label>
 
                             <div class="col-lg-6">
