@@ -17,11 +17,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/home/summary-articles', 'HomeController@summary');
-
 // 메신저에서 로그인
 Route::post('/entry', 'AuthController@entry');
+
+// 홈
+Route::prefix('home')->group(function () {
+    Route::view('/', 'home')->name('home');
+    Route::get('summary-articles', 'HomeController@summary');
+    Route::get('list', 'HomeController@list');
+});
 
 // 세미나 소식
 Route::prefix('seminars')->group(function () {

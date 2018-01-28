@@ -8,6 +8,18 @@
 <div id="content" class="container mt-5">
   <summary-articles></summary-articles>
 
-  내용 내용
+  <div class="row no-gutters mt-4">
+    <div class="d-none d-lg-block">
+      <div>
+        <img src="/images/banner/home_banner1.jpg">
+      </div>
+      <div class="mt-3">
+        <img src="/images/banner/home_banner2.jpg">
+      </div>
+    </div>
+    <div class="col ml-3">
+      <home-list></home-list>
+    </div>
+  </div>
 </div>
 @endsection

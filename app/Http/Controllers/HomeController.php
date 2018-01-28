@@ -7,33 +7,17 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function summary(Request $request)
     {
-        // $this->middleware('auth');
-    }
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('home');
-    }
-
-    public function summary()
-    {
         $seminars = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
                     ->orderBy('id', 'desc')
-                    ->limit(5)
+                    ->limit(8)
                     ->get();
         $seminars = $seminars->each(function ($item, $key) {
             $item->board = 'seminars';
@@ -43,14 +27,47 @@ class HomeController extends Controller
                     ->withCount('comments')
                     ->where('open', true)
                     ->orderBy('id', 'desc')
-                    ->limit(5)
+                    ->limit(8)
                     ->get();
         $notices = $notices->each(function ($item, $key) {
             $item->board = 'notices';
         });
 
         $data = $seminars->merge($notices);
-        $data = $data->sortByDesc('created_at')->slice(0, 5);
+        $data = $data->sortByDesc('created_at')->slice(0, 9);
+
+        return response()->json($data);
+    }
+
+    public function list(Request $request)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $this->validate($request, [
+            'mode' => 'required|in:insurance,seminars,notices'
+        ]);
+
+        $mode = $request->input('mode');
+
+        if ($mode == 'insurance') {
+            $data = [];
+        } elseif ($mode == 'seminars') {
+            $data = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->limit(8)
+                    ->get();
+        } elseif ($mode == 'notices') {
+            $data = \App\Notice::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->limit(10)
+                    ->get();
+        }
 
         return response()->json($data);
     }

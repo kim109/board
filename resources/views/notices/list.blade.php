@@ -12,7 +12,7 @@
       <div class="col">
         <articles-list writable="{{ $writable }}"></articles-list>
       </div>
-      <div class="ml-3 d-none d-sm-block" style="width:300px">
+      <div class="ml-3 d-none d-lg-block" style="width:300px">
         @include('layouts.right_banner')
       </div>
     </div>

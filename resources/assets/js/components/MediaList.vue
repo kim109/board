@@ -118,7 +118,7 @@ export default {
     },
     search: function() {
       let keyword = document.getElementById('keyword').value
-      this.$http.get(this.base+'/list', {
+      this.$http.get(this.base+'/lists', {
         params: { keyword: keyword }
       })
       .then((response) => {

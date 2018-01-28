@@ -16,6 +16,7 @@ require('./bootstrap')
 const app = new Vue({
   el: '#content',
   components: {
-    'summary-articles': require('./components/Summary.vue')
+    'summary-articles': require('./components/Summary.vue'),
+    'home-list': require('./components/HomeList.vue')
   }
 })

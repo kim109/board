@@ -6,8 +6,6 @@
 
 @section('content')
   <div id="content" class="container my-5">
-    <summary-articles></summary-articles>
-
     <div class="row no-gutters mt-3">
       <div class="col">
         <media-list writable="{{ $writable }}"></media-list>
