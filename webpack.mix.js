@@ -23,6 +23,8 @@ mix.js('resources/assets/js/seminars/list.js', 'public/js/seminars')
    .js('resources/assets/js/seminars/create.js', 'public/js/seminars')
    .js('resources/assets/js/seminars/edit.js', 'public/js/seminars');
 
+mix.js('resources/assets/js/insurances/reply.js', 'public/js/insurances');
+
 if (mix.inProduction()) {
     mix.version();
 }

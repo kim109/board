@@ -27,9 +27,28 @@ Route::prefix('home')->group(function () {
     Route::get('list', 'HomeController@list');
 });
 
+// 보험청구 이모저모
+Route::prefix('insurances')->group(function () {
+    Route::view('/', 'insurances.list')->name('insurances.index');
+    Route::get('list', 'InsuranceController@list');
+
+    Route::get('{id}', 'InsuranceController@show')->name('insurances.show');
+
+    Route::get('create', 'InsuranceController@create')->name('insurances.create');
+    Route::post('/', 'InsuranceController@store');
+
+    Route::get('{id}/reply', 'InsuranceController@reply')->name('insurances.reply');
+    Route::post('{id}/reply', 'InsuranceController@storeReply');
+
+    Route::get('{id}/edit', 'InsuranceController@edit')->name('insurances.edit');
+    Route::patch('{id}', 'InsuranceController@update');
+
+    Route::delete('{id}', 'InsuranceController@destroy');
+});
+
 // 세미나 소식
 Route::prefix('seminars')->group(function () {
-    Route::get('/', 'SeminarController@index')->name('seminars.index');
+    Route::view('/', 'seminars.list')->name('seminars.index');
     Route::get('list', 'SeminarController@list');
 
     Route::get('{id}', 'SeminarController@show')->name('seminars.show');

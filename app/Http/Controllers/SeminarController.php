@@ -10,19 +10,13 @@ use Illuminate\Http\Request;
 
 class SeminarController extends Controller
 {
-    public function index(Request $request)
-    {
-        $writable = Auth::check();
-        return view('seminars.list', ['writable' => $writable]);
-    }
-
     public function list(Request $request)
     {
         if (!$request->ajax()) {
             return response()->json(['errors' => 'invalid connection'], 406);
         }
         $keyword = $request->input('keyword');
- 
+
         $articles = Seminar::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)

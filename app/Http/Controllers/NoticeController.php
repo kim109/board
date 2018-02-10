@@ -58,7 +58,7 @@ class NoticeController extends Controller
             return response()->json(['errors' => 'invalid connection'], 406);
         }
         $keyword = $request->input('keyword');
- 
+
         $articles = Notice::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
