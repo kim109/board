@@ -116,6 +116,52 @@ class InsuranceController extends Controller
         return redirect()->route('insurances.show', ['id' => $id]);
     }
 
+    public function edit($id)
+    {
+        $article = Insurance::findorFail($id);
+        $categories = \App\Category::where('table', 'insurances')->get();
+        return view('insurances.edit', ['article' => $article, 'categories' => $categories]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'category' => 'required|integer',
+            'subject' => 'required',
+            'content' => 'required'
+        ]);
+
+        $article = Insurance::findorFail($id);
+
+        $admin = explode(',', env('ADMIN'));
+        $admin = array_map('trim', $admin);
+        if (!in_array(Auth::user()->user_id, $admin) && $article->user_id != Auth::id()) {
+            return back()->withErrors(['errors' => '수정 권한이 없습니다.']);
+        }
+
+        $article->category_id = $request->input('category');
+        $article->subject = $request->input('subject');
+        $article->content = $request->input('content');
+        $article->save();
+
+        if ($request->hasFile('attach')) {
+            $attach = $request->attach;
+            $path = $request->attach->store('attachments');
+
+            $attachment = new Attachment;
+            $attachment->user_id = Auth::id();
+            $attachment->attach_id = $article->id;
+            $attachment->attach_type = 'insurances';
+            $attachment->path = $path;
+            $attachment->name = $attach->getClientOriginalName();
+            $attachment->mime = $attach->getClientMimeType();
+            $attachment->size = $attach->getClientSize();
+            $attachment->save();
+        }
+
+        return redirect()->route('insurances.show', ['id' => $article->id]);
+    }
+
     public function destroy(Request $request, $id)
     {
         if (!$request->ajax()) {
