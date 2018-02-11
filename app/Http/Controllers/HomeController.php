@@ -13,6 +13,16 @@ class HomeController extends Controller
             return response()->json(['errors' => 'invalid connection'], 406);
         }
 
+        $insurances = \App\Insurance::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->limit(8)
+                    ->get();
+        $insurances = $insurances->each(function ($item, $key) {
+            $item->board = 'insurances';
+        });
+
         $seminars = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
@@ -33,7 +43,7 @@ class HomeController extends Controller
             $item->board = 'notices';
         });
 
-        $data = $seminars->merge($notices);
+        $data = $insurances->merge($seminars)->merge($notices);
         $data = $data->sortByDesc('created_at')->slice(0, 9);
 
         return response()->json($data);
@@ -46,13 +56,18 @@ class HomeController extends Controller
         }
 
         $this->validate($request, [
-            'mode' => 'required|in:insurance,seminars,notices'
+            'mode' => 'required|in:insurances,seminars,notices'
         ]);
 
         $mode = $request->input('mode');
 
-        if ($mode == 'insurance') {
-            $data = [];
+        if ($mode == 'insurances') {
+            $data = \App\Insurance::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->limit(8)
+                    ->get();
         } elseif ($mode == 'seminars') {
             $data = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')

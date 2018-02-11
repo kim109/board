@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="p-3">
+        <div class="p-3" style="border-bottom: 2px solid #e9ecef">
           @if (count($article->attachments) > 0)
           <ul class="list-unstyled">
               @foreach ($article->attachments as $attachment)
@@ -46,8 +46,11 @@
           @endif
 
           <p>{!! $article->content !!}</p>
-          <hr>
-          @foreach ($replies as $reply)
+        </div>
+
+        {{--  답변영역  --}}
+        @foreach ($replies as $reply)
+        <div class="p-3" style="border-bottom: 2px solid #e9ecef">
           <div class="row">
             <div class="col-8">
               {{ $reply->user->name }}님의 답변입니다.
@@ -64,18 +67,19 @@
           </div>
           <hr>
           <p>{!! $reply->content !!}</p>
-          <hr>
-          @endforeach
+        </div>
+        @endforeach
+
+
+        <div class="p-3">
           @auth
           <div class="text-right">
-            <a class="btn btn-sm btn-primary" href="/{{ Request::path() }}/reply" role="button">
+            <a class="btn btn-primary" href="/{{ Request::path() }}/reply" role="button">
               <i class="fas fa-reply" aria-hidden="true"></i> 답변하기
             </a>
           </div>
           <hr>
-          @endauth
 
-          @if (Auth::check())
           <div>
             <h6 class="font-weight-bold">플러스 댓글 남기기</h6>
             <textarea class="form-control input-sm mb-1" rows="3" id="comment-content" required></textarea>
@@ -84,7 +88,7 @@
             </div>
           </div>
           <hr>
-          @endif
+          @endauth
 
           <comments v-for="comment in comments" :key="comment.id" :comment="comment" :user="user" @reload="loadComments"></comments>
 

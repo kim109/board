@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-<div id="content" class="container mt-5">
+<div id="content" class="container my-5">
   <summary-articles></summary-articles>
 
   <div class="row no-gutters mt-4">

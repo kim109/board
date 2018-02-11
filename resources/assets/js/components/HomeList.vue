@@ -28,7 +28,7 @@
 export default {
   data: function () {
     return {
-      mode: 'insurance',
+      mode: 'insurances',
       lists: []
     }
   },
@@ -36,6 +36,9 @@ export default {
     mode: function () {
       this.getData()
     }
+  },
+  beforeMount: function () {
+    this.getData()
   },
   methods: {
     getData: function() {

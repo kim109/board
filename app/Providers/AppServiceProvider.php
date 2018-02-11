@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'notices' => 'App\Notice',
             'seminars' => 'App\Seminar',
+            'insurances' => 'App\Insurance',
             'freeboards' => 'App\Freeboard',
             'supports' => 'App\Support',
             'market' => 'App\Market',

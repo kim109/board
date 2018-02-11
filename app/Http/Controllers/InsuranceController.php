@@ -50,7 +50,6 @@ class InsuranceController extends Controller
             $writable = in_array(Auth::user()->user_id, $admin) || $article->user_id == Auth::id();
         }
 
-        dump($replies);
         return view('insurances.show', [
             'article' => $article,
             'replies' => $replies,
