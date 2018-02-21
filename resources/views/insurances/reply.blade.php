@@ -57,15 +57,6 @@
         <div class="form-group">
           <textarea class="form-control form-control-sm" rows="10" id="article" name="content" required></textarea>
         </div>
-        <div class="form-group">
-          <label><i class="fas fa-paperclip"></i> 첨부파일</label>
-          <div id="attachment" class="dropzone">
-            <div class="dz-default dz-message"></div>
-          </div>
-          <div>
-            여기에 파일을 끌어 놓거나, 클릭하세요. <span class="small text-success">( 최대 크기 : 2MB )</span>
-          </div>
-        </div>
         <div class="text-center">
           <input class="btn btn-primary btn-sm" type="submit" value="등록">
           <a class="btn btn-secondary btn-sm" href="/{{ dirname(Request::path()) }}" role="button">취소</a>

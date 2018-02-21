@@ -4,7 +4,8 @@ require('trumbowyg/dist/plugins/upload/trumbowyg.upload')
 require('trumbowyg/dist/plugins/noembed/trumbowyg.noembed')
 
 $.trumbowyg.svgPath = '/icons.svg'
-jQuery.trumbowyg.langs.ko.upload = '업로드'
+jQuery.trumbowyg.langs.ko.insertImage = '이미지 URL로 추가'
+jQuery.trumbowyg.langs.ko.upload = '이미지 파일로 추가'
 jQuery.trumbowyg.langs.ko.file = '파일'
 jQuery.trumbowyg.langs.ko.noembed = '비디오 링크'
 

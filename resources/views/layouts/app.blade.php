@@ -52,8 +52,10 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link @if (Request::is('/')) active @endif" href="{{ url('/') }}">치카플러스 홈</a>
-                    <a class="nav-item nav-link @if (Request::is('insurances*')) active @endif" href="/insurances">보험청구 이모저모</a>
+                    <a class="nav-item nav-link @if (Request::is('insurances*')) active @endif" href="/insurances">치카지식인</a>
+                    <a class="nav-item nav-link @if (Request::is('abc*')) active @endif" href="#">치카칼럼</a>
                     <a class="nav-item nav-link @if (Request::is('seminars*')) active @endif" href="/seminars">세미나소식</a>
+                    <a class="nav-item nav-link @if (Request::is('market*')) active @endif" href="/market">덴티마켓</a>
                     <a class="nav-item nav-link @if (Request::is('notices*')) active @endif" href="/notices">공지사항</a>
                   @if (Auth::guest())
                     <a class="nav-item nav-link d-block d-sm-none" href="{{ route('login') }}">로그인</a>

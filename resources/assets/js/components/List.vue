@@ -18,7 +18,7 @@
           <col />
           <col style="width:6em" />
           <col style="width:6em" />
-          <col style="width:5em" />
+          <col style="width:7em" />
         </colgroup>
         <thead>
           <tr class="text-center">
@@ -119,11 +119,7 @@ export default {
         let now = moment();
         let d = moment(date);
 
-        if (now.diff(d, 'days', true) < 1) {
-            return d.format('HH:mm');
-        } else {
-            return d.format('MM/DD');
-        }
+        return d.format('YY. M. D');
     },
     search: function() {
       let keyword = document.getElementById('keyword').value
