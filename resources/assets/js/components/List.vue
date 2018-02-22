@@ -18,7 +18,7 @@
           <col />
           <col style="width:6em" />
           <col style="width:6em" />
-          <col style="width:7em" />
+          <col style="width:6em" />
         </colgroup>
         <thead>
           <tr class="text-center">
@@ -38,7 +38,7 @@
                 </a>
               </td>
               <td class="text-center">{{ row.hits.toLocaleString() }}</td>
-              <td class="text-center">{{ row.user.name }}</td>
+              <td class="text-center">{{ maskName(row.user.name) }}</td>
               <td class="text-center" :title="row.created_at">{{ dateAt(row.created_at) }}</td>
             </tr>
           </template>
@@ -116,10 +116,21 @@ export default {
   },
   methods: {
     dateAt: function(date) {
-        let now = moment();
-        let d = moment(date);
+        let now = moment()
+        let d = moment(date)
 
-        return d.format('YY. M. D');
+        return d.format('YY.MM.DD')
+    },
+    maskName: function(name) {
+      let masking = name.charAt(0)
+
+      if (name.length == 2) {
+        masking = masking+'*'
+      } else if (name.length > 2) {
+        masking = masking + '*'.repeat(name.length-2) + name.substr(-1)
+      }
+
+      return masking
     },
     search: function() {
       let keyword = document.getElementById('keyword').value

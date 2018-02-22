@@ -104,7 +104,7 @@ class AttachmentController extends Controller
 
         return response()->json($result);
     }
-    
+
     public function remove(Request $request, $id)
     {
         $attachment = Attachment::findorFail($id);

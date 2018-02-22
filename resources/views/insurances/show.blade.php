@@ -22,7 +22,7 @@
             </div>
             <div class="col-sm-4 col-md-3 text-right">
               <span title="{{ $article->created_at }}">
-                {{ $article->created_at->format('y. n. j') }}
+                {{ $article->created_at->format('y.m.d') }}
               </span>
             </div>
           </div>
@@ -49,11 +49,11 @@
         <div class="p-3" style="border-bottom: 2px solid #e9ecef">
           <div class="row">
             <div class="col-8">
-              <h4>{{ $reply->user->name }}님의 답변입니다.</h4>
+              <h5><strong class="text-primary">{{ $reply->user->name }}</strong>님의 답변입니다.</h5>
             </div>
             <div class="col-4 text-right">
               <span title="{{ $reply->created_at }}">
-                {{ $reply->created_at->format('y. n. j') }}
+                {{ $reply->created_at->format('y.m.d') }}
               </span>
             </div>
           </div>

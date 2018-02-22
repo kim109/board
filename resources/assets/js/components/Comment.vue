@@ -2,7 +2,7 @@
   <div class="comment py-2">
     <div class="row mb-2">
       <div class="col-sm-6">
-        {{ comment.user.name }} <span class="text-muted">( {{ comment.user.user_id }} )</span>
+        {{ maskName(comment.user.name) }} <span class="text-muted">( {{ comment.user.user_id.replace(/.{4}$/, '****') }} )</span>
         <small class="text-muted ml-3" :title="comment.created_at">{{ dateAt(comment.created_at) }}</small>
       </div>
       <div class="col-sm-6 text-right small" v-if="status == 'none'">
@@ -29,7 +29,7 @@
       <li v-for="childen in comment.children" :key="childen.id">
         <div class="row mb-2">
             <div class="col-sm-6">
-                {{ childen.user.name }} <span class="text-muted">( {{ childen.user.user_id }} )</span>
+                {{ maskName(childen.user.name) }} <span class="text-muted">( {{ childen.user.user_id.replace(/.{4}$/, '****') }} )</span>
                 <small class="text-muted ml-3" :title="comment.created_at">{{ dateAt(childen.created_at) }}</small>
             </div>
             <div class="col-sm-6 text-right small" v-if="childen.user_id == user">
@@ -54,71 +54,78 @@
 <script>
   export default {
     props: {
-        comment: {
-            type: Object,
-            required: true
-        },
-        user: {
-            type: Number,
-            required: true
-        }
+      comment: {
+        type: Object,
+        required: true
+      },
+      user: {
+        type: Number,
+        required: true
+      }
     },
     data: function () {
-        return {
-            status: "none",
-            content: null
-        }
+      return {
+        status: "none",
+        content: null
+      }
     },
     methods: {
-        dateAt: function(date) {
-            let now = this.moment();
-            let d = this.moment(date);
+      dateAt: function(date) {
+        let now = this.moment()
+        let d = this.moment(date)
 
-            if (now.diff(d, 'days', true) < 1) {
-                return d.format('LT');
-            } else {
-                return d.format('LL');
-            }
-        },
-        edit: function() {
-            this.status = 'edit';
-            this.content = this.comment.content.replace(/<br ?\/?>/g,"\n");
-        },
-        cancel: function() {
-            this.status = 'none';
-            this.content = null;
-        },
-        update: function() {
-            let url = window.location.pathname+'/comments/'+this.comment.id;
-            this.$http.patch(url, { 'content': this.content });
+        return (now.diff(d, 'days', true) < 1) ? d.format('LT') : d.format('LL')
+      },
+      maskName: function(name) {
+        let masking = name.charAt(0)
 
-            this.comment.content = this.content.replace(/\n/g, '<br />');
-            this.status = 'none';
-            this.content = null;
-        },
-        remove: function(id) {
-            if (confirm('댓글을 삭제하시겠습니까?')) {
-                let url = window.location.pathname+'/comments/'+id;
-                this.$http.delete(url)
-                    .then((response) => {
-                            this.$emit('reload');
-                    });
-            }
-        },
-        reply: function() {
-            let url = window.location.pathname+'/comments/'+this.comment.id+'/reply';
-            let content = document.getElementById('reply-content').value.trim();
-            console.log(content);
-            if (content.length > 0) {
-                this.$http.post(url, { 'content': content })
-                    .then((response) => {
-                            this.status = 'none';
-                            this.$emit('reload');
-                    });
-            } else {
-                alert('내용을 입력해주세요.');
-            }
+        if (name.length == 2) {
+          masking = masking+'*'
+        } else if (name.length > 2) {
+          masking = masking + '*'.repeat(name.length-2) + name.substr(-1)
         }
+
+        return masking
+      },
+      edit: function() {
+        this.status = 'edit';
+        this.content = this.comment.content.replace(/<br ?\/?>/g,"\n");
+      },
+      cancel: function() {
+        this.status = 'none';
+        this.content = null;
+      },
+      update: function() {
+        let url = window.location.pathname+'/comments/'+this.comment.id;
+        this.$http.patch(url, { 'content': this.content });
+
+        this.comment.content = this.content.replace(/\n/g, '<br />');
+        this.status = 'none';
+        this.content = null;
+      },
+      remove: function(id) {
+        if (confirm('댓글을 삭제하시겠습니까?')) {
+          let url = window.location.pathname+'/comments/'+id;
+          this.$http.delete(url)
+              .then((response) => {
+                this.$emit('reload');
+              })
+        }
+      },
+      reply: function() {
+        let url = window.location.pathname+'/comments/'+this.comment.id+'/reply';
+        let content = document.getElementById('reply-content').value.trim();
+        console.log(content);
+        if (content.length > 0) {
+            this.$http.post(url, { 'content': content })
+                .then((response) => {
+                        this.status = 'none';
+                        this.$emit('reload');
+                });
+        } else {
+            alert('내용을 입력해주세요.');
+        }
+      }
     }
   }
 </script>

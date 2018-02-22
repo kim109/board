@@ -2,13 +2,13 @@
   <div class="home-list">
     <ul class="nav nav-pills nav-fill">
         <li class="nav-item">
-          <a class="nav-link" :class="{active : mode == 'insurance'}" href="#" @click.stop="mode='insurance'">보험청구 이모저모</a>
+          <a class="nav-link" :class="{active : mode == 'insurances'}" href="#" @click.prevent="mode='insurances'">치카지식인</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" :class="{active : mode == 'seminars'}" href="#" @click.stop="mode='seminars'">세미나 소식</a>
+          <a class="nav-link" :class="{active : mode == 'seminars'}" href="#" @click.prevent="mode='seminars'">세미나소식</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" :class="{active : mode == 'notices'}" href="#" @click.stop="mode='notices'">공지사항</a>
+          <a class="nav-link" :class="{active : mode == 'notices'}" href="#" @click.prevent="mode='notices'">공지사항</a>
         </li>
       </ul>
       <div class="p-3 contents">
