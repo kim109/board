@@ -10,16 +10,33 @@ use Illuminate\Http\Request;
 
 class SeminarController extends Controller
 {
+    // 카테고리 정보
+    public function category(Request $request)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['errors' => 'invalid connection'], 406);
+        }
+
+        $categories = \App\Category::where('table', 'seminars')->get(['id', 'name']);
+
+        return response()->json($categories);
+    }
+
+    // 글 목록
     public function list(Request $request)
     {
         if (!$request->ajax()) {
             return response()->json(['errors' => 'invalid connection'], 406);
         }
+        $category = $request->input('category');
         $keyword = $request->input('keyword');
 
         $articles = Seminar::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
+                    ->when($category, function ($query) use ($category) {
+                        return $query->where('category_id', $category);
+                    })
                     ->when($keyword, function ($query) use ($keyword) {
                         return $query->where('subject', 'like', '%'.$keyword.'%')
                                 ->orWhere('content', 'like', '%'.$keyword.'%');

@@ -19,11 +19,13 @@ mix.sass('resources/assets/sass/chikaplus.scss', 'public/css')
    .js('resources/assets/js/create.js', 'public/js')
    .js('resources/assets/js/edit.js', 'public/js');
 
+mix.js('resources/assets/js/qna/list.js', 'public/js/qna')
+   .js('resources/assets/js/qna/show.js', 'public/js/qna')
+   .js('resources/assets/js/qna/answer.js', 'public/js/qna');
+
 mix.js('resources/assets/js/seminars/list.js', 'public/js/seminars')
    .js('resources/assets/js/seminars/create.js', 'public/js/seminars')
    .js('resources/assets/js/seminars/edit.js', 'public/js/seminars');
-
-mix.js('resources/assets/js/insurances/reply.js', 'public/js/insurances');
 
 if (mix.inProduction()) {
     mix.version();

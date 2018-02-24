@@ -2,7 +2,7 @@
   <div class="home-list">
     <ul class="nav nav-pills nav-fill">
         <li class="nav-item">
-          <a class="nav-link" :class="{active : mode == 'insurances'}" href="#" @click.prevent="mode='insurances'">치카지식인</a>
+          <a class="nav-link" :class="{active : mode == 'qna'}" href="#" @click.prevent="mode='qna'">치카지식인</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" :class="{active : mode == 'seminars'}" href="#" @click.prevent="mode='seminars'">세미나소식</a>
@@ -28,7 +28,7 @@
 export default {
   data: function () {
     return {
-      mode: 'insurances',
+      mode: 'qna',
       lists: []
     }
   },

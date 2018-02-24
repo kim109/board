@@ -10,8 +10,6 @@
 
 @section('content')
   <div id="content" class="container my-5">
-    <summary-articles></summary-articles>
-  
     <div class="row no-gutters mt-3">
       <div class="col">
         <form id="fm" class="content-box p-3" action="/{{ dirname(Request::path()) }}" method="post" enctype="multipart/form-data">
@@ -35,14 +33,16 @@
             <div style="width:165px">
               <label><i class="fas fa-image"></i> 썸네일 이미지</label>
               <div id="thumbnail" class="dropzone">
-                <div class="dz-default dz-message"></div>
+                <div class="dz-default dz-message">
+                  여기를 클릭하세요
+                </div>
               </div>
             </div>
             <div class="col ml-3">
               <label><i class="fas fa-paperclip"></i> 첨부파일</label>
               <div id="attachment" class="dropzone">
                 <div class="dz-default dz-message">
-                    여기에 파일을 끌어 놓거나, 클릭하세요. <span class="small text-success">( 최대 크기 : 2MB )</span>
+                  파일첨부를 원하시면 여기에 파일을 드래그하거나 클릭해주세요.
                 </div>
               </div>
             </div>

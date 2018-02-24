@@ -1,13 +1,15 @@
 {
-    "/js/show.js": "/js/show.js?id=86f9c70faf254c4a3b20",
-    "/js/list.js": "/js/list.js?id=eb665b6ec84b568f1286",
-    "/js/seminars/list.js": "/js/seminars/list.js?id=0ab77ec110e0c8666cac",
-    "/js/home.js": "/js/home.js?id=a5b9277cfd6814377ea2",
-    "/css/chikaplus.css": "/css/chikaplus.css?id=fc4016835b7a8b55cd70",
+    "/js/show.js": "/js/show.js?id=514a20a61e05930da6a4",
+    "/js/qna/show.js": "/js/qna/show.js?id=53e41193563badbcbe60",
+    "/js/qna/list.js": "/js/qna/list.js?id=d7c12932e80729d519e5",
+    "/js/list.js": "/js/list.js?id=b1c1803687703b2544ed",
+    "/js/seminars/list.js": "/js/seminars/list.js?id=6b606195769c8c67655d",
+    "/js/home.js": "/js/home.js?id=6755e0e3fd3da088a591",
+    "/css/chikaplus.css": "/css/chikaplus.css?id=24bbf52e9b573ae13ad5",
     "/css/wysiwyg.css": "/css/wysiwyg.css?id=5bd286f377ff5a45e92c",
-    "/js/seminars/edit.js": "/js/seminars/edit.js?id=8bb99a88205ca5365773",
-    "/js/seminars/create.js": "/js/seminars/create.js?id=ef629f0b22bcbadb3768",
-    "/js/insurances/reply.js": "/js/insurances/reply.js?id=614c9ce23b82c1b71fbd",
+    "/js/seminars/edit.js": "/js/seminars/edit.js?id=6c49b24ac8d8410e1568",
+    "/js/seminars/create.js": "/js/seminars/create.js?id=d02aecf59cff47262258",
+    "/js/qna/answer.js": "/js/qna/answer.js?id=1b1c740244c27b9787c5",
     "/js/edit.js": "/js/edit.js?id=33363e63bfd46f86a92a",
-    "/js/create.js": "/js/create.js?id=93cfea140e5d09a61516"
+    "/js/create.js": "/js/create.js?id=c7ea5bf6b574100cba1f"
 }

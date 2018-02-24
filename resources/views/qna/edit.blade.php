@@ -24,15 +24,15 @@
         <form id="fm" class="content-box p-3" action="/{{ dirname(Request::path()) }}" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
           {{ method_field('PATCH') }}
-          <div class="row">
-            <div class="col-4 col-sm-2">
+          <div class="row no-gutters">
+            <div class="mr-3" style="width:9em;">
               <select class="form-control form-control-sm" name="category" required>
                 @foreach ($categories as $category)
                   <option value="{{ $category->id }}" @if ($category->id == $article->category_id) selected="selected"@endif>{{ $category->name }}</option>
                 @endforeach
               </select>
             </div>
-            <div class="col-8 col-sm-10">
+            <div class="col">
               <input type="text" class="form-control form-control-sm" id="subject" name="subject" placeholder="제목을 입력해주세요" value="{{ $article->subject }}" required>
             </div>
           </div>

@@ -16,15 +16,15 @@
       <div class="col">
         <form id="fm" class="content-box p-3" action="/{{ dirname(Request::path()) }}" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
-          <div class="row">
-            <div class="col-4 col-sm-2">
+          <div class="row no-gutters">
+            <div class="mr-3" style="width:9em;">
               <select class="form-control form-control-sm" name="category" required>
                 @foreach ($categories as $category)
                   <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
               </select>
             </div>
-            <div class="col-8 col-sm-10">
+            <div class="col">
               <input type="text" class="form-control form-control-sm" id="subject" name="subject" placeholder="제목을 입력해주세요" required>
             </div>
           </div>
@@ -34,10 +34,9 @@
           <div class="form-group">
             <label><i class="fas fa-paperclip"></i> 첨부파일</label>
             <div id="attachment" class="dropzone">
-              <div class="dz-default dz-message"></div>
-            </div>
-            <div>
-              여기에 파일을 끌어 놓거나, 클릭하세요. <span class="small text-success">( 최대 크기 : 2MB )</span>
+              <div class="dz-default dz-message">
+                파일첨부를 원하시면 여기에 파일을 드래그하거나 클릭해주세요.
+              </div>
             </div>
           </div>
           <div class="text-center">

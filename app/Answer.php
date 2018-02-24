@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class InsuranceReply extends Model
+class Answer extends Model
 {
     use SoftDeletes;
 
@@ -20,8 +20,8 @@ class InsuranceReply extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function insurance()
+    public function question()
     {
-        return $this->belongsTo('App\Insurance');
+        return $this->belongsTo('App\Question');
     }
 }

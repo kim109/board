@@ -23,9 +23,31 @@ Route::post('/entry', 'AuthController@entry');
 // 홈
 Route::prefix('home')->group(function () {
     Route::view('/', 'home')->name('home');
-    Route::get('summary-articles', 'HomeController@summary');
+    Route::get('popularity', 'HomeController@popularity');
     Route::get('list', 'HomeController@list');
 });
+
+// 치카 지식인
+Route::prefix('qna')->group(function () {
+    Route::view('/', 'qna.list')->name('qna.index');
+    Route::get('categories', 'QnAController@category');
+    Route::get('popularity', 'QnAController@popularity');
+    Route::get('list', 'QnAController@list');
+
+    Route::get('{id}', 'QnAController@show')->name('qna.show');
+
+    Route::get('create', 'QnAController@create')->name('qna.create');
+    Route::post('/', 'QnAController@store');
+
+    Route::get('{id}/answer', 'QnAController@answer')->name('qna.answer');
+    Route::post('{id}/answer', 'QnAController@storeAnswer');
+
+    Route::get('{id}/edit', 'QnAController@edit')->name('qna.edit');
+    Route::patch('{id}', 'QnAController@update');
+
+    Route::delete('{id}', 'QnAController@destroy');
+});
+
 
 // 보험청구 이모저모
 Route::prefix('insurances')->group(function () {
@@ -49,6 +71,7 @@ Route::prefix('insurances')->group(function () {
 // 세미나 소식
 Route::prefix('seminars')->group(function () {
     Route::view('/', 'seminars.list')->name('seminars.index');
+    Route::get('categories', 'SeminarController@category');
     Route::get('list', 'SeminarController@list');
 
     Route::get('{id}', 'SeminarController@show')->name('seminars.show');

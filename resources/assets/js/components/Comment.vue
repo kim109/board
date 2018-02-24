@@ -115,15 +115,15 @@
       reply: function() {
         let url = window.location.pathname+'/comments/'+this.comment.id+'/reply';
         let content = document.getElementById('reply-content').value.trim();
-        console.log(content);
+
         if (content.length > 0) {
-            this.$http.post(url, { 'content': content })
-                .then((response) => {
-                        this.status = 'none';
-                        this.$emit('reload');
-                });
+          this.$http.post(url, { 'content': content })
+              .then((response) => {
+                this.status = 'none';
+                this.$emit('reload');
+              });
         } else {
-            alert('내용을 입력해주세요.');
+          alert('내용을 입력해주세요.');
         }
       }
     }

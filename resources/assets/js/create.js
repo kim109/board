@@ -13,7 +13,8 @@ $(document).ready(() => {
     maxFiles: 3,
     maxFilesize: 5,
     addRemoveLinks: true,
-    dictRemoveFile: '삭제'
+    dictRemoveFile: '삭제',
+    dictDefaultMessage: 'eef'
   })
   .on('success', (file, data) => {
     file._id = data.id;

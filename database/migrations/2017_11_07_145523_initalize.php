@@ -101,30 +101,7 @@ class Initalize extends Migration
                   ->onUpdate('cascade');
         });
 
-        // 사용 문의 Q&A
-        Schema::create('supports', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('category_id');
-            $table->string('subject')->comment('제목');
-            $table->longText('question')->comment('질문');
-            $table->longText('answer')->nullable()->comment('답변');
-            $table->unsignedInteger('hits')->default(0)->comment('조회수');
-            $table->boolean('pin')->default(false)->comment('상단 고정 여부');
-            $table->boolean('open')->default(true)->comment('공개 여부');
-            $table->softDeletes();
-            $table->timestamps();
-
-            $table->foreign('user_id')
-                  ->references('id')->on('users')
-                  ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->foreign('category_id')
-                  ->references('id')->on('categories')
-                  ->onUpdate('cascade');
-        });
-
-        // 질문
+        // 치카 지식인 - 질문
         Schema::create('questions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
@@ -147,7 +124,7 @@ class Initalize extends Migration
                   ->onUpdate('cascade');
         });
 
-        // 답변
+        // 치카 지식인 - 답변
         Schema::create('answers', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
@@ -179,6 +156,7 @@ class Initalize extends Migration
         Schema::dropIfExists('categories');
         Schema::dropIfExists('notices');
         Schema::dropIfExists('freeboards');
-        Schema::dropIfExists('supports');
+        Schema::dropIfExists('questions');
+        Schema::dropIfExists('answers');
     }
 }

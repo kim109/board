@@ -52,7 +52,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link @if (Request::is('/')) active @endif" href="{{ url('/') }}">치카플러스 홈</a>
-                    <a class="nav-item nav-link @if (Request::is('insurances*')) active @endif" href="/insurances">치카지식인</a>
+                    <a class="nav-item nav-link @if (Request::is('qna*')) active @endif" href="/qna">치카지식인</a>
                     <a class="nav-item nav-link @if (Request::is('abc*')) active @endif" href="#">치카칼럼</a>
                     <a class="nav-item nav-link @if (Request::is('seminars*')) active @endif" href="/seminars">세미나소식</a>
                     <a class="nav-item nav-link @if (Request::is('market*')) active @endif" href="/market">덴티마켓</a>
@@ -81,22 +81,18 @@
                         <img class="align-bottom" src="/images/jplelab_ci.png" width="152" height="32" alt="JPLELAB">
                     </div>
                     <p class="small mb-3">
-                        서울시 강남구 테헤란로82길 15(대치동), 70호 <span class="ml-4">T. 6204-0511</span><br>
+                        서울시 강남구 역삼로 542(대치동) 신사S&amp;G빌딩 1층  <span class="ml-4">T. 02-6204-7575</span><br>
                         (주) 대닛 대표 : 주지훈 <span class="ml-4">사업자등록번호 : 598-81-00812</span>
                     </p>
-                    <p class="small">
-                        서울시 강남구 역삼로 542(대치동) 신사에앤지빌딩1층 <span class="ml-  4">T. 02-6204-0512</span><br>
-                        (주) 제이플랩 대표 : 김기연 <span class="ml-4">사업자등록번호 : 343-87-00664</span>
-                    </p>
+                    <p class="small">Copyright(c) DenIT & JPLELAB. All rights reserved.</p>
                 </div>
                 <div class="col-3 pt-4">
                     <h4>QUICK LINK</h4>
                     <ul class="list-unstyled">
-                        <li><a href="#">개인정보처리방침</a></li>
-                        <li><a href="#">이용약관</a></li>
-                        <li><a href="#">고객지원</a></li>
-                        <li><a href="#">서비스 전체보기</a></li>
-                        <li><a href="#">원격지원 신청</a></li>
+                        <li class="mb-2"><a href="https://www.chikatalk.co.kr/privacy/">개인정보처리방침</a></li>
+                        <li class="mb-2"><a href="https://www.chikatalk.co.kr/term/">이용약관</a></li>
+                        <li class="mb-2"><a href="https://www.chikatalk.co.kr/service/">서비스 전체보기</a></li>
+                        <li><a href="https://www.chikatalk.co.kr/support/">원격지원 신청</a></li>
                     </ul>
                 </div>
                 <div class="col-3 pt-4">

@@ -56,24 +56,24 @@ class HomeController extends Controller
         }
 
         $this->validate($request, [
-            'mode' => 'required|in:insurances,seminars,notices'
+            'mode' => 'required|in:qna,seminars,notices'
         ]);
 
         $mode = $request->input('mode');
 
-        if ($mode == 'insurances') {
-            $data = \App\Insurance::with(['user:id,user_id,name', 'category:id,name'])
+        if ($mode == 'qna') {
+            $data = \App\Question::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
                     ->orderBy('id', 'desc')
-                    ->limit(8)
+                    ->limit(10)
                     ->get();
         } elseif ($mode == 'seminars') {
             $data = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
                     ->orderBy('id', 'desc')
-                    ->limit(8)
+                    ->limit(10)
                     ->get();
         } elseif ($mode == 'notices') {
             $data = \App\Notice::with(['user:id,user_id,name', 'category:id,name'])

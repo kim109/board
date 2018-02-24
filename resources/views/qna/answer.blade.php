@@ -5,7 +5,7 @@
 @endpush
 
 @push('scripts')
-  <script src="{{ mix('/js/insurances/reply.js') }}"></script>
+  <script src="{{ mix('/js/qna/answer.js') }}"></script>
 @endpush
 
 @section('content')
@@ -24,11 +24,7 @@
             </div>
             <div class="col-sm-4 col-md-3 text-right">
             <span title="{{ $article->created_at }}">
-                @if ($article->created_at > date('Y-m-d'))
-                {{ $article->created_at->format('H:i') }}
-                @else
-                {{ $article->created_at->format('Y/m/d') }}
-                @endif
+              {{ $article->created_at->format('y.m.d') }}
             </span>
             </div>
           </div>
@@ -52,7 +48,7 @@
       </div>
 
       <h5>답변하기</h5>
-      <form id="fm" class="content-box p-3" action="/{{ dirname(Request::path()) }}/reply" method="post" enctype="multipart/form-data">
+      <form id="fm" class="content-box p-3" action="/{{ dirname(Request::path()) }}/answer" method="post">
         {{ csrf_field() }}
         <div class="form-group">
           <textarea class="form-control form-control-sm" rows="10" id="article" name="content" required></textarea>

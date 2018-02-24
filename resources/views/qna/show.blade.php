@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @push('scripts')
-  <script src="{{ mix('/js/show.js') }}"></script>
+  <script src="{{ mix('/js/qna/show.js') }}"></script>
 @endpush
 
 @section('content')
 <div id="content" class="container my-5">
-  <summary-articles></summary-articles>
+  <summary-articles type="qna"></summary-articles>
 
   <div class="row no-gutters mt-3">
     <div class="col">
@@ -45,19 +45,26 @@
         </div>
 
         {{--  답변영역  --}}
-        @foreach ($replies as $reply)
+        @foreach ($answers as $answer)
         <div class="p-3" style="border-bottom: 2px solid #e9ecef">
           <div class="row">
             <div class="col-8">
-              <h5><strong class="text-primary">{{ $reply->user->name }}</strong>님의 답변입니다.</h5>
+              <h5><strong class="text-primary">{{ $answer->user->name }}</strong>님의 답변입니다.</h5>
             </div>
             <div class="col-4 text-right">
-              <span title="{{ $reply->created_at }}">
-                {{ $reply->created_at->format('y.m.d') }}
+              <span title="{{ $answer->created_at }}">
+                {{ $answer->created_at->format('y.m.d') }}
               </span>
             </div>
           </div>
-          <p>{!! $reply->content !!}</p>
+          <p>{!! $answer->content !!}</p>
+          @if ($answer->user->id == Auth::id())
+          <div class="text-right">
+            <a class="btn btn-sm btn-danger" href="/{{ Request::path() }}/answers/{$answer->id}" role="button" @click.prevent="destoryAnswer">
+              <i class="fas fa-trash" aria-hidden="true"></i> 답변삭제
+            </a>
+          </div>
+          @endif
         </div>
         @endforeach
 
@@ -65,7 +72,7 @@
         <div class="p-3">
           @auth
           <div class="text-right">
-            <a class="btn btn-primary" href="/{{ Request::path() }}/reply" role="button">
+            <a class="btn btn-primary" href="/{{ Request::path() }}/answer" role="button">
               <i class="fas fa-reply" aria-hidden="true"></i> 질문 답변하기
             </a>
           </div>
@@ -83,19 +90,28 @@
 
           <comments v-for="comment in comments" :key="comment.id" :comment="comment" :user="user" @reload="loadComments"></comments>
 
-          <div class="text-center">
-            <a class="btn btn-sm btn-primary" href="{{ $list }}" role="button">
-              <i class="fas fa-list" aria-hidden="true"></i> 목록
-            </a>
+          <div class="row">
+            @auth
+            <div class="col-6">
+              <a class="btn btn-sm btn-primary" href="{{ route('qna.create') }}" role="button">
+                <i class="fas fa-pencil-alt" aria-hidden="true"></i> 지식인에 물어보기
+              </a>
+              @if ($writable)
+              <a class="btn btn-sm btn-secondary" href="{{ route('qna.edit', ['id' => $article->id]) }}" role="button">
+                <i class="fas fa-edit" aria-hidden="true"></i> 수정
+              </a>
+              <a class="btn btn-sm btn-danger" href="/{{ Request::path() }}" role="button" @click.prevent="destory">
+                <i class="fas fa-trash" aria-hidden="true"></i> 삭제
+              </a>
+              @endif
+            </div>
+            @endauth
 
-            @if ($writable)
-            <a class="btn btn-sm btn-secondary" href="/{{ Request::path() }}/edit" role="button">
-              <i class="fas fa-edit" aria-hidden="true"></i> 수정
-            </a>
-            <a class="btn btn-sm btn-danger" href="/{{ Request::path() }}" role="button" @click.prevent="destory">
-              <i class="fas fa-trash" aria-hidden="true"></i> 삭제
-            </a>
-            @endif
+            <div class="col-6 text-right">
+              <a class="btn btn-sm btn-primary" href="{{ route('qna.index') }}" role="button">
+                <i class="fas fa-list" aria-hidden="true"></i> 목록
+              </a>
+            </div>
           </div>
         </div>
       </div>

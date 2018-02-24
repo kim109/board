@@ -3,8 +3,8 @@
     <div class="row no-gutters">
       <div class="col pt-4 px-4">
         <ul class="list-unstyled">
-          <li v-for="article in articles" :key="'s-'+article.id" class="mb-2">
-            <a :href="'/'+article.board+'/'+article.id">
+          <li v-for="article in articles" :key="article.id" class="mb-2">
+            <a :href="'/'+type+'/'+article.id">
               <span class="text-primary">[{{ article.category.name }}]</span>
               {{ article.subject }} ({{ article.comments_count.toLocaleString() }})
             </a>
@@ -12,7 +12,7 @@
         </ul>
       </div>
       <div class="d-none d-lg-block">
-        <img src="/images/summary-right.jpg" width="348" height="310">
+        <img src="/images/summary-right.jpg" height="200">
       </div>
     </div>
   </div>
@@ -20,15 +20,21 @@
 
 <script>
 export default {
+  props: {
+    type: {
+      type: String,
+      required: true
+    },
+  },
   data: function () {
     return {
       articles: null
     }
   },
   beforeMount: function() {
-    this.$http.get('/home/summary-articles')
+    this.$http.get('/'+this.type+'/popularity')
     .then((response) => {
-      this.articles = _.orderBy(response.data, ['created_at'], ['desc'])
+      this.articles = _.orderBy(response.data, ['hits'], ['desc'])
     })
   }
 }

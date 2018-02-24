@@ -12,7 +12,17 @@
         </div>
       </div>
     </div>
+
     <div class="content-box mt-3">
+      <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+          <a href="#" class="nav-link" :class="{active : category == 0}" @click.prevent="category= 0">전체보기</a>
+        </li>
+        <li v-for="c in categories" :key="c.id" class="nav-item">
+          <a href="#" class="nav-link" :class="{active : category == c.id}" @click.prevent="category= c.id">{{ c.name }}</a>
+        </li>
+      </ul>
+
       <div class="row p-3">
         <div class="media col-md-6 mb-3" v-for="(row) in lists" :key="row.id">
           <a :href="base+'/'+row.id"><img class="mr-3" :src="'/thumbnail/'+row.thumbnail_id+'?w=120&h=120'" :alt="row.subject"></a>
@@ -36,6 +46,7 @@
             </div>
           </div>
         </div>
+
       </div>
 
       <div class="p-3 row">
@@ -61,7 +72,7 @@
           </nav>
         </div>
         <div class="col-2 text-right" v-if="writable == 1">
-          <a :href="base+'/create'" class="btn btn-sm btn-primary">
+          <a :href="base+'/create'" class="btn btn-primary">
             <i class="fas fa-pencil-alt"></i> 글쓰기
           </a>
         </div>
@@ -83,7 +94,10 @@ export default {
   data: function () {
     return {
       base: window.location.pathname,
+      categories: [],
       rows: [],
+      category: 0,
+      keyword: null,
       perpage: 15,
       page: 0
     }
@@ -99,27 +113,29 @@ export default {
       return Math.ceil(this.rows.length / this.perpage)
     }
   },
+  watch: {
+    category: function() {
+      this.load()
+    },
+    keyword: function() {
+      this.load()
+    }
+  },
   beforeMount: function() {
-    this.$http.get(this.base+'/list')
+    this.$http.get(this.base+'/categories')
     .then((response) => {
-      this.rows = response.data
+      this.categories = response.data
     })
+
+    this.load()
   },
   methods: {
-    dateAt: function(date) {
-        let now = moment();
-        let d = moment(date);
-
-        if (now.diff(d, 'days', true) < 1) {
-            return d.format('HH:mm');
-        } else {
-            return d.format('MM/DD');
-        }
-    },
     search: function() {
-      let keyword = document.getElementById('keyword').value
+      this.keyword = document.getElementById('keyword').value
+    },
+    load: function() {
       this.$http.get(this.base+'/list', {
-        params: { keyword: keyword }
+        params: { keyword: this.keyword, category: this.category }
       })
       .then((response) => {
         this.rows = response.data
@@ -129,12 +145,21 @@ export default {
 }
 </script>
 
-<style scoped>
-  table {
-    table-layout: fixed;
-  }
-  table td {
-    border-top: none;
-    padding: 0.5rem;
+<style lang="scss" scoped>
+  .nav {
+    border-bottom: 1px solid #cdcdcd;
+
+    .nav-item {
+      border-right: 1px solid #cdcdcd;
+      &:last-child {
+        border-right: none;
+      }
+
+      .nav-link.active {
+        color: white;
+        background-color: #505767;
+        border-radius: 0;
+      }
+    }
   }
 </style>
