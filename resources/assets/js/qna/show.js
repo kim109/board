@@ -41,6 +41,14 @@ const app = new Vue({
           location.href = response.data.list
         });
       }
+    },
+    destoryAnswer: function(event) {
+      if (confirm('답변을 삭제하시겠습니까?')) {
+        this.$http.delete(event.currentTarget.getAttribute('href'))
+        .then((response) => {
+          location.href = response.data.list
+        });
+      }
     }
   }
 })

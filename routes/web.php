@@ -11,9 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
 
 Auth::routes();
 
@@ -21,8 +18,8 @@ Auth::routes();
 Route::post('/entry', 'AuthController@entry');
 
 // 홈
+Route::view('/', 'home')->name('home');
 Route::prefix('home')->group(function () {
-    Route::view('/', 'home')->name('home');
     Route::get('popularity', 'HomeController@popularity');
     Route::get('list', 'HomeController@list');
 });
@@ -41,6 +38,7 @@ Route::prefix('qna')->group(function () {
 
     Route::get('{id}/answer', 'QnAController@answer')->name('qna.answer');
     Route::post('{id}/answer', 'QnAController@storeAnswer');
+    Route::delete('{id}/answers/{answer}', 'QnAController@destroyAnswer');
 
     Route::get('{id}/edit', 'QnAController@edit')->name('qna.edit');
     Route::patch('{id}', 'QnAController@update');
@@ -49,23 +47,22 @@ Route::prefix('qna')->group(function () {
 });
 
 
-// 보험청구 이모저모
-Route::prefix('insurances')->group(function () {
-    Route::view('/', 'insurances.list')->name('insurances.index');
-    Route::get('list', 'InsuranceController@list');
+// 치카 컬럼
+Route::prefix('columns')->group(function () {
+    Route::get('/', 'ColumnController@index')->name('columns.index');
+    Route::get('categories', 'ColumnController@category');
+    Route::get('popularity', 'ColumnController@popularity');
+    Route::get('list', 'ColumnController@list');
 
-    Route::get('{id}', 'InsuranceController@show')->name('insurances.show');
+    Route::get('{id}', 'ColumnController@show')->name('columns.show');
 
-    Route::get('create', 'InsuranceController@create')->name('insurances.create');
-    Route::post('/', 'InsuranceController@store');
+    Route::get('create', 'ColumnController@create')->name('columns.create');
+    Route::post('/', 'ColumnController@store');
 
-    Route::get('{id}/reply', 'InsuranceController@reply')->name('insurances.reply');
-    Route::post('{id}/reply', 'InsuranceController@storeReply');
+    Route::get('{id}/edit', 'ColumnController@edit')->name('columns.edit');
+    Route::patch('{id}', 'ColumnController@update');
 
-    Route::get('{id}/edit', 'InsuranceController@edit')->name('insurances.edit');
-    Route::patch('{id}', 'InsuranceController@update');
-
-    Route::delete('{id}', 'InsuranceController@destroy');
+    Route::delete('{id}', 'ColumnController@destroy');
 });
 
 // 세미나 소식
@@ -103,13 +100,6 @@ Route::prefix('notices')->group(function () {
 
 // 자유게시판
 Route::resource('freeboards', 'FreeboardController')->middleware('auth');
-// 사용문의 Q&A
-Route::resource('supports', 'SupportController')->middleware('auth');
-Route::get('supports/{id}/answer', function ($id) {
-    $article = \App\Support::findorFail($id);
-    return view('supports.answer', ['article' => $article]);
-})->middleware(['auth', 'admin']);
-Route::post('supports/{id}/answer', 'SupportController@answer')->middleware(['auth', 'admin']);
 
 // 중고장터
 Route::resource('market', 'MarketController');

@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::morphMap([
             'qna' => 'App\Question',
-            'answers' => 'App\Answer',
+            'columns' => 'App\Column',
             'seminars' => 'App\Seminar',
             'notices' => 'App\Notice',
             'market' => 'App\Market',

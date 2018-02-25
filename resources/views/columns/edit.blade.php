@@ -26,7 +26,7 @@
     @endforeach
   ];
 </script>
-<script src="{{ mix('/js/seminars/edit.js') }}"></script>
+<script src="{{ mix('/js/columns/edit.js') }}"></script>
 @endpush
 
 @section('content')

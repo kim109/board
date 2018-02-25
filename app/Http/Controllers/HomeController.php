@@ -2,49 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Notice;
+use App\Question;
+use App\Column;
+use App\Seminar;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function summary(Request $request)
+    public function popularity(Request $request)
     {
         if (!$request->ajax()) {
             return response()->json(['errors' => 'invalid connection'], 406);
         }
 
-        $insurances = \App\Insurance::with(['user:id,user_id,name', 'category:id,name'])
-                    ->withCount('comments')
+        $qna = Question::with(['user:id,user_id,name', 'category:id,name'])
                     ->where('open', true)
-                    ->orderBy('id', 'desc')
-                    ->limit(8)
+                    ->orderBy('hits', 'desc')
+                    ->limit(4)
                     ->get();
-        $insurances = $insurances->each(function ($item, $key) {
-            $item->board = 'insurances';
+        $qna = $qna->each(function ($item, $key) {
+            $item->board = 'qna';
         });
 
-        $seminars = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
-                    ->withCount('comments')
+        $columns = Column::with(['user:id,user_id,name', 'category:id,name'])
                     ->where('open', true)
-                    ->orderBy('id', 'desc')
-                    ->limit(8)
+                    ->orderBy('hits', 'desc')
+                    ->limit(4)
+                    ->get();
+        $columns = $columns->each(function ($item, $key) {
+            $item->board = 'columns';
+        });
+
+        $seminars = Seminar::with(['user:id,user_id,name', 'category:id,name'])
+                    ->where('open', true)
+                    ->orderBy('hits', 'desc')
+                    ->limit(4)
                     ->get();
         $seminars = $seminars->each(function ($item, $key) {
             $item->board = 'seminars';
         });
 
-        $notices = \App\Notice::with(['user:id,user_id,name', 'category:id,name'])
-                    ->withCount('comments')
-                    ->where('open', true)
-                    ->orderBy('id', 'desc')
-                    ->limit(8)
-                    ->get();
-        $notices = $notices->each(function ($item, $key) {
-            $item->board = 'notices';
-        });
-
-        $data = $insurances->merge($seminars)->merge($notices);
-        $data = $data->sortByDesc('created_at')->slice(0, 9);
+        $data = $qna->merge($columns)->merge($seminars);
+        $data = $data->sortByDesc('created_at')->slice(0, 6);
 
         return response()->json($data);
     }
@@ -56,20 +55,27 @@ class HomeController extends Controller
         }
 
         $this->validate($request, [
-            'mode' => 'required|in:qna,seminars,notices'
+            'mode' => 'required|in:qna,columns,seminars,notices'
         ]);
 
         $mode = $request->input('mode');
 
         if ($mode == 'qna') {
-            $data = \App\Question::with(['user:id,user_id,name', 'category:id,name'])
+            $data = Question::with(['user:id,user_id,name', 'category:id,name'])
+                    ->withCount('comments')
+                    ->where('open', true)
+                    ->orderBy('id', 'desc')
+                    ->limit(10)
+                    ->get();
+        } elseif ($mode == 'columns') {
+            $data = Column::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
                     ->orderBy('id', 'desc')
                     ->limit(10)
                     ->get();
         } elseif ($mode == 'seminars') {
-            $data = \App\Seminar::with(['user:id,user_id,name', 'category:id,name'])
+            $data = Seminar::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
                     ->orderBy('id', 'desc')
@@ -83,7 +89,6 @@ class HomeController extends Controller
                     ->limit(10)
                     ->get();
         }
-
         return response()->json($data);
     }
 }

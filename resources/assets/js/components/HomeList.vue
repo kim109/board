@@ -5,6 +5,9 @@
           <a class="nav-link" :class="{active : mode == 'qna'}" href="#" @click.prevent="mode='qna'">치카지식인</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" :class="{active : mode == 'columns'}" href="#" @click.prevent="mode='columns'">치카컬럼</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" :class="{active : mode == 'seminars'}" href="#" @click.prevent="mode='seminars'">세미나소식</a>
         </li>
         <li class="nav-item">

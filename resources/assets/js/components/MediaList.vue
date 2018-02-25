@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="row">
+      <!-- 검색 Input -->
       <div class="col-12 col-md-6 offset-md-6">
         <div class="input-group">
           <input type="search" id="keyword" class="form-control" placeholder="검색" aria-label="Search for..." @keyup.enter="search">
@@ -14,6 +15,7 @@
     </div>
 
     <div class="content-box mt-3">
+      <!-- 카테고리 Tab -->
       <ul class="nav nav-pills nav-fill">
         <li class="nav-item">
           <a href="#" class="nav-link" :class="{active : category == 0}" @click.prevent="category= 0">전체보기</a>
@@ -24,29 +26,19 @@
       </ul>
 
       <div class="row p-3">
-        <div class="media col-md-6 mb-3" v-for="(row) in lists" :key="row.id">
-          <a :href="base+'/'+row.id"><img class="mr-3" :src="'/thumbnail/'+row.thumbnail_id+'?w=120&h=120'" :alt="row.subject"></a>
-          <div class="media-body">
-            <div class="my-3 font-weight-bold">
-              <a :href="base+'/'+row.id">{{ row.subject }} ({{ row.comments_count.toLocaleString() }})</a>
-            </div>
-            <div class="row small">
-              <div class="col-12">
-                <label class="text-primary">작성일</label>
-                {{ row.created_at }}
+        <!-- 글목록 -->
+        <template v-if="lists.length">
+          <div class="col-3 mb-3" v-for="(row) in lists" :key="row.id">
+            <a :href="base+'/'+row.id">
+              <img class="mr-3" :src="'/thumbnail/'+row.thumbnail_id" :alt="row.subject">
+              <div>
+                <span class="text-primary">[{{ row.category.name }}]</span>
+                {{ row.subject }} ({{ row.comments_count.toLocaleString() }})
               </div>
-              <div class="col">
-                <label class="text-primary">조회수</label>
-                {{ row.hits.toLocaleString() }}
-              </div>
-              <div class="col text-right mr-3">
-                <label class="text-primary">작성자</label>
-                {{ row.user.name }}
-              </div>
-            </div>
+            </a>
           </div>
-        </div>
-
+        </template>
+        <div class="col text-center my-5" v-else>등록된 글이 없습니다.</div>
       </div>
 
       <div class="p-3 row">
@@ -90,6 +82,9 @@ export default {
     writable: {
       required: true
     },
+    perpage: {
+      required: true
+    }
   },
   data: function () {
     return {
@@ -98,7 +93,6 @@ export default {
       rows: [],
       category: 0,
       keyword: null,
-      perpage: 15,
       page: 0
     }
   },

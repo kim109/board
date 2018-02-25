@@ -28,7 +28,7 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav">
-                    @if (Auth::guest())
+                    @guest
                         <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">로그인</a></li>
                         <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">회원가입</a></li>
                     @else
@@ -42,7 +42,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
                         </form>
-                    @endif
+                    @endguest
                 </ul>
             </div>
         </div>
@@ -51,12 +51,12 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link @if (Request::is('/')) active @endif" href="{{ url('/') }}">치카플러스 홈</a>
-                    <a class="nav-item nav-link @if (Request::is('qna*')) active @endif" href="/qna">치카지식인</a>
-                    <a class="nav-item nav-link @if (Request::is('abc*')) active @endif" href="#">치카칼럼</a>
-                    <a class="nav-item nav-link @if (Request::is('seminars*')) active @endif" href="/seminars">세미나소식</a>
-                    <a class="nav-item nav-link @if (Request::is('market*')) active @endif" href="/market">덴티마켓</a>
-                    <a class="nav-item nav-link @if (Request::is('notices*')) active @endif" href="/notices">공지사항</a>
+                    <a class="nav-item nav-link @if (Request::is('/')) active @endif"           href="{{ url('/') }}">치카플러스 홈</a>
+                    <a class="nav-item nav-link @if (Request::is('qna*')) active @endif"        href="{{ route('qna.index') }}">치카지식인</a>
+                    <a class="nav-item nav-link @if (Request::is('columns*')) active @endif"    href="{{ route('columns.index') }}">치카칼럼</a>
+                    <a class="nav-item nav-link @if (Request::is('seminars*')) active @endif"   href="{{ route('seminars.index') }}">세미나소식</a>
+                    {{--  <a class="nav-item nav-link @if (Request::is('market*')) active @endif"     href="/market">덴티마켓</a>  --}}
+                    <a class="nav-item nav-link @if (Request::is('notices*')) active @endif"    href="{{ route('notices.index') }}">공지사항</a>
                   @if (Auth::guest())
                     <a class="nav-item nav-link d-block d-sm-none" href="{{ route('login') }}">로그인</a>
                   @else

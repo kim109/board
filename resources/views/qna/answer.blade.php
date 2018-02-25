@@ -17,7 +17,8 @@
           <h4><span class="text-success">[{{ $article->category->name }}]</span> {{ $article->subject }}</h4>
           <div class="row">
             <div class="col-sm-4 col-md-6">
-            <span class="text-primary">작성자 :</span> {{ $article->user->name }}
+            <span class="text-primary">작성자 :</span>
+            {{ mb_substr($article->user->name, 0, 1).str_repeat('*', mb_strlen($article->user->name)-2).mb_substr($article->user->name, -1) }}
             </div>
             <div class="col-sm-4 col-md-3 text-right">
             <span class="text-primary">조회수 :</span> {{ number_format($article->hits) }}

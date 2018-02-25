@@ -139,7 +139,7 @@ class SeminarController extends Controller
             $attachment = new Attachment;
             $attachment->user_id = Auth::id();
             $attachment->attach_id = $article->id;
-            $attachment->attach_type = 'notices';
+            $attachment->attach_type = 'seminars';
             $attachment->path = $path;
             $attachment->name = $attach->getClientOriginalName();
             $attachment->mime = $attach->getClientMimeType();

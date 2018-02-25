@@ -3,13 +3,25 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Question;
-use App\Answer;
+use App\Column;
+use App\Comment;
 use App\Attachment;
 use Illuminate\Http\Request;
 
-class QnAController extends Controller
+class ColumnController extends Controller
 {
+    public function index(Request $request)
+    {
+        $writable = false;
+        if (Auth::check()) {
+            $admin = explode(',', env('ADMIN'));
+            $admin = array_map('trim', $admin);
+            $writable = in_array(Auth::user()->user_id, $admin);
+        }
+
+        return view('columns.list', ['writable' => $writable]);
+    }
+
     // 카테고리 정보
     public function category(Request $request)
     {
@@ -17,7 +29,7 @@ class QnAController extends Controller
             return response()->json(['errors' => 'invalid connection'], 406);
         }
 
-        $categories = \App\Category::where('table', 'questions')->get(['id', 'name']);
+        $categories = \App\Category::where('table', 'columns')->get(['id', 'name']);
 
         return response()->json($categories);
     }
@@ -29,14 +41,14 @@ class QnAController extends Controller
             return response()->json(['errors' => 'invalid connection'], 406);
         }
 
-        $articles = Question::with('category:id,name')
+        $articles = Column::with('category:id,name')
                     ->withCount('comments')
                     ->where('open', true)
                     ->orderBy('hits', 'desc')
                     ->limit(6)
                     ->get();
         $articles = $articles->each(function ($item, $key) {
-            $item->board = 'qna';
+            $item->board = 'columns';
         });
 
         return response()->json($articles);
@@ -51,7 +63,7 @@ class QnAController extends Controller
         $category = $request->input('category');
         $keyword = $request->input('keyword');
 
-        $articles = Question::with(['user:id,user_id,name', 'category:id,name'])
+        $articles = Column::with(['user:id,user_id,name', 'category:id,name'])
                     ->withCount('comments')
                     ->where('open', true)
                     ->when($category, function ($query) use ($category) {
@@ -70,15 +82,13 @@ class QnAController extends Controller
     // 글 보기
     public function show($id, Request $request)
     {
-        $article = Question::findorFail($id);
+        $article = Column::findorFail($id);
         if ($article->user_id != Auth::id()) {
             $article->hits += 1;
             $article->save();
         }
 
-        $answers = $article->answers()->get();
-
-        $list_url = route('qna.index');
+        $list_url = route('columns.index');
 
         $writable = false;
         if (Auth::check()) {
@@ -87,77 +97,50 @@ class QnAController extends Controller
             $writable = in_array(Auth::user()->user_id, $admin) || $article->user_id == Auth::id();
         }
 
-        return view('qna.show', [
-            'article' => $article,
-            'answers' => $answers,
-            'list' => $list_url,
-            'writable' => $writable
-        ]);
+        return view('columns.show', ['article' => $article, 'list' => $list_url, 'writable' => $writable]);
     }
 
     // 글 작성 View
     public function create()
     {
-        $categories = \App\Category::where('table', 'questions')->get();
-        return view('qna.create', ['categories' => $categories]);
+        $categories = \App\Category::where('table', 'columns')->get();
+        return view('columns.create', ['categories' => $categories]);
     }
 
-    // 질문 등록
     public function store(Request $request)
     {
         $this->validate($request, [
             'category' => 'required|integer',
             'subject' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'thumbnail_id' => 'required|integer'
         ]);
 
-        $article = new Question;
+        $article = new Column;
         $article->user_id = Auth::id();
         $article->category_id = $request->input('category');
         $article->subject = $request->input('subject');
         $article->content = $request->input('content');
+        $article->thumbnail_id = $request->input('thumbnail_id');
         $article->save();
 
         if ($request->has('attachments')) {
             $attachments = Attachment::whereIn('id', $request->input('attachments'))->get();
             $attachments->each(function ($attachment) use ($article) {
                 $attachment->attach_id = $article->id;
-                $attachment->attach_type = 'qna';
+                $attachment->attach_type = 'columns';
                 $attachment->save();
             });
         }
 
-        return redirect()->route('qna.index');
-    }
-
-    public function answer($id, Request $request)
-    {
-        $article = Question::findorFail($id);
-        return view('qna.answer', ['article' => $article]);
-    }
-
-    public function storeAnswer($id, Request $request)
-    {
-        $this->validate($request, [
-            'content' => 'required'
-        ]);
-
-        $article = Question::findorFail($id);
-
-        $answer = new Answer();
-        $answer->user_id = Auth::id();
-        $answer->question_id = $article->id;
-        $answer->content = $request->input('content');
-        $answer->save();
-
-        return redirect()->route('qna.show', ['id' => $id]);
+        return redirect()->route('columns.index');
     }
 
     public function edit($id)
     {
-        $article = Question::findorFail($id);
-        $categories = \App\Category::where('table', 'questions')->get();
-        return view('qna.edit', ['article' => $article, 'categories' => $categories]);
+        $article = Column::findorFail($id);
+        $categories = \App\Category::where('table', 'columns')->get();
+        return view('columns.edit', ['article' => $article, 'categories' => $categories]);
     }
 
     public function update(Request $request, $id)
@@ -165,10 +148,11 @@ class QnAController extends Controller
         $this->validate($request, [
             'category' => 'required|integer',
             'subject' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'thumbnail_id' => 'required|integer'
         ]);
 
-        $article = Question::findorFail($id);
+        $article = Column::findorFail($id);
 
         $admin = explode(',', env('ADMIN'));
         $admin = array_map('trim', $admin);
@@ -179,6 +163,7 @@ class QnAController extends Controller
         $article->category_id = $request->input('category');
         $article->subject = $request->input('subject');
         $article->content = $request->input('content');
+        $article->thumbnail_id = $request->input('thumbnail_id');
         $article->save();
 
         if ($request->hasFile('attach')) {
@@ -188,7 +173,7 @@ class QnAController extends Controller
             $attachment = new Attachment;
             $attachment->user_id = Auth::id();
             $attachment->attach_id = $article->id;
-            $attachment->attach_type = 'qna';
+            $attachment->attach_type = 'columns';
             $attachment->path = $path;
             $attachment->name = $attach->getClientOriginalName();
             $attachment->mime = $attach->getClientMimeType();
@@ -196,7 +181,7 @@ class QnAController extends Controller
             $attachment->save();
         }
 
-        return redirect()->route('qna.show', ['id' => $article->id]);
+        return redirect()->route('columns.show', ['id' => $article->id]);
     }
 
     public function destroy(Request $request, $id)
@@ -205,7 +190,7 @@ class QnAController extends Controller
             return response()->json(['errors' => 'invalid connection'], 406);
         }
 
-        $article = Question::findorFail($id);
+        $article = Column::findorFail($id);
 
         $admin = explode(',', env('ADMIN'));
         $admin = array_map('trim', $admin);
@@ -214,29 +199,9 @@ class QnAController extends Controller
         }
 
         $article->comments()->delete();
-        $article->answers()->delete();
         $article->attachments()->delete();
         $article->delete();
 
-        return response()->json(['list' => route('qna.index')]);
-    }
-
-    public function destroyAnswer(Request $request, $id, $answer)
-    {
-        if (!$request->ajax()) {
-            return response()->json(['errors' => 'invalid connection'], 406);
-        }
-
-        $article = Answer::findorFail($answer);
-
-        $admin = explode(',', env('ADMIN'));
-        $admin = array_map('trim', $admin);
-        if (!in_array(Auth::user()->user_id, $admin) && $article->user_id != Auth::id()) {
-            return response()->json(['errors' => '삭제 권한이 없습니다.'], 403);
-        }
-
-        $article->delete();
-
-        return response()->json(['list' => route('qna.show', ['id' => $article->id])]);
+        return response()->json(['list' => route('columns.index')]);
     }
 }

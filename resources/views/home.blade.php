@@ -6,7 +6,7 @@
 
 @section('content')
 <div id="content" class="container my-5">
-  <summary-articles></summary-articles>
+  <summary-articles type="home"></summary-articles>
 
   <div class="row no-gutters mt-4">
     <div class="d-none d-lg-block">

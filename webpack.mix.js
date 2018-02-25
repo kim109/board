@@ -23,6 +23,10 @@ mix.js('resources/assets/js/qna/list.js', 'public/js/qna')
    .js('resources/assets/js/qna/show.js', 'public/js/qna')
    .js('resources/assets/js/qna/answer.js', 'public/js/qna');
 
+mix.js('resources/assets/js/columns/list.js', 'public/js/columns')
+   .js('resources/assets/js/columns/create.js', 'public/js/columns')
+   .js('resources/assets/js/columns/edit.js', 'public/js/columns');
+
 mix.js('resources/assets/js/seminars/list.js', 'public/js/seminars')
    .js('resources/assets/js/seminars/create.js', 'public/js/seminars')
    .js('resources/assets/js/seminars/edit.js', 'public/js/seminars');
