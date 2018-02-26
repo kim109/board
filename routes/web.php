@@ -118,3 +118,10 @@ Route::post('attachments', 'AttachmentController@store');
 Route::get('attachments/{id}/{md5}', 'AttachmentController@download');
 Route::get('thumbnail/{id}', 'AttachmentController@thumbnail');
 Route::delete('attachments/{id}', 'AttachmentController@remove');
+
+// 메신저에 표시될 요약 페이지
+Route::prefix('summary')->group(function () {
+    Route::view('/', 'summary')->name('summary.index')->middleware('auth');
+    Route::get('list', 'SummaryController@list');
+    Route::get('jisiklist', 'SummaryController@jisiklist');
+});
