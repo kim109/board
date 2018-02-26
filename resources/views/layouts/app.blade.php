@@ -30,9 +30,7 @@
                 <ul class="navbar-nav">
                     @guest
                         <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">로그인</a></li>
-                        <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">회원가입</a></li>
                     @else
-                        <li class="nav-item"><a href="#" class="nav-link">정보수정</a></li>
                         <li class="nav-item">
                             <a href="{{ route('logout') }}" class="nav-link"
                                onclick="event.preventDefault();document.getElementById('logout-form').submit();">

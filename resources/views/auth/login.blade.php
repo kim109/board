@@ -11,22 +11,22 @@
                         {{ csrf_field() }}
 
                         <div class="form-group row">
-                            <label for="email" class="col-lg-4 col-form-label text-lg-right">UserID</label>
+                            <label for="email" class="col-lg-4 col-form-label text-lg-right">Email</label>
 
                             <div class="col-lg-6">
                                 <input
-                                        id="user_id"
-                                        type="text"
-                                        class="form-control{{ $errors->has('user_id') ? ' is-invalid' : '' }}"
-                                        name="user_id"
-                                        value="{{ old('user_id') }}"
+                                        id="email"
+                                        type="email"
+                                        class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                        name="email"
+                                        value="{{ old('email') }}"
                                         required
                                         autofocus
                                 >
 
-                                @if ($errors->has('user_id'))
+                                @if ($errors->has('email'))
                                     <div class="invalid-feedback">
-                                        <strong>{{ $errors->first('user_id') }}</strong>
+                                        <strong>{{ $errors->first('email') }}</strong>
                                     </div>
                                 @endif
                             </div>

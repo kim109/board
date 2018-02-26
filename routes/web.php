@@ -12,10 +12,10 @@
 */
 
 
+// 로그인
 Auth::routes();
-
-// 메신저에서 로그인
-Route::post('/entry', 'AuthController@entry');
+Route::post('login', 'AuthController@login')->middleware('guest');
+Route::post('entry', 'AuthController@entry');
 
 // 홈
 Route::view('/', 'home')->name('home');
