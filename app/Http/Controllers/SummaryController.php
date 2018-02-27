@@ -7,8 +7,7 @@ use App\Seminar;
 use App\Comment;
 use App\Attachment;
 
-use App\Insurance;
-use App\InsuranceReply;
+use App\Question;
 
 use Illuminate\Http\Request;
 
@@ -34,12 +33,16 @@ class SummaryController extends Controller
         if (!$request->ajax()) {
             return response()->json(['errors' => 'invalid connection'], 406);
         }
-    
-        $articles = Insurance::with(['user:id,user_id,name', 'category:id,name'])
+
+        $articles = Question::with('category:id,name')
                     ->withCount('comments')
                     ->where('open', true)
-                    ->orderBy('id', 'desc')
+                    ->orderBy('hits', 'desc')
+                    ->limit(6)
                     ->get();
+        $articles = $articles->each(function ($item, $key) {
+            $item->board = 'qna';
+        });
 
         return response()->json($articles);
     }

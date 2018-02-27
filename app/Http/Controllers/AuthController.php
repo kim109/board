@@ -57,10 +57,13 @@ class AuthController extends Controller
         ]);
         $email = $request->input('email');
         $password = $request->input('password');
+	$url = $request->input('url');
 
         $this->auth($email, $password);
 
-        return redirect('/');
+	if($url == 'summary') return redirect('/summary');
+	else
+	   return redirect('/');
     }
 
     public function login(Request $request)
