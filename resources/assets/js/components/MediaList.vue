@@ -30,7 +30,9 @@
         <template v-if="lists.length">
           <div class="col-3 mb-3" v-for="(row) in lists" :key="row.id">
             <a :href="base+'/'+row.id">
-              <img class="mr-3" :src="'/thumbnail/'+row.thumbnail_id" :alt="row.subject">
+              <div class="image">
+                <img :src="'/thumbnail/'+row.thumbnail_id" :alt="row.subject" class="img img-responsive full-width" />
+              </div>
               <div>
                 <span class="text-primary">[{{ row.category.name }}]</span>
                 {{ row.subject }} ({{ row.comments_count.toLocaleString() }})
@@ -154,6 +156,21 @@ export default {
         background-color: #505767;
         border-radius: 0;
       }
+    }
+  }
+
+  .image {
+    position:relative;
+    overflow:hidden;
+    padding-bottom:100%;
+
+    img {
+      position: absolute;
+      max-width: 100%;
+      max-height: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
     }
   }
 </style>
